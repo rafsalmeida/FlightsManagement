@@ -8,6 +8,7 @@
     @if ($errors->has('num_socio'))
         <em>{{ $errors->first('num_socio') }}</em>
     @endif
+    
 </div>
 <div class="form-group">
     <label for="inputNome">Nome</label>
