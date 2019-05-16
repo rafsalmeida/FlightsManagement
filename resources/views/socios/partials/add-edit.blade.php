@@ -31,7 +31,7 @@
 </div>
 <div class="form-group">
     <label for="inputSexo">Sexo</label>
-    <div class='radio'> 
+    <div class='radio'>
         <div>
             {!! Form::radio('sexo','F', $socio->sexo == 'F')  !!}
             <label class="form-check-label">Feminino</label>
@@ -40,10 +40,10 @@
             {!! Form::radio('sexo','M',$socio->sexo == 'M')  !!}
             <label class="form-check-label">Masculino</label>
         </div>
-        
+
     </div>
 
-   
+
 </div>
 <div class="form-group">
     <label for="inputEmail">Email</label>
@@ -107,7 +107,7 @@
 </div>
 <div class="form-group">
     <label for="inputQuotas">Quotas</label>
-    <div class='radio'> 
+    <div class='radio'>
         <div>
             {!! Form::radio('quota_paga','1',$socio->quota_paga == '1')  !!}
             <label class="form-check-label">Pagas</label>
@@ -116,7 +116,7 @@
             {!! Form::radio('quota_paga','0',$socio->quota_paga == '0')  !!}
             <label class="form-check-label">Não pagas</label>
         </div>
-        
+
     </div>
 </div>
 <div class="form-group">
@@ -129,7 +129,7 @@
         {!! Form::radio('ativo','0',$socio->ativo == '0')  !!}
         <label class="form-check-label">Não ativo</label>
     </div>
-        
+
 </div>
 <div class="form-group">
     <label for="inputDirecao">Direção</label>
