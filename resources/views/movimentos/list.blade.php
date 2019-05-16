@@ -1,6 +1,3 @@
-
-
-
 @extends('master')
 @section('title', "Lista de Movimentos")
 @section('content')
