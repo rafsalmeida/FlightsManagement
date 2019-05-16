@@ -25,8 +25,8 @@
         type="datetime-local" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
         placeholder="HoraAterragem" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
-    @if ($errors->has('marca'))
-        <em>{{ $errors->first('marca') }}</em>
+    @if ($errors->has('hora_aterragem'))
+        <em>{{ $errors->first('hora_aterragem') }}</em>
     @endif
 </div>
 <div class="form-group">
