@@ -42,7 +42,7 @@
                 @endif</td>
             <td>
                 <div style="text-align: center; margin: auto">
-                <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="#">Editar</a>
+                <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
                 <form action="#" method="POST" role="form" class="inline">
                     @csrf
                     @method('delete')
@@ -60,7 +60,6 @@
 @endif
 
 {{ $movimentos->links() }}
-
 
 @endsection
 
