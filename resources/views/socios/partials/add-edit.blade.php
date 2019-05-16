@@ -92,7 +92,7 @@
         @if(isset($socio))
             {{ old('endereco', $socio->endereco) }}
         @endif
-    </textarea>
+        </textarea>
     </div>
 
     @if ($errors->has('endereco'))
