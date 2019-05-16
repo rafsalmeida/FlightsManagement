@@ -15,11 +15,27 @@
     </div>
 
      <div>
-       @dump($valores)
-       @foreach($valores as $valor)
+       <div>
+       <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+    <thead class="thead-light">
+        <tr>
+            <th>Unidade Conta Horas</th>
+            <th>Preço</th>
+            <th>Tempo</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach($valores as $valor)
+        <tr>
+            <td>{{$valor->unidade_conta_horas}} </td>
+            <td>{{$valor->minutos}} </td>
+            <td>{{$valor->preco}}</td>
+           
+        </tr>
 
-{{$valor->unidade_conta_horas}} - {{$valor->minutos}} {{$valor->preco}} <br>
        @endforeach 
+
+    </table>
 
     </div>
     <div class="form-group" style="padding-left: 15px;">
