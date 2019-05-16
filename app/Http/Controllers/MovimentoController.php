@@ -59,7 +59,9 @@ class MovimentoController extends Controller
      */
     public function edit(Movimento $movimento)
     {
-        //
+        $title = "Editar Movimento";
+        $movimento = Movimento::findOrFail($id);
+        return view("movimentos.edit", compact("title", "movimento"));
     }
 
     /**
