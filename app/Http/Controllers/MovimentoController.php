@@ -57,7 +57,7 @@ class MovimentoController extends Controller
      * @param  \App\Movimento  $movimento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Movimento $movimento)
+    public function edit($id)
     {
         $title = "Editar Movimento";
         $movimento = Movimento::findOrFail($id);
