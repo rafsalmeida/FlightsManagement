@@ -9,7 +9,7 @@
             <th>ID</th>
             <th>Aeronave</th>
             <th>Data</th>
-            <th>Natureza</th>
+            <th>Natu       reza</th>
             <th>Confirmado</th>
             <th>Piloto</th>
             <th>Instrutor</th>
