@@ -103,9 +103,7 @@
 <div class="form-group">
     <label for="inputType">Tipo de Sócio</label>
     <div>
-        <!--{{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio) }}-->
-        
-        {{ Form::select('tipo_socio', $tipos_licenca->pluck('code','nome'))}}
+        {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio) }}
        
     </div>
 </div>
@@ -181,7 +179,8 @@
 <div class="form-group">
     <label for="inputTipoLicenca">Tipo de Licença</label>
     <div>
-        {{ Form::select('tipo_licenca', array('ALUNO-PPL(A)' => 'Aluno - Private Pilot License Airplane', 'ALUNO-PU' => 'Aluno - Piloto de Ultraleve', 'ATPL' => 'Airline Transport Pilot License', 'CPL(A)' => 'Comercial Pilot License Airplane', 'PPL(A)' => 'Private Pilot License Airplane' ,'PU' => 'Piloto de Ultraleve'), $socio->tipo_licenca) }}
+        <!--{{ Form::select('tipo_licenca', array('ALUNO-PPL(A)' => 'Aluno - Private Pilot License Airplane', 'ALUNO-PU' => 'Aluno - Piloto de Ultraleve', 'ATPL' => 'Airline Transport Pilot License', 'CPL(A)' => 'Comercial Pilot License Airplane', 'PPL(A)' => 'Private Pilot License Airplane' ,'PU' => 'Piloto de Ultraleve'), $socio->tipo_licenca) }}-->
+        {{ Form::select('tipo_licenca', $tipos_licenca->pluck('code','nome'))}}
     </div>
 </div>
 <div class="form-group">
@@ -219,7 +218,8 @@
     <label for="inputClasseCertificado">Classe Certificado</label>
     <div>
         <!--{{ Form::select('classe_certificado', array('Class 1' => 'Class 1 medical certificate', 'Class 2' => 'Class 2 medical certificate', 'LAPL' => 'Light Aircraft Pilot Licence Medical'), $socio->classe_certificado) }}-->
-        
+        {{ Form::select('classe_certificado', $classes_certificado->pluck('code','nome'))}}
+
     </div>
 </div>
 <div class="form-group">
