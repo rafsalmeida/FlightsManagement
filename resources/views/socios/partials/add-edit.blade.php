@@ -180,7 +180,11 @@
     <label for="inputTipoLicenca">Tipo de Licença</label>
     <div>
         <!--{{ Form::select('tipo_licenca', array('ALUNO-PPL(A)' => 'Aluno - Private Pilot License Airplane', 'ALUNO-PU' => 'Aluno - Piloto de Ultraleve', 'ATPL' => 'Airline Transport Pilot License', 'CPL(A)' => 'Comercial Pilot License Airplane', 'PPL(A)' => 'Private Pilot License Airplane' ,'PU' => 'Piloto de Ultraleve'), $socio->tipo_licenca) }}-->
-        {{ Form::select('tipo_licenca', $tipos_licenca->pluck('code','nome'))}}
+        @if(isset($socio->tipo_licenca))
+            {!! Form::select('tipo_licenca', $tipos_licenca, $socio->tipoLicenca->code) !!}
+        @else
+             {!! Form::select('tipo_licenca', $tipos_licenca) !!}
+        @endif
     </div>
 </div>
 <div class="form-group">
@@ -200,7 +204,7 @@
             <label class="form-check-label">Confirmada</label>
         </div>
         <div>
-            {!! Form::radio('licenca_confirmada','NULL',$socio->licenca_confirmada == 'NULL')  !!}
+            {!! Form::radio('licenca_confirmada','0',$socio->licenca_confirmada == '0')  !!}
             <label class="form-check-label">Não confirmada</label>
         </div>
 </div>
@@ -218,7 +222,11 @@
     <label for="inputClasseCertificado">Classe Certificado</label>
     <div>
         <!--{{ Form::select('classe_certificado', array('Class 1' => 'Class 1 medical certificate', 'Class 2' => 'Class 2 medical certificate', 'LAPL' => 'Light Aircraft Pilot Licence Medical'), $socio->classe_certificado) }}-->
-        {{ Form::select('classe_certificado', $classes_certificado->pluck('code','nome'))}}
+        @if(isset($socio->classe_certificado))
+            {!! Form::select('classe_certificado', $classes_certificado, $socio->classeCertificado->code) !!}
+        @else
+            {!! Form::select('classe_certificado', $classes_certificado)!!}
+        @endif
 
     </div>
 </div>
