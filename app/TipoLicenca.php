@@ -10,6 +10,6 @@ class TipoLicenca extends Model
     
     public function socio()
 	{
-		return $this->hasMany('App\Socio');
+		return $this->hasMany('App\Socio', 'tipo_licenca', 'code');
 	}
 }
