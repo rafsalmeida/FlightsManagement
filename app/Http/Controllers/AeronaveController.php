@@ -49,14 +49,21 @@ class AeronaveController extends Controller
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
         'num_lugares' => 'required|integer|max:11',
-        'conta_horas' => 'required|integer|max:11',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/'
+        'conta_horas' => 'required|integer',
+        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
+        'minuto' => 'required|integer|max:60',///acrescentei
         ], [ // Custom Messages
         'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
         'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
         ]);
 
-        Aeronave::create($aeronave);
+        $valor = $request->validate([
+        'preco_minuto' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/', ///falta apresentar mensagem
+        'minuto' => 'required|integer|max:60',///acrescentei 
+        ]);
+
+        Aeronave::create($aeronave); ////
+        AeronaveValor::create($valor);
         return redirect()
                  ->action('AeronaveController@index')            
                  ->with('success', 'Aeronave adicionada corretamente');

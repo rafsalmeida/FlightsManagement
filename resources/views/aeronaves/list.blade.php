@@ -22,7 +22,7 @@
             <td>{{ $aeronave->marca }}</td>
             <td>{{ $aeronave->modelo }}</td>
             <td>{{ $aeronave->num_lugares }}</td>
-            <td>{{ $aeronave->conta_horas }}</td>
+            <td>{{ $aeronave->conta_horas/10}} horas</td>
             <td>{{ $aeronave->preco_hora }}€</td>
             <td>
                 <div style="text-align: center; margin: auto">

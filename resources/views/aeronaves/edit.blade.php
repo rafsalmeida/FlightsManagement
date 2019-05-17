@@ -19,8 +19,8 @@
          <thead class="thead-light">
         <tr>
             <th>Unidade Conta Horas</th>
+            <th>Minutos</th>
             <th>Preço</th>
-            <th>Tempo</th>
         </tr>
         </thead>
     <tbody>
