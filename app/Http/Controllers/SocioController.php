@@ -85,8 +85,8 @@ class SocioController extends Controller
     {
         $title = "Editar Sócio";
         $socio = Socio::findOrFail($id);
-        $tipo_licenca = TipoLicenca::all();
-        return view("socios.edit", compact("title", "socio"));
+        $tipos_licenca = TipoLicenca::all();
+        return view("socios.edit", compact("title", "socio","tipos_licenca"));
     }
 
     /**
