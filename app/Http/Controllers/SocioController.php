@@ -86,8 +86,8 @@ class SocioController extends Controller
     {
         $title = "Editar Sócio";
         $socio = Socio::findOrFail($id);
-        $tipos_licenca = TipoLicenca::all();
-        $classes_certificado = ClasseCertificado::all();
+        $tipos_licenca = TipoLicenca::pluck('nome','code');
+        $classes_certificado = ClasseCertificado::pluck('nome','code');
         return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
     }
 
