@@ -49,8 +49,9 @@ class AeronaveController extends Controller
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
         'num_lugares' => 'required|integer|max:11',
-        'conta_horas' => 'required|integer|max:11',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/'
+        'conta_horas' => 'required|integer',
+        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
+        'minuto' => 'required|integer|max:60',///acrescentei
         ], [ // Custom Messages
         'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
         'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
