@@ -35,11 +35,11 @@
 
             <td>
             	<div class="form-group">
-    			<input type="text" class="form-control" name="preco_hora" id="preco_hora"
+    			<input type="text" class="form-control" name="preco_minuto" id="preco_minuto"
         				placeholder="Precos"/>
    			             <!-- Verificar-->
-   			             @if ($errors->has('preco_hora'))
-        				<em>{{ $errors->first('preco_hora') }}</em>
+   			             @if ($errors->has('preco_minuto'))
+        				<em>{{ $errors->first('preco_minuto') }}</em>
    						 @endif
 			</div> 
             </td>
