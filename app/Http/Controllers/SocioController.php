@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Socio;
 use App\TipoLicenca;
+use App\ClasseCertificado;
 use Illuminate\Http\Request;
 
 class SocioController extends Controller
@@ -86,7 +87,8 @@ class SocioController extends Controller
         $title = "Editar Sócio";
         $socio = Socio::findOrFail($id);
         $tipos_licenca = TipoLicenca::all();
-        return view("socios.edit", compact("title", "socio","tipos_licenca"));
+        $classes_certificado = ClasseCertificado::all();
+        return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
     }
 
     /**
