@@ -33,6 +33,7 @@
 <div class="form-group">
     <label for="inputSexo">Sexo</label>
     <div class='radio'>
+        @if(isset($socio))
         <div>
             {!! Form::radio('sexo','F', $socio->sexo == 'F')  !!}
             <label class="form-check-label">Feminino</label>
@@ -41,7 +42,16 @@
             {!! Form::radio('sexo','M',$socio->sexo == 'M')  !!}
             <label class="form-check-label">Masculino</label>
         </div>
-
+        @else
+        <div>
+            {!! Form::radio('sexo','F')  !!}
+            <label class="form-check-label">Feminino</label>
+        </div>
+        <div>
+            {!! Form::radio('sexo','M')  !!}
+            <label class="form-check-label">Masculino</label>
+        </div>
+        @endif
     </div>
 
 
@@ -103,13 +113,18 @@
 <div class="form-group">
     <label for="inputType">Tipo de Sócio</label>
     <div>
-        {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio) }}
+        @if(isset($socio))
+            {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio) }}
+        @else
+            {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'))}}
+        @endif
        
     </div>
 </div>
 <div class="form-group">
     <label for="inputQuotas">Quotas</label>
     <div class='radio'>
+        @if(isset($socio))
         <div>
             {!! Form::radio('quota_paga','1',$socio->quota_paga == '1')  !!}
             <label class="form-check-label">Pagas</label>
@@ -118,11 +133,21 @@
             {!! Form::radio('quota_paga','0',$socio->quota_paga == '0')  !!}
             <label class="form-check-label">Não pagas</label>
         </div>
-
+        @else
+        <div>
+            {!! Form::radio('quota_paga','1')  !!}
+            <label class="form-check-label">Pagas</label>
+        </div>
+        <div>
+            {!! Form::radio('quota_paga','0')  !!}
+            <label class="form-check-label">Não pagas</label>
+        </div>
+        @endif
     </div>
 </div>
 <div class="form-group">
     <label for="inputAtivo">Ativo</label>
+    @if(isset($socio))
     <div>
         {!! Form::radio('ativo','1',$socio->ativo == '1')  !!}
         <label class="form-check-label">Ativo</label>
@@ -131,10 +156,20 @@
         {!! Form::radio('ativo','0',$socio->ativo == '0')  !!}
         <label class="form-check-label">Não ativo</label>
     </div>
-
+    @else
+    <div>
+        {!! Form::radio('ativo','1')  !!}
+        <label class="form-check-label">Ativo</label>
+    </div>
+    <div>
+        {!! Form::radio('ativo','0')  !!}
+        <label class="form-check-label">Não ativo</label>
+    </div>
+    @endif
 </div>
 <div class="form-group">
     <label for="inputDirecao">Direção</label>
+    @if(isset($socio))
     <div>
         {!! Form::radio('direcao','1',$socio->direcao == '1')  !!}
         <label class="form-check-label">Pertence</label>
@@ -143,9 +178,20 @@
         {!! Form::radio('direcao','0',$socio->direcao == '0')  !!}
         <label class="form-check-label">Não pertence</label>
     </div>
+    @else
+    <div>
+        {!! Form::radio('direcao','1')  !!}
+        <label class="form-check-label">Pertence</label>
+    </div>
+    <div>
+        {!! Form::radio('direcao','0')  !!}
+        <label class="form-check-label">Não pertence</label>
+    </div>
+    @endif
 </div>
 <div class="form-group">
     <label for="inputAluno">Aluno</label>
+    @if(isset($socio))
     <div>
         {!! Form::radio('aluno','1',$socio->aluno == '1')  !!}
         <label class="form-check-label">Sim</label>
@@ -154,9 +200,20 @@
         {!! Form::radio('aluno','0',$socio->aluno == '0')  !!}
         <label class="form-check-label">Não</label>
     </div>
+    @else
+    <div>
+        {!! Form::radio('aluno','1')  !!}
+        <label class="form-check-label">Sim</label>
+    </div>
+    <div>
+        {!! Form::radio('aluno','0')  !!}
+        <label class="form-check-label">Não</label>
+    </div>
+    @endif
 </div>
 <div class="form-group">
     <label for="inputInstrutor">Instrutor</label>
+    @if(isset($socio))
     <div>
         {!! Form::radio('instrutor','1',$socio->instrutor == '1')  !!}
         <label class="form-check-label">Sim</label>
@@ -165,6 +222,16 @@
         {!! Form::radio('instrutor','0',$socio->instrutor == '0')  !!}
         <label class="form-check-label">Não</label>
     </div>
+    @else
+    <div>
+        {!! Form::radio('instrutor','1')  !!}
+        <label class="form-check-label">Sim</label>
+    </div>
+    <div>
+        {!! Form::radio('instrutor','0')  !!}
+        <label class="form-check-label">Não</label>
+    </div>
+    @endif
 </div>
 <div class="form-group">
     <label for="inputLicenca">Nº Licenca</label>
@@ -179,7 +246,6 @@
 <div class="form-group">
     <label for="inputTipoLicenca">Tipo de Licença</label>
     <div>
-        <!--{{ Form::select('tipo_licenca', array('ALUNO-PPL(A)' => 'Aluno - Private Pilot License Airplane', 'ALUNO-PU' => 'Aluno - Piloto de Ultraleve', 'ATPL' => 'Airline Transport Pilot License', 'CPL(A)' => 'Comercial Pilot License Airplane', 'PPL(A)' => 'Private Pilot License Airplane' ,'PU' => 'Piloto de Ultraleve'), $socio->tipo_licenca) }}-->
         @if(isset($socio->tipo_licenca))
             {!! Form::select('tipo_licenca', $tipos_licenca, $socio->tipoLicenca->code) !!}
         @else
@@ -199,6 +265,7 @@
 </div>
 <div class="form-group">
     <label for="inputLicencaConfirmada">Licença</label>
+        @if(isset($socio))
         <div>
             {!! Form::radio('licenca_confirmada','1',$socio->licenca_confirmada == '1')  !!}
             <label class="form-check-label">Confirmada</label>
@@ -207,6 +274,16 @@
             {!! Form::radio('licenca_confirmada','0',$socio->licenca_confirmada == '0')  !!}
             <label class="form-check-label">Não confirmada</label>
         </div>
+        @else
+        <div>
+            {!! Form::radio('licenca_confirmada','1')  !!}
+            <label class="form-check-label">Confirmada</label>
+        </div>
+        <div>
+            {!! Form::radio('licenca_confirmada','0')  !!}
+            <label class="form-check-label">Não confirmada</label>
+        </div>
+        @endif
 </div>
 <div class="form-group">
     <label for="inputCertificado">Nº Certificado</label>
@@ -221,7 +298,6 @@
 <div class="form-group">
     <label for="inputClasseCertificado">Classe Certificado</label>
     <div>
-        <!--{{ Form::select('classe_certificado', array('Class 1' => 'Class 1 medical certificate', 'Class 2' => 'Class 2 medical certificate', 'LAPL' => 'Light Aircraft Pilot Licence Medical'), $socio->classe_certificado) }}-->
         @if(isset($socio->classe_certificado))
             {!! Form::select('classe_certificado', $classes_certificado, $socio->classeCertificado->code) !!}
         @else
@@ -242,6 +318,7 @@
 </div>
 <div class="form-group">
     <label for="inputCertificadoConfirmado">Certificado</label>
+    @if(isset($socio))
     <div>
         {!! Form::radio('certificado_confirmado','1',$socio->certificado_confirmado == '1')  !!}
         <label class="form-check-label">Confirmado</label>
@@ -250,10 +327,28 @@
         {!! Form::radio('certificado_confirmado','0',$socio->certificado_confirmado == '0')  !!}
         <label class="form-check-label">Não confirmado</label>
     </div>
+    @else
+    <div>
+        {!! Form::radio('certificado_confirmado','1')  !!}
+        <label class="form-check-label">Confirmado</label>
+    </div>
+    <div>
+        {!! Form::radio('certificado_confirmado','0')  !!}
+        <label class="form-check-label">Não confirmado</label>
+    </div>
+    @endif
 </div>
+<div class="form-group">
+    <label for="inputFoto">Foto</label>
+    <div> 
+        <input type="file" name="file_foto" id="inputFoto" value="@if(isset($socio)){{ old('file_foto', $socio->file_url) }}@endif"/>
+    </div>
+   
+</div>
+
 <!-- fazer os uploads de ficheiros (tem de se adicionar os campos a bd???) -->
-<!-- fazer as relacoes das bds para os tipos de certificados e licencas-->
-<!-- ver algumas confirmacoes que estão null-->
+
+
 
 
 @endsection
