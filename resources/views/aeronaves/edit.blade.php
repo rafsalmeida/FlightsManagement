@@ -14,16 +14,15 @@
     	@yield('form')
     </div>
 
-     <div>
-       <div>
-       <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
-    <thead class="thead-light">
+    <div class="w-100 p-3  container" >
+       <table class="table table-bordered  table table-sm shadow p-3 mb-5 bg-white rounded">
+         <thead class="thead-light">
         <tr>
             <th>Unidade Conta Horas</th>
             <th>Preço</th>
             <th>Tempo</th>
         </tr>
-    </thead>
+        </thead>
     <tbody>
     @foreach($valores as $valor)
         <tr>
@@ -34,7 +33,7 @@
         </tr>
 
        @endforeach 
-
+    </tbody>
     </table>
 
     </div>
