@@ -11,17 +11,19 @@ use Illuminate\Support\Facades\DB;
 class US07_BTest extends USTestBase
 {
     protected $userToSimulate;
+    protected $userToUpdate;
     protected function setUp(): void
     {
         parent::setUp();
         $this->seedNormalUsers();
         $this->userToSimulate = $this->normalUser;
-    }
+        $this->userToUpdate = $this->normalUser;
+    }    
 
     public function testAlterarPerfilSimplesComSucesso()
     {
         $newdata = [
-            "id" => $this->normalUser->id,
+            "id" => $this->userToUpdate->id,
             "name" => "Novo Nome Para Normal User",
             "nome_informal" => "Novo Informal 123",
             "email" => "xptop@nanaemail.pt",
@@ -30,8 +32,8 @@ class US07_BTest extends USTestBase
             "telefone" => "999999999",
             "endereco" => "Rua para testes",
         ];
-        $requestData = array_merge($this->getRequestArrayFromUser($this->normalUser), $newdata);
-        $this->actingAs($this->userToSimulate)->put('/socios/'. $this->normalUser->id, $requestData)
+        $requestData = array_merge($this->getRequestArrayFromUser($this->userToUpdate), $newdata);
+        $this->actingAs($this->userToSimulate)->put('/socios/'. $this->userToUpdate->id, $requestData)
             ->assertAllValid()
             ->assertSuccessfulOrRedirect();
         $dbData = array_merge($newdata, ["data_nascimento" => $this->format_date_db($newdata["data_nascimento"]) ]);   
@@ -41,14 +43,14 @@ class US07_BTest extends USTestBase
     public function testAlterarPerfilSimplesSemCamposNullablesComSucesso()
     {
         $newdata = [
-            "id" => $this->normalUser->id,
+            "id" => $this->userToUpdate->id,
             "name" => "Novo Nome Para Normal User",
             "nome_informal" => "Novo Informal 123",
             "email" => "xptop@nanaemail.pt",
             "data_nascimento" => $this->format_date_input("1965-08-23"),
         ];
-        $requestData = array_merge($this->getRequestArrayFromUser($this->normalUser), $newdata);
-        $this->actingAs($this->userToSimulate)->put('/socios/'. $this->normalUser->id, $requestData)
+        $requestData = array_merge($this->getRequestArrayFromUser($this->userToUpdate), $newdata);
+        $this->actingAs($this->userToSimulate)->put('/socios/'. $this->userToUpdate->id, $requestData)
             ->assertAllValid()
             ->assertSuccessfulOrRedirect();
         $dbData = array_merge($newdata, ["data_nascimento" => $this->format_date_db($newdata["data_nascimento"]) ]);   
@@ -57,9 +59,9 @@ class US07_BTest extends USTestBase
 
     public function testAlterarPerfilComCamposNaoAutorizadosNaoAlteraBaseDados()
     {
-        $originalData = $this->getRequestArrayFromUser($this->normalUser);
+        $originalData = $this->getRequestArrayFromUser($this->userToUpdate);
         $newdata = [
-            "id" => $this->normalUser->id,
+            "id" => $this->userToUpdate->id,
             "name" => "Novo Nome Para Normal User",
             "nome_informal" => "Novo Informal 123",
             "email" => "xptop@nanaemail.pt",
@@ -70,7 +72,6 @@ class US07_BTest extends USTestBase
             // campos que não pode alterar (só elementos da direcao é que podem)
             "num_socio" => "9238473",         
             "ativo" => 0,
-            "password_inicial" => 1,
             "quota_paga" => 0,
             "sexo" => "F",
             "tipo_socio" => "P",
@@ -88,7 +89,6 @@ class US07_BTest extends USTestBase
             "id" => null,
             "num_socio" => null,
             "ativo" => null,
-            "password_inicial" => null,
             "quota_paga" => null,
             "sexo" => null,
             "tipo_socio" => null,
@@ -102,16 +102,16 @@ class US07_BTest extends USTestBase
         $requestData = array_merge($originalData, $newdata);
 
         $this->actingAs($this->userToSimulate)
-            ->put('/socios/'. $this->normalUser->id, $requestData);
+            ->put('/socios/'. $this->userToUpdate->id, $requestData);
 
         $this->assertDatabaseHas('users', $dbUnchangedData);
     }    
 
     public function testAlterarPerfilComCamposPilotoNaoAlteraBaseDados()
     {
-        $originalData = $this->getRequestArrayFromUser($this->normalUser);
+        $originalData = $this->getRequestArrayFromUser($this->userToUpdate);
         $newdata = [
-            "id" => $this->normalUser->id,
+            "id" => $this->userToUpdate->id,
             "name" => "Novo Nome Para Normal User",
             "nome_informal" => "Novo Informal 123",
             "email" => "xptop@nanaemail.pt",
@@ -144,7 +144,7 @@ class US07_BTest extends USTestBase
         $requestData = array_merge($originalData, $newdata);
 
         $this->actingAs($this->userToSimulate)
-            ->put('/socios/'. $this->normalUser->id, $requestData);
+            ->put('/socios/'. $this->userToUpdate->id, $requestData);
 
         $this->assertDatabaseHas('users', $dbUnchangedData);
     }    
