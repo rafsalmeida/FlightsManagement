@@ -9,6 +9,7 @@ class Socio extends Model
 {
     protected $table = 'users';
     use SoftDeletes;
+    protected $fillable = ['num_socio', 'name', 'nome_informal', 'email','nif','data_nascimento','telefone','endereco','num_licenca','validade_licenca','num_certificado','validade_certificado'];
 
     public function tipoLicenca()
 	{
