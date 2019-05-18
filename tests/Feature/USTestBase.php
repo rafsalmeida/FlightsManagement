@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 use App\User;
-use App\Models\Aeronave;
 
 class USTestBase extends TestCase
 {
@@ -72,41 +71,59 @@ class USTestBase extends TestCase
         $totalPrevisto = env('SEED_TOTAL_SOCIOS', 40);
 
         if (!USTestBase::$initialSeed) {
-            $total = DB::table('users')->count();
-            $seed = ($total < $totalPrevisto) || ($total > 2*$totalPrevisto);
-            $seed = !$seed ? $forceSeed : true;
-            if ($seed) {
-                DB::statement("SET foreign_key_checks=0");
+            $trySeed = true;
+            $totalTentativas = 1;
+            while ($trySeed) {
+                $trySeed = false;
+                try {
+                    $total = DB::table('users')->count();
+                    $seed = ($total < $totalPrevisto) || ($total > 2*$totalPrevisto);
+                    $seed = !$seed ? $forceSeed : true;
+                    if ($seed) {
+                        dump("Seed da Base de Dados - tentativa $totalTentativas");
+                        DB::statement("SET foreign_key_checks=0");
 
-                $this->seed(\TiposLicencasSeeder::class);
-                $this->seed(\ClassesCertificadosSeeder::class);
-                $this->seed(\AerodromosSeeder::class);
-                $this->seed(\AeronavesSeeder::class);
-                $this->seed(\AeronavesValoresSeeder::class);
+                        $this->seed(\TiposLicencasSeeder::class);
+                        $this->seed(\ClassesCertificadosSeeder::class);
+                        $this->seed(\AerodromosSeeder::class);
+                        $this->seed(\AeronavesSeeder::class);
+                        $this->seed(\AeronavesValoresSeeder::class);
 
-                // Custom/known values
-                $this->seedTipoLicenca();
-                $this->seedClasseCertificado();
-                $this->seedAerodromo();
+                        // Custom/known values
+                        $this->seedTipoLicenca();
+                        $this->seedClasseCertificado();
+                        $this->seedAerodromo();
 
-                // Remaing Seeds:
-                $this->seed(\UsersSeeder::class);
-                $this->seed(\AeronavesPilotosSeeder::class);
-                $this->seed(\MovimentosSeeder::class);
+                        // Remaing Seeds:
+                        $this->seed(\UsersSeeder::class);
+                        $this->seed(\AeronavesPilotosSeeder::class);
+                        $this->seed(\MovimentosSeeder::class);
 
-                DB::statement("SET foreign_key_checks=1");
+                        DB::statement("SET foreign_key_checks=1");
+                    }
+
+                    USTestBase::$latestUserID = DB::table('users')->max('id');
+                    USTestBase::$latestMovimentoID = DB::table('movimentos')->max('id');
+                    USTestBase::$latestContaHoras = DB::table('aeronaves')->pluck('conta_horas', 'matricula');
+                    USTestBase::$totalAtivos = DB::table('users')->whereNull('deleted_at')->where('ativo',1)->count();
+                    USTestBase::$totalDesativos = DB::table('users')->whereNull('deleted_at')->where('ativo',0)->count();
+                    USTestBase::$totalPilotos = DB::table('users')->whereNull('deleted_at')->where('tipo_socio','P')->count();
+                    USTestBase::$totalMovimentos = DB::table('movimentos')->count();
+                    USTestBase::$totalAeronaves = DB::table('aeronaves')->whereNull('deleted_at')->count();
+
+                    USTestBase::$initialSeed = true;
+
+                } catch (\Exception $e) {
+                    dump("Seed da Base de Dados de Teste Falhou. Vai ser feita uma nova tentativa!");
+                    $totalTentativas++;
+                    $trySeed = true;
+                    if ($totalTentativas > 10) {
+                        $trySeed = false;                        
+                        throw $e;
+                    }
+
+                }
             }
-
-            USTestBase::$latestUserID = DB::table('users')->max('id');
-            USTestBase::$latestMovimentoID = DB::table('movimentos')->max('id');
-            USTestBase::$latestContaHoras = DB::table('aeronaves')->pluck('conta_horas', 'matricula');
-            USTestBase::$totalAtivos = DB::table('users')->whereNull('deleted_at')->where('ativo',1)->count();
-            USTestBase::$totalDesativos = DB::table('users')->whereNull('deleted_at')->where('ativo',0)->count();
-            USTestBase::$totalPilotos = DB::table('users')->whereNull('deleted_at')->where('tipo_socio','P')->count();
-            USTestBase::$totalMovimentos = DB::table('movimentos')->count();
-            USTestBase::$totalAeronaves = DB::table('aeronaves')->whereNull('deleted_at')->count();
-
-            USTestBase::$initialSeed = true;
         }
         $this->resetData();
     }
@@ -165,6 +182,10 @@ class USTestBase extends TestCase
 
     protected function resetData()
     {
+        if ($this->normalUserComFoto) {
+            $this->deletePhotoByName($this->normalUserComFoto->foto_url);
+        }
+
         DB::table('movimentos')->where('id', '>', USTestBase::$latestMovimentoID)->delete();
         DB::table('aeronaves_pilotos')->where('piloto_id', '>', USTestBase::$latestUserID)->delete();
         DB::table('users')->where('id', '>', USTestBase::$latestUserID)->delete();
@@ -175,6 +196,7 @@ class USTestBase extends TestCase
         foreach (USTestBase::$latestContaHoras as $matricula => $conta_horas) {
             DB::table('aeronaves')->where('matricula', $matricula)->update(['conta_horas' => $conta_horas]);
         }
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,7 +260,7 @@ class USTestBase extends TestCase
     private function addAeronaveToDB($aeronave)
     {
         DB::table('aeronaves')->insert($aeronave);
-        return Aeronave::withTrashed()->findOrFail($aeronave['matricula']);
+        return DB::table('aeronaves')->where('matricula', $aeronave['matricula'])->first();
     }
 
     protected function seedNormalUsers()
@@ -626,10 +648,11 @@ class USTestBase extends TestCase
                 "instrutor" => $user->instrutor,
                 "num_licenca" => $user->num_licenca,
                 "tipo_licenca" => $user->tipo_licenca,
-                "validade_licenca" => $user->validade_licenca,
+                "validade_licenca" => $this->format_date_input($user->validade_licenca),
                 "licenca_confirmada" => $user->licenca_confirmada,
                 "num_certificado" => $user->num_certificado,
                 "classe_certificado" => $user->classe_certificado,
+                "validade_certificado" => $this->format_date_input($user->validade_certificado),
                 "certificado_confirmado" => $user->certificado_confirmado
             ];
         }
@@ -657,6 +680,7 @@ class USTestBase extends TestCase
                 "licenca_confirmada" => "",
                 "num_certificado" =>  "",
                 "classe_certificado" =>  "",
+                "validade_certificado" =>  "",
                 "certificado_confirmado" =>  ""
             ];
     }
@@ -753,7 +777,7 @@ class USTestBase extends TestCase
 
     protected function createPhoto($user_id)
     {
-        Storage::fake('local');
+//        Storage::fake('local');
 
         $file = UploadedFile::fake()->image('foto.jpg', 50, 50)->size(100);
         $newFilePath = basename(Storage::putFile('public/fotos', $file, 'public'));
@@ -767,7 +791,7 @@ class USTestBase extends TestCase
 
     protected function deletePhoto($user_id)
     {
-        Storage::fake('local');
+        //Storage::fake('local');
         $photoUrl = DB::table('users')
             ->where('id', $user_id)
             ->first()->foto_url;
@@ -775,12 +799,21 @@ class USTestBase extends TestCase
         return $photoUrl;
     }
 
+    protected function deletePhotoByName($name)
+    {
+        //Storage::fake('local');
+        Storage::delete('public/fotos/' . $name);
+        return $name;
+    }
 
     private function createPDF($name)
     {
-        Storage::fake('local');
-        $file = UploadedFile::fake()->create('document.pdf', 4);
-        Storage::putFileAs('docs_piloto', $file, $name);
+        //Storage::fake('local');
+
+        // $file = UploadedFile::fake()->create('document.pdf', 4);          
+        // Storage::putFileAs('docs_piloto', $file, $name);
+
+        copy(__DIR__."/pdf_file_for_tests.pdf", storage_path() . "/app/docs_piloto/$name");
         return $name;
     }
 
@@ -791,7 +824,7 @@ class USTestBase extends TestCase
 
     protected function deleteLicencaPDF($user_id)
     {
-        Storage::fake('local');
+        //Storage::fake('local');
         $filename = 'licenca_' . $user_id . '.pdf';
         Storage::delete('docs_piloto/' . $filename);
         return $filename;
@@ -804,7 +837,7 @@ class USTestBase extends TestCase
 
     protected function deleteCertificadoPDF($user_id)
     {
-        Storage::fake('local');
+        //Storage::fake('local');
         $filename = 'certificado_' . $user_id . '.pdf';
         Storage::delete('docs_piloto/' . $filename);
         return $filename;
