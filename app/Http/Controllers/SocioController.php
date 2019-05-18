@@ -6,6 +6,8 @@ use App\Socio;
 use App\TipoLicenca;
 use App\ClasseCertificado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreSocio;
 
 class SocioController extends Controller
 {
@@ -40,32 +42,19 @@ class SocioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSocio $request)
     {
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
 
-        $socio = $request->validate([
-        "num_socio" => "required|integer|max:11",
-        "name" => "required|string|alpha|max:255",
-        "nome_informal" => "required|string|alpha_dash|max:40",
-        "email" => "required|email|max:255",
-        "nif" => "digits:9|nullable",
-        "data_nascimento" => "required|date",
-        "telefone" => "string|max:20|nullable",
-        "endereco" => "string|nullable",
-        "num_licenca" => "string|size:30|nullable",
-        "validade_licenca" => "date|nullable",
-        "num_certificado" => "string|size:30|nullable",
-        "validade_certificado" => "date|nullable",
-        "foto_url" => "image|nullable",
-        ]);
+        $socio = $request->validated();
 
-        $socio->foto_url = $request->file('photo');
-
+        //$socio->password = Hash::make($request->data_nascimento);
 
         Socio::create($socio);
+        
+
         return redirect()
                  ->action("SocioController@index")            
                  ->with("success", "Sócio adicionado corretamente");
@@ -104,28 +93,16 @@ class SocioController extends Controller
      * @param  \App\Socio  $socio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,  $id)
+    public function update(StoreSocio $request,  $id)
     {
         //validar e dar store na bd
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
-        $socio = $request->validate([
-        "num_socio" => "required|integer|max:11",
-        "name" => "required|string|alpha|max:255",
-        "nome_informal" => "required|string|alpha_dash|max:40",
-        "email" => "required|email|max:255",
-        "nif" => "digits:9",
-        "data_nascimento" => "required|date",
-        "telefone" => "string|max:20",
-        "endereco" => "string|nullable",
-        "num_licenca" => "string|size:30|nullable",
-        "validade_licenca" => "date|nullable",
-        "num_certificado" => "string|size:30|nullable",
-        "validade_certificado" => "date|nullable",
-        ]);
+        $socio = $request->validated();
+
         $socioModel = Socio::findOrFail($id);
-        $socioModel->fill($aeronave);
+        $socioModel->fill($socio);
         $socioModel->save();
         return redirect()
                 ->action("SocioController@index")
