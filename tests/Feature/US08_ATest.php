@@ -53,7 +53,7 @@ class US08_ATest extends USTestBase
         $this->actingAs($this->userToSimulate)->get('/socios')
                 ->assertStatus(200)
                 ->assertDontSeeAll([
-                    $this->desativadoUser->num_socio,
+                    $this->desativadoUser->nome_informal,
                 ], "A lista com os sócios ativos apresenta sócios desativados");
     }
 
