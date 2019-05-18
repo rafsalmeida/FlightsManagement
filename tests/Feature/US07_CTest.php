@@ -40,18 +40,23 @@ class US07_CTest extends USTestBase
 
     public function checkUploadFoto()
     {
-        $oldFotoUrl = DB::table('users')->where('id', $this->normalUser->id)->first()->foto_url;
-        $newdata = ["file_foto" => UploadedFile::fake()->image('foto.jpg', 50, 50)->size(100)];
-        $requestData = array_merge($this->getRequestArrayFromUser($this->normalUser), $newdata);
-        $response = $this->actingAs($this->userToSimulate)->put('/socios/'. $this->normalUser->id, $requestData)
-            ->assertAllValid()
-            ->assertSuccessfulOrRedirect();
-        $newFotoUrl = DB::table('users')->where('id', $this->normalUser->id)->first()->foto_url;
-        $this->assertTrue($oldFotoUrl != $newFotoUrl, 'Após o upload da foto, o url da foto não foi alterado na Base de Dados');
+        try {
+            $oldFotoUrl = DB::table('users')->where('id', $this->normalUser->id)->first()->foto_url;
+            $newdata = ["file_foto" => UploadedFile::fake()->image('foto.jpg', 50, 50)->size(100)];
+            $requestData = array_merge($this->getRequestArrayFromUser($this->normalUser), $newdata);
+            $response = $this->actingAs($this->userToSimulate)->put('/socios/'. $this->normalUser->id, $requestData)
+                ->assertAllValid()
+                ->assertSuccessfulOrRedirect();
+            $newFotoUrl = DB::table('users')->where('id', $this->normalUser->id)->first()->foto_url;
+            $this->assertTrue($oldFotoUrl != $newFotoUrl, 'Após o upload da foto, o url da foto não foi alterado na Base de Dados');
 
-        $response->assertFileExists("public/fotos/".$newFotoUrl,'Após o upload da foto o ficheiro não existe no storage');
-        if ($oldFotoUrl) {
-            $response->assertFileDoesNotExists("public/fotos/".$oldFotoUrl,'Após o upload da foto o ficheiro antigo não foi apagado do storage');
+            $response->assertFileExists("public/fotos/".$newFotoUrl,'Após o upload da foto o ficheiro não existe no storage');
+            if ($oldFotoUrl) {
+                $response->assertFileDoesNotExists("public/fotos/".$oldFotoUrl,'Após o upload da foto o ficheiro antigo não foi apagado do storage');
+            }            
+        } finally {
+            $this->deletePhotoByName($newFotoUrl);
+            $this->deletePhotoByName($oldFotoUrl);
         }
     }
 
@@ -60,11 +65,14 @@ class US07_CTest extends USTestBase
         $this->checkUploadFoto();
     }
 
-
     public function testUploadFotoAlteraFoto()
     {
-        $this->createPhoto($this->normalUser->id);
-        $this->checkUploadFoto();
+        $name = $this->createPhoto($this->normalUser->id);
+        try {
+            $this->checkUploadFoto();
+        } finally {
+            $this->deletePhotoByName($name);
+        }
     }    
 
 
