@@ -16,6 +16,6 @@ class FreshDBSeedTest extends USTestBase
 
    public function testRebuildInitialDataOnDataBase()
     {
-        $this->assertTrue(true);
+	        $this->assertTrue(true);
     }
 }
