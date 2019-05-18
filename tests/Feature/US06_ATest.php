@@ -21,7 +21,7 @@ class US06_ATest extends USTestBase
             ->assertStatus(200);
         $this->actingAs($this->direcaoUser)->get("/socios/". $this->normalUser->id.'/edit')
             ->assertStatus(200);
-        $this->actingAs($this->normalUser)->get('/socios/30000002/edit')
+        $this->actingAs($this->direcaoUser)->get('/socios/30000002/edit')
             ->assertStatus(404);
     }
 
@@ -52,5 +52,8 @@ class US06_ATest extends USTestBase
                 'Campo [file_foto] não incluido ou inválido');
         $response->assertSeeInOrder_2(['<textarea', 'name="endereco"', '>', $this->normalUser->endereco, '</textarea>'],
                 'Campo [endereco] não incluido ou inválido');
+        $response->assertSeeInOrder_2(['<input', 'name="data_nascimento"', 'value="'.$this->format_date_input($this->normalUser->data_nascimento).'"', '>'],
+                'Campo [data_nascimento] não incluido ou inválido');
+        
     }
 }
