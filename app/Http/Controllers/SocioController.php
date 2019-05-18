@@ -50,7 +50,11 @@ class SocioController extends Controller
 
         $socio = $request->validated();
 
-        //$socio->password = Hash::make($request->data_nascimento);
+        /*$socio = new Socio();
+        $socio = $request->validated();
+        $socio->fill($request->all)
+        $socio->password = Hash::make($request->data_nascimento);
+        $socio->save();*/
 
         Socio::create($socio);
         
