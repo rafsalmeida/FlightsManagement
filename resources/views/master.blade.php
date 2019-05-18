@@ -19,7 +19,7 @@
 		      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 				    <i class="fas fa-bars"></i>
 			  </button>
-		      <a class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
+		      <a href="{{action('HomeController@index')}}"class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
               <div class="dropdown navbar-nav ml-auto" >
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                     <span class="caret"></span></button>
