@@ -6,10 +6,10 @@
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
     <thead class="thead-light">
         <tr>
-            <th>Nº de Sócio</th>
-            <th>Nome</th>
+            <th>Foto</th>
+            <th>Nome Informal</th>
             <th>Email</th>
-            <th>Tipo</th>
+            <th>Tipo de Sócio</th>
             <th>Direção</th>
             <th>Quotas</th>
             <th>Ativo</th>
@@ -19,10 +19,11 @@
     <tbody>
     @foreach ($socios as $socio)
         <tr>
-            <td>{{ $socio->num_socio }}</td>
+            <td><a href="http://ainet.prj31.test/storage/fotos/{{$socio->foto_url}}">Foto</a></td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
-            <td>@if($socio->tipo_socio == "P")
+            <td>
+                @if($socio->tipo_socio == "P")
                     Piloto
                 @elseif ($socio->tipo_socio == "NP")
                     Não-Piloto
@@ -36,13 +37,15 @@
                     Não pertence
                 @endif
             </td>
-            <td>@if ($socio->quota_paga == 1)
+            <td>
+                @if ($socio->quota_paga == 1)
                     Pagas
                 @else
                     Não pagas
                 @endif
             </td>
-            <td>@if ($socio->ativo == 1)
+            <td>
+                @if ($socio->ativo == 1)
                     Ativo
                 @else
                     Não-ativo
