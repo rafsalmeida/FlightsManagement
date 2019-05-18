@@ -29,7 +29,9 @@ class SocioController extends Controller
     public function create()
     {
         $title = "Adicionar Sócio";
-        return view("socios.add", compact("title"));
+        $tipos_licenca = TipoLicenca::pluck('nome','code');
+        $classes_certificado = ClasseCertificado::pluck('nome','code');
+        return view("socios.add", compact("title","tipos_licenca","classes_certificado"));
     }
 
     /**
@@ -57,7 +59,11 @@ class SocioController extends Controller
         "validade_licenca" => "date|nullable",
         "num_certificado" => "string|size:30|nullable",
         "validade_certificado" => "date|nullable",
+        "foto_url" => "image|nullable",
         ]);
+
+        $socio->foto_url = $request->file('photo');
+
 
         Socio::create($socio);
         return redirect()
