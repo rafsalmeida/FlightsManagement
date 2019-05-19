@@ -19,7 +19,7 @@
     <tbody>
     @foreach ($socios as $socio)
         <tr>
-            <td><a href="http://ainet.prj31.test/storage/fotos/{{$socio->foto_url}}">Foto</a></td>
+            <td><a href="{{url('/storage/fotos').'/'.$socio->foto_url}}">Foto</a></td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
             <td>
@@ -57,9 +57,8 @@
                 <form action="{{action('SocioController@destroy', $socio->id)}}" method="POST" role="form" class="inline">
                     @csrf
                     @method('delete')
-                    @include('partials.deletemodal')
                     <input type="hidden" name="socio_id" value="{{ $socio->id }}">
-                    <button type="button" class="btn btn-sm btn-xs btn-danger rounded-pill" data-target="#deleteconfirm" data-toggle="modal" style="width: 100%">Apagar</button>
+                    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                 </form>
             </div>
             </td>
