@@ -56,10 +56,16 @@ class SocioController extends Controller
         }
 
         //$socio = $request->validated();
+        //
+        $image = $request->file('file_foto');
+        $name = time().'.'.$image->getClientOriginalExtension();
+
+        $path = $request->file('file_foto')->storeAs('public/fotos', $name);
 
         $socio = new Socio();
        
         $socio->fill($request->all());
+        $socio->foto_url = $name;
         $request->validated();
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
@@ -111,11 +117,20 @@ class SocioController extends Controller
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
-        $socio = $request->validated();
+        if(! is_null($request['file_foto'])) {
+            $image = $request->file('file_foto');
+            $name = time().'.'.$image->getClientOriginalExtension();
 
-        $socioModel = Socio::findOrFail($id);
-        $socioModel->fill($socio);
-        $socioModel->save();
+            $path = $request->file('file_foto')->storeAs('public/fotos', $name);
+            // OR
+            // Storage::putFileAs('public/img', $image, $name);
+        }
+        $request->validated();
+
+        $socio = Socio::findOrFail($id);
+        $socio->fill($request->all());
+        $socio->foto_url = $name;
+        $socio->save();
         return redirect()
                 ->action("SocioController@index")
                 ->with("success", "Sócio editado corretamente");
@@ -131,7 +146,7 @@ class SocioController extends Controller
      */
     public function destroy($id)
     {
-        dd($_REQUEST['socio_id']);
+
         Socio::destroy($id);
         return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');;
     }
