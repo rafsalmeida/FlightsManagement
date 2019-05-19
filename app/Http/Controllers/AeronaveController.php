@@ -51,10 +51,10 @@ class AeronaveController extends Controller
         }
 
         $aeronave = $request->validate([
-        'matricula' => 'unique:aeronaves|required|string|size:8',
+        'matricula' => 'unique:aeronaves,matricula|required|string|size:8',
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
-        'num_lugares' => 'required|integer|max:11',
+        'num_lugares' => 'required|integer',
         'conta_horas' => 'required|integer',
         'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
         'minuto' => 'required|integer|max:60',///acrescentei
@@ -119,13 +119,12 @@ class AeronaveController extends Controller
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
         }
-
         $aeronave = $request->validate([
-        'matricula' => 'unique:aeronaves|required|string|size:8',
+        'matricula' => 'required|string|unique:aeronaves,matricula,'.$request->matricula.',matricula',
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
-        'num_lugares' => 'required|integer|max:11',
-        'conta_horas' => 'required|integer|max:11',
+        'num_lugares' => 'required|integer',
+        'conta_horas' => 'required|integer',
         'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/'
         ], [ // Custom Messages
         'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
