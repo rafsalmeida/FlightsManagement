@@ -16,6 +16,7 @@ return [
     'after_or_equal'       => 'O campo :attribute deverá conter uma data posterior ou igual a :date.',
     'alpha'                => 'O campo :attribute deverá conter apenas letras.',
     'alpha_dash'           => 'O campo :attribute deverá conter apenas letras, números e traços.',
+    'alpha_space'         => 'O campo :attribute deverá conter apenas letras e espaços.',
     'alpha_num'            => 'O campo :attribute deverá conter apenas letras e números .',
     'array'                => 'O campo :attribute deverá conter uma coleção de elementos.',
     'before'               => 'O campo :attribute deverá conter uma data anterior a :date.',
