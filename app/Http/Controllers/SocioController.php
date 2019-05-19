@@ -55,15 +55,16 @@ class SocioController extends Controller
             return redirect()->action("SocioController@index");
         }
 
-        $socio = $request->validated();
+        //$socio = $request->validated();
 
-        /*$socio = new Socio();
-        $socio = $request->validated();
-        $socio->fill($request->all)
+        $socio = new Socio();
+       
+        $socio->fill($request->all());
+        $request->validated();
         $socio->password = Hash::make($request->data_nascimento);
-        $socio->save();*/
+        $socio->save();
 
-        Socio::create($socio);
+        //Socio::create($socio);
         
 
         return redirect()
@@ -128,9 +129,10 @@ class SocioController extends Controller
      * @param  \App\Socio  $socio
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Socio $socio)
+    public function destroy($id)
     {
+        dd($_REQUEST['socio_id']);
         Socio::destroy($id);
-        return redirect()->action("SocioController@index");
+        return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');;
     }
 }
