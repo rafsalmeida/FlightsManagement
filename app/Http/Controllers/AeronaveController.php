@@ -150,6 +150,7 @@ class AeronaveController extends Controller
     public function destroy($id)
     {
         Aeronave::destroy($id);
-        return redirect()->action('AeronaveController@index');
+        return redirect()->action('AeronaveController@index')
+                         ->with('success', 'Aeronave apagada corretamente');;
     }
 }
