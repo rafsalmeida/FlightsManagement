@@ -30,9 +30,8 @@
                 <form action="{{action('AeronaveController@destroy', $aeronave->matricula)}}" method="POST" role="form" class="inline">
                     @csrf
                     @method('delete')
-                    @include('partials.deletemodal')
                     <input type="hidden" name="aeronave_matricula" value="{{ $aeronave->matricula }}">
-                    <button type="button" class="btn btn-sm btn-xs btn-danger rounded-pill" data-target="#deleteconfirm" data-toggle="modal" style="width: 100%">Apagar</button>
+                    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                 </form>
             </div>
             </td>
