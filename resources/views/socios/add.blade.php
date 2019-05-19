@@ -5,7 +5,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('SocioController@store')}}" method="post" class="form-group">
+<form action="{{ action('SocioController@store')}}" method="post" class="form-group" enctype="multipart/form-data">
 	@csrf
     <div class="container" style="padding-top: 15px">
     	@yield('form')
