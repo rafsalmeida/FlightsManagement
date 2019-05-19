@@ -41,7 +41,7 @@
             <div class="row">
 	               <div class="col-md-2 collapse navbar-collapse show" id="collapsibleNavbar" style="padding: 0; margin: 0; min-height: 91vh;background-color: #ececec; "> 
                         <ul class="vertical-menu navbar-nav nav-navtabs">
-                          <li class="nav-item active">
+                          <li class="nav-item">
                             <a class="btn" href="{{action('AeronaveController@index')}}"><i class="fas fa-plane"></i> Gerir Aeronaves</a>
                           </li>
                           <li class="nav-item">
@@ -63,4 +63,10 @@
             </div>
         </div>
     </body>
+    <script>
+            $(".vertical-menu .nav-item").on("click", function(){
+               $(".vertical-menu").find(".active").removeClass("active");
+               $(this).addClass("active");
+            });
+        </script>
 </html>
