@@ -15,6 +15,11 @@ class IsDirecao
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if($request->socio() && $request->socio()->direcao == 1){
+
+            return $next($request);
+        }
+
+        throw new AccessDeniedHttpException('Unauthorized.');
     }
 }
