@@ -15,8 +15,8 @@
         type="datetime-local" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
         placeholder="HoraDescolagem" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
-    @if ($errors->has('marca'))
-        <em>{{ $errors->first('marca') }}</em>
+    @if ($errors->has('hora_descolagem'))
+        <em>{{ $errors->first('hora_descolagem') }}</em>
     @endif
 </div>
 <div class="form-group">
@@ -69,15 +69,39 @@
         <em>{{ $errors->first('piloto_id') }}</em>
     @endif
 </div>
+
 <div class="form-group">
-    <label for="inputNVoo">Natureza do Voo</label>
-    <input
-        type="text" class="form-control"
-        name="natureza" id="inputNVoo"
-        placeholder="NVoo" value="@if(isset($movimento)){{ old('natureza', $movimento->natureza) }}@endif" />
-    @if ($errors->has('natureza'))
-        <em>{{ $errors->first('natureza') }}</em>
-    @endif
+    <label for="inputNatureza">Natureza do Voo</label>
+    <div class='radio' name='natureza'>
+        @if(isset($movimento))
+        <div>
+            {!! Form::radio('natureza','T', $movimento->natureza == 'T')  !!}
+            <label class="form-check-label">Treino</label>
+        </div>
+        <div>
+            {!! Form::radio('natureza','I',$movimento->natureza == 'I')  !!}
+            <?php $natureza = 'I'; ?>
+            <label class="form-check-label">Instrução</label>
+        </div>
+        <div>
+            {!! Form::radio('natureza','E',$movimento->natureza == 'E')  !!}
+            <label class="form-check-label">Especial</label>
+        </div>
+        @else
+        <div>
+            {!! Form::radio('natureza','T')  !!}
+            <label class="form-check-label">Treino</label>
+        </div>
+        <div>
+            {!! Form::radio('natureza','I')  !!}
+            <label class="form-check-label">Instrução</label>
+        </div>
+        <div>
+            {!! Form::radio('natureza','E')  !!}
+            <label class="form-check-label">Especial</label>
+        </div>
+        @endif
+    </div>
 </div>
 <div class="form-group">
     <label for="inputAerPartida">Aerodromo de Partida</label>
@@ -149,6 +173,7 @@
         <em>{{ $errors->first('conta_horas_fim') }}</em>
     @endif
 </div>
+<!-- 
 <div class="form-group">
     <label for="inputTempVoo">Tempo de Voo</label>
     <input
@@ -169,15 +194,46 @@
         <em>{{ $errors->first('preco_voo') }}</em>
     @endif
 </div>
+-->
 <div class="form-group">
-    <label for="inputMPagamento">Modo de Pagamento</label>
-    <input
-        type="text" class="form-control"
-        name="modo_pagamento" id="inputMPagamento"
-        placeholder="MPagamento" value="@if(isset($movimento)){{ old('modo_pagamento', $movimento->modo_pagamento) }}@endif" />
-    @if ($errors->has('modo_pagamento'))
-        <em>{{ $errors->first('modo_pagamento') }}</em>
-    @endif
+    <label for="inputTPagamento">Modo de Pagamento</label>
+    <div class='radio'>
+        @if(isset($movimento))
+        <div>
+            {!! Form::radio('modo_pagamento','T', $movimento->modo_pagamento == 'N')  !!}
+            <label class="form-check-label">Numerário</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','I',$movimento->natureza == 'M')  !!}
+            <label class="form-check-label">Multibanco</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','E',$movimento->natureza == 'T')  !!}
+            <label class="form-check-label">Transferência</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','E',$movimento->natureza == 'P')  !!}
+            <label class="form-check-label">Pacote de horas</label>
+        </div>
+        @else
+        <div>
+            {!! Form::radio('modo_pagamento','N')  !!}
+            <label class="form-check-label">Numerário</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','M')  !!}
+            <label class="form-check-label">Multibanco</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','T')  !!}
+            <label class="form-check-label">Transferência</label>
+        </div>
+        <div>
+            {!! Form::radio('modo_pagamento','P')  !!}
+            <label class="form-check-label">Pacote de horas</label>
+        </div>
+        @endif
+    </div>
 </div>
 <div class="form-group">
     <label for="inputNRecibo">Nº do Recibo</label>
@@ -199,16 +255,18 @@
         <em>{{ $errors->first('observacoes') }}</em>
     @endif
 </div>
-<div class="form-group">
-    <label for="inputTInstrucao">Tipo de Instrução</label>
-    <input
-        type="text" class="form-control"
-        name="tipo_instrucao" id="inputRInstrucao"
-        placeholder="TInstrucao" value="@if(isset($movimento)){{ old('tipo_instrucao', $movimento->tipo_instrucao) }}@endif" />
-    @if ($errors->has('tipo_instrucao'))
-        <em>{{ $errors->first('tipo_instrucao') }}</em>
-    @endif
-</div>
+@if($natureza == 'I')
+    <div class="form-group">
+        <label for="inputTInstrucao">Tipo de Instrução</label>
+        <input
+            type="text" class="form-control"
+            name="tipo_instrucao" id="inputRInstrucao"
+            placeholder="TInstrucao" value="@if(isset($movimento)){{ old('tipo_instrucao', $movimento->tipo_instrucao) }}@endif" />
+        @if ($errors->has('tipo_instrucao'))
+            <em>{{ $errors->first('tipo_instrucao') }}</em>
+        @endif
+    </div>
+@endif
 <div class="form-group">
     <label for="inputInstrutor">Instrutor Id</label>
     <input
