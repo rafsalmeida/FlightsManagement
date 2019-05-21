@@ -27,9 +27,9 @@
     @foreach($valores as $valor)
         <tr>
             <td>{{$valor->unidade_conta_horas}} </td>
-            <td> <input type="text" class="form-control" name="minutos" id="inputMinutos"
+            <td> <input type="text" class="form-control" name="tempos[]" id="inputTempo"
             value="@if(isset($valor)){{ old('minutos', $valor->minutos) }}@endif" /> </td>
-            <td><input type="text" class="form-control" name="preco" id="inputPreco"
+            <td><input type="text" class="form-control" name="precos[]" id="inputPreco"
             value="@if(isset($valor)){{ old('preco', $valor->preco) }}@endif" /> </td>
            
         </tr>
