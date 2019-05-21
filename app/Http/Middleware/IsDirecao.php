@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Closure;
 
 class IsDirecao
@@ -15,7 +15,7 @@ class IsDirecao
      */
     public function handle($request, Closure $next)
     {
-        if ($request->socio() && $request->socio()->direcao == 1) {
+        if ($request->user() && $request->user()->direcao == 1) {
             return $next($request);
         }
 
