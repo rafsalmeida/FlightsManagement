@@ -5,7 +5,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('AeronaveController@store')}}" method="post" class="form-group">
+<form method="POST" action="{{ action('AeronaveController@store')}}"  class="form-group">
 	@csrf
     <div class="container" style="padding-top: 15px">
     	@yield('form')
