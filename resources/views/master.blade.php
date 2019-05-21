@@ -26,7 +26,7 @@
                     <ul class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center;">
                         <li><a class="text-primary" href="{{action('SocioController@edit', Auth::user()->id)}}"><i class="fas fa-user-circle"></i> Perfil</a></li>
                         <div class="dropdown-divider"></div>
-                        <li><a class="text-primary" href="#"><i class="fas fa-key"></i> Alterar Password</a></li>
+                        <li><a class="text-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}"><i class="fas fa-key"></i> Alterar Password</a></li>
                         <div class="dropdown-divider"></div>
                         <li><form action="{{ action('Auth\LoginController@logout')}}" method="post" class= "form-group"> 
                         @csrf 

@@ -17,6 +17,7 @@ class AeronaveController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
     }
 
     public function index()
@@ -33,6 +34,7 @@ class AeronaveController extends Controller
      */
     public function create()
     {
+
         $title = "Adicionar Aeronave";
         return view('aeronaves.add', compact('title'));
 
@@ -46,6 +48,9 @@ class AeronaveController extends Controller
      */
     public function store(Request $request)
     {
+
+
+
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
         }
@@ -97,7 +102,8 @@ class AeronaveController extends Controller
     {
         //ir buscar a aeronave com um certo id
         //chamar o form de edit passando a aeronave
-        //
+        
+
         $title = "Editar Aeronave";
         $aeronave = Aeronave::findOrFail($id);
         $valores = AeronaveValor::where('matricula', $aeronave->matricula)->get();
@@ -115,6 +121,7 @@ class AeronaveController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         //validar e dar store na bd
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
@@ -148,6 +155,7 @@ class AeronaveController extends Controller
     }
     public function destroy($id)
     {
+
         Aeronave::destroy($id);
         return redirect()->action('AeronaveController@index')
                          ->with('success', 'Aeronave apagada corretamente');;
