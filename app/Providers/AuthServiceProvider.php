@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('is-direcao', function ($socio) {    
+            return $socio->direcao == 1;
+        });
     }
 }
