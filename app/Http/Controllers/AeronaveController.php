@@ -49,7 +49,7 @@ class AeronaveController extends Controller
     public function store(Request $request)
     {
 
-
+        //$this->authorize('create',Aeronave::class);
 
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
@@ -62,19 +62,25 @@ class AeronaveController extends Controller
         'num_lugares' => 'required|integer',
         'conta_horas' => 'required|integer',
         'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
-        'minuto' => 'required|integer|max:60',///acrescentei
+        //'minuto' => 'required|integer|max:60',///acrescente
+        'tempos' => 'required',
+        'precos' => 'required',
         ], [ // Custom Messages
         'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
         'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
         ]);
 
-        $valor = $request->validate([
-        'preco_minuto' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/', ///falta apresentar mensagem
-        'minuto' => 'required|integer|max:60',///acrescentei 
-        ]);
+        
 
-        Aeronave::create($aeronave); ////
-        AeronaveValor::create($valor);
+       $aeronaveCriada = Aeronave::create($aeronave); ////
+        $valor = array();
+        for($i=0; $i<10;$i++){
+            $valor['matricula'] = $aeronaveCriada->matricula;
+            $valor['unidade_conta_horas'] = $i+1;
+            $valor['minutos'] = $aeronave['tempos'][$i];
+            $valor['preco'] =$aeronave['precos'][$i];
+            AeronaveValor::create($valor);
+        }
         return redirect()
                  ->action('AeronaveController@index')            
                  ->with('success', 'Aeronave adicionada corretamente');
