@@ -25,9 +25,9 @@ class StoreSocio extends FormRequest
     public function rules()
     {
         return [
-            "num_socio" => "required|integer|regex:/^\d{1,11}$/".Rule::unique('users')->ignore($this->id),
-            "name" => "required|string|max:255|regex:/^[\pL\s]+$/u",
-            "nome_informal" => "required|alpha_dash|max:40",
+            "num_socio" => "required|integer|regex:/^\d{1,11}$/|".Rule::unique('users')->ignore($this->id),
+            "name" => "required|string|alpha|max:255|regex:/^[\pL\s]+$/u",
+            "nome_informal" => "required|string|max:40",
             "sexo" => "required",
             "tipo_socio" => "required",
             "email" => "required|email|max:255|".Rule::unique('users')->ignore($this->id),
