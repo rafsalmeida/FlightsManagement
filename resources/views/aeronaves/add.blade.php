@@ -25,7 +25,7 @@
         <tr>
             <td>{{$i}} </td>
             <td><div class="form-group">
-    			<input type="text" class="form-control" name="minuto" id="minuto"
+    			<input type="text" class="form-control" name="tempos[]" id="minuto"
         				placeholder="Minutos"/>
    			             <!-- Verificar-->
    			             @if ($errors->has('minuto'))
@@ -35,7 +35,7 @@
 
             <td>
             	<div class="form-group">
-    			<input type="text" class="form-control" name="preco_minuto" id="preco_minuto"
+    			<input type="text" class="form-control" name="precos[]" id="preco_minuto"
         				placeholder="Precos"/>
    			             <!-- Verificar-->
    			             @if ($errors->has('preco_minuto'))
