@@ -6,7 +6,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('AeronaveController@update', $aeronave->matricula)}}" method="post" class="form-group">
+<form  method="POST" action="{{ action('AeronaveController@update', $aeronave->matricula)}}"  class="form-group">
 	@method('put')
 	@csrf
     <input type="hidden" name="matricula" value="{{ $aeronave->matricula }}" />
