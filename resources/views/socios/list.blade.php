@@ -13,7 +13,9 @@
             <th>Direção</th>
             <th>Quotas</th>
             <th>Ativo</th>
+            @can('is-direcao', Auth::user())
             <th></th>
+            @endcan
         </tr>
     </thead>
     <tbody>
@@ -51,23 +53,26 @@
                     Não-ativo
                 @endif
             </td>
-            <td>
+            @can('is-direcao', Auth::user())
+            <td>                
                 <div style="text-align: center; margin: auto">
                 <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
-                <form action="{{action('SocioController@destroy', $socio->id)}}" method="POST" role="form" class="inline">
+                <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="socio_id" value="{{ $socio->id }}">
                     {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                 </form>
-                <form action="{{route('socios.mudarEstado', [$socio])}}" method="POST" role="form" class="inline">
+                <form method="POST" action="{{url('/socios/'.$socio->id.'/ativo')}}"  role="form" class="inline">
                     @csrf
-                    <input type="hidden" name="socio_id" value="{{ $socio->id }}">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Ativar/Desativar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
+                    @method('PATCH')
+                    <input type="hidden" name="_method" value="patch">
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Ativar/Desativar', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
                 </form>
-
+                
             </div>
             </td>
+            @endcan
         </tr>
     @endforeach
     </table>
