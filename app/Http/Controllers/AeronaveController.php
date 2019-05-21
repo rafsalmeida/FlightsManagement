@@ -49,7 +49,6 @@ class AeronaveController extends Controller
     public function store(Request $request)
     {
 
-        //$this->authorize('create',Aeronave::class);
 
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
