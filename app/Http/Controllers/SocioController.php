@@ -56,16 +56,21 @@ class SocioController extends Controller
         }
 
         //$socio = $request->validated();
-        //
-        $image = $request->file('file_foto');
-        $name = time().'.'.$image->getClientOriginalExtension();
-
-        $path = $request->file('file_foto')->storeAs('public/fotos', $name);
-
+        
         $socio = new Socio();
        
         $socio->fill($request->all());
-        $socio->foto_url = $name;
+
+
+        if(! is_null($request['file_foto'])) {
+            $image = $request->file('file_foto');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $path = $request->file('file_foto')->storeAs('public/fotos', $name);
+            $socio->foto_url = $name;
+        }
+
+
+
         $request->validated();
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
