@@ -30,5 +30,7 @@ Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => '
 //
 Route::resource('socios', 'SocioController');
 
+Route::post('socios/{socio}', 'SocioController@mudarEstado')->name('socios.mudarEstado');
+
 Route::resource('movimentos', 'MovimentoController');
 
