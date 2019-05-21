@@ -78,9 +78,43 @@ class MovimentoController extends Controller
      * @param  \App\Movimento  $movimento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Movimento $movimento)
+    public function update(Request $request, $id)
     {
-        //
+        //validar e dar store na bd
+
+        if ($request->has('cancel')) {
+            return redirect()->action('MovimentoController@index');
+        }
+
+        $movimento = $request->validate([
+        'aeronave' => 'required|string',
+        'num_diario' => 'required|integer',
+        'num_servico' => 'required|integer',
+        'piloto_id' => 'required|integer',
+        'aerodromo_partida' => 'required|string',
+        'aerodromo_chegada' => 'required|string',
+        'num_aterragens' => 'required|integer',
+        'num_descolagens' => 'required|integer',
+        'num_pessoas' => 'required|integer',
+        'conta_horas_inicio' => 'required|integer',
+        'conta_horas_fim' => 'required|integer',
+        'num_recibo' => 'required|integer',
+        ]);
+        $movimentoModel = Movimento::findOrFail($id);
+        $movimentoModel->fill($movimento);
+        $movimentoModel->save();
+        return redirect()
+                ->action('MovimentoController@index')
+                ->with('success', 'Movimento editada corretamente');
+
+        
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     }
 
     /**
