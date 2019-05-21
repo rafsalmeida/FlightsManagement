@@ -22,6 +22,7 @@ class SocioController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('verified');
 
     }
     
