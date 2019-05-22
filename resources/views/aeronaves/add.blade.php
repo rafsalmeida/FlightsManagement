@@ -28,8 +28,8 @@
     			<input type="text" class="form-control" name="tempos[]" id="minuto"
         				placeholder="Minutos"/>
    			             <!-- Verificar-->
-   			             @if ($errors->has('minuto'))
-        				<em>{{ $errors->first('minuto') }}</em>
+   			             @if ($errors->has('tempos'))
+        				<em>{{ $errors->first('tempos') }}</em>
    						 @endif
 			</div> </td>
 
@@ -38,8 +38,8 @@
     			<input type="text" class="form-control" name="precos[]" id="preco_minuto"
         				placeholder="Precos"/>
    			             <!-- Verificar-->
-   			             @if ($errors->has('preco_minuto'))
-        				<em>{{ $errors->first('preco_minuto') }}</em>
+   			             @if ($errors->has('precos'))
+        				<em>{{ $errors->first('precos') }}</em>
    						 @endif
 			</div> 
             </td>
