@@ -21,7 +21,11 @@ class SocioController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
+
+        $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy','mudarEstado']]);
+
+        $this->middleware('verified');
+
 
     }
     
@@ -155,6 +159,19 @@ class SocioController extends Controller
     {
 
         Socio::destroy($id);
-        return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');;
+        return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');
+    }
+
+    public function mudarEstado($id){
+
+        $socio = Socio::findOrFail($id);
+        if($socio->ativo == 1){
+            $socio->ativo = 0;
+        } else {
+            $socio->ativo = 1;
+        }
+
+        $socio->save();
+        return redirect()->action("SocioController@index")->with('success', 'Estado alterado corretamente');
     }
 }
