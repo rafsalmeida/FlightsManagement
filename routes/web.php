@@ -20,7 +20,10 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->middleware('verified');
+Route::group(['middleware' => ['verified' , 'passwd_changed']], function(){
+	Route::get('/home', 'HomeController@index');
+});
+
 
 Route::get('password', 'Auth\ChangePasswordController@showForm')->name('password');
 Route::patch('password', 'Auth\ChangePasswordController@updatePassword')->name('password.change');
