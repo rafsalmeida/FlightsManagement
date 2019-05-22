@@ -15,10 +15,12 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+
+
 Auth::routes(['register' => false]);
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->middleware('verified');
 
 Route::get('password', 'Auth\ChangePasswordController@showForm')->name('password');
 Route::patch('password', 'Auth\ChangePasswordController@updatePassword')->name('password.change');
