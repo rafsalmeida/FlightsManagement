@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Aeronave;
 use App\AeronaveValor;
 
+
 class AeronaveController extends Controller
 {
     /**
@@ -55,7 +56,7 @@ class AeronaveController extends Controller
         }
 
         $aeronave = $request->validate([
-        'matricula' => 'unique:aeronaves,matricula|required|string|size:8',
+        'matricula' => 'unique:aeronaves,matricula|required|string|max:8',
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
         'num_lugares' => 'required|integer',
@@ -100,18 +101,19 @@ class AeronaveController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $id //
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Aeronave $aeronave)
     {
         //ir buscar a aeronave com um certo id
         //chamar o form de edit passando a aeronave
         
 
         $title = "Editar Aeronave";
-        $aeronave = Aeronave::findOrFail($id);
-        $valores = AeronaveValor::where('matricula', $aeronave->matricula)->get();
+        //$valores = AeronaveValor::where('matricula', $aeronave->matricula)->get();
+        //$aeronave = Aeronave::findOrFail($aeronave);
+        $valores = $aeronave->valores;
         return view('aeronaves.edit', compact('title', 'aeronave', 'valores'));
         
     }
@@ -124,27 +126,43 @@ class AeronaveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Aeronave $aeronave)
     {
 
         //validar e dar store na bd
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
         }
-        $aeronave = $request->validate([
+        $aeronaveValidador = $request->validate([
         'matricula' => 'required|string|unique:aeronaves,matricula,'.$request->matricula.',matricula',
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
         'num_lugares' => 'required|integer',
         'conta_horas' => 'required|integer',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/'
+        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
+        'tempos' => 'required',
+        'precos' => 'required',
         ], [ // Custom Messages
         'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
         'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
         ]);
-        $aeronaveModel = Aeronave::findOrFail($id);
-        $aeronaveModel->fill($aeronave);
-        $aeronaveModel->save();
+        $aeronave->fill($aeronaveValidador);
+        $aeronave->save();
+
+        $valores= $aeronave->valores;
+   
+        $i=0;
+        $array= array();
+        foreach ( $valores as $valor) {
+            $array['matricula'] = $aeronave->matricula;
+            $array['unidade_conta_horas'] = $i+1;
+            $array['minutos'] = $aeronaveValidador['tempos'][$i];
+            $array['preco'] =$aeronaveValidador['precos'][$i];
+            $valor->fill($request->all());
+            $valor->save();
+            $i++;
+        }
+           
         return redirect()
                 ->action('AeronaveController@index')
                 ->with('success', 'Aeronave editada corretamente');
