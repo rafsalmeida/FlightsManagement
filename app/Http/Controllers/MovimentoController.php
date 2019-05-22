@@ -58,18 +58,22 @@ class MovimentoController extends Controller
         'data' => 'required',
         'hora_descolagem' => 'required',
         'hora_aterragem' => 'required',
-        'aeronave' => 'required|string',
+        'aeronave' => 'required|string|exists:aeronaves,matricula',
+        'natureza' => 'required',
         'num_diario' => 'required|integer',
         'num_servico' => 'required|integer',
-        'piloto_id' => 'required|integer',
-        'aerodromo_partida' => 'required|string',
-        'aerodromo_chegada' => 'required|string',
+        'piloto_id' => 'required|integer|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
+        'aerodromo_partida' => 'required|string|exists:aerodromos,code',
+        'aerodromo_chegada' => 'required|string|exists:aerodromos,code',
         'num_aterragens' => 'required|integer',
         'num_descolagens' => 'required|integer',
         'num_pessoas' => 'required|integer',
         'conta_horas_inicio' => 'required|integer',
         'conta_horas_fim' => 'required|integer',
         'num_recibo' => 'required|integer',
+        'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
+        'tipo_instrucao' => 'required_if:natureza,I',
+        'modo_pagamento' => 'required',
         'observacoes' => 'nullable'
         ]);
 
@@ -87,7 +91,15 @@ class MovimentoController extends Controller
         $aeronave_precos = AeronaveValor::whereMatricula($request->aeronave)->whereUnidadeContaHoras($request->conta_horas_fim-$request->conta_horas_inicio)->first();
         $movimento->preco_voo = $aeronave_precos->preco;
         $movimento->confirmado = 0;
-        
+        if ($request->natureza == 'I'){
+            $instrutor = Socio::find($request->piloto_id);
+            $movimento->num_licenca_instrutor = $instrutor->num_licenca;
+            $movimento->validade_licenca_instrutor = $instrutor->validade_licenca;
+            $movimento->tipo_licenca_instrutor = $instrutor->tipo_licenca;
+            $movimento->num_certificado_instrutor = $instrutor->num_certificado;
+            $movimento->validade_certificado_instrutor = $instrutor->validade_certificado;
+            $movimento->classe_certificado_instrutor = $instrutor->classe_certificado;
+        }
 
         $movimento->save();
 
@@ -151,7 +163,8 @@ class MovimentoController extends Controller
         'num_recibo' => 'required|integer',
         'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
         'tipo_instrucao' => 'required_if:natureza,I',
-        'modo_pagamento' => 'required'
+        'modo_pagamento' => 'required',
+        'observacoes' => 'nullable'
         ]);
 
      
