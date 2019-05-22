@@ -14,4 +14,7 @@ class Aeronave extends Model
     protected $fillable = ['matricula', 'marca', 'modelo', 'num_lugares','conta_horas','preco_hora'];
 
     
+    public function aeronaveValores(){
+    	return $this->hasMany('App\AeronaveValor', 'matricula');
+    }
 }

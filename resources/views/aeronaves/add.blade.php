@@ -5,7 +5,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('AeronaveController@store')}}" method="post" class="form-group">
+<form method="POST" action="{{ action('AeronaveController@store')}}"  class="form-group">
 	@csrf
     <div class="container" style="padding-top: 15px">
     	@yield('form')
@@ -25,7 +25,7 @@
         <tr>
             <td>{{$i}} </td>
             <td><div class="form-group">
-    			<input type="text" class="form-control" name="minuto" id="minuto"
+    			<input type="text" class="form-control" name="tempos[]" id="minuto"
         				placeholder="Minutos"/>
    			             <!-- Verificar-->
    			             @if ($errors->has('minuto'))
@@ -35,7 +35,7 @@
 
             <td>
             	<div class="form-group">
-    			<input type="text" class="form-control" name="preco_minuto" id="preco_minuto"
+    			<input type="text" class="form-control" name="precos[]" id="preco_minuto"
         				placeholder="Precos"/>
    			             <!-- Verificar-->
    			             @if ($errors->has('preco_minuto'))

@@ -21,7 +21,11 @@ class SocioController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
         $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy','mudarEstado']]);
+
+        $this->middleware('verified');
+
 
     }
     

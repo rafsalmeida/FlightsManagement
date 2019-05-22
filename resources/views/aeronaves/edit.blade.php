@@ -6,7 +6,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('AeronaveController@update', $aeronave->matricula)}}" method="post" class="form-group">
+<form  method="POST" action="{{ action('AeronaveController@update', $aeronave->matricula)}}"  class="form-group">
 	@method('put')
 	@csrf
     <input type="hidden" name="matricula" value="{{ $aeronave->matricula }}" />
@@ -27,8 +27,10 @@
     @foreach($valores as $valor)
         <tr>
             <td>{{$valor->unidade_conta_horas}} </td>
-            <td>{{$valor->minutos}} </td>
-            <td>{{$valor->preco}}</td>
+            <td> <input type="text" class="form-control" name="tempos[]" id="inputTempo"
+            value="@if(isset($valor)){{ old('minutos', $valor->minutos) }}@endif" /> </td>
+            <td><input type="text" class="form-control" name="precos[]" id="inputPreco"
+            value="@if(isset($valor)){{ old('preco', $valor->preco) }}@endif" /> </td>
            
         </tr>
 
