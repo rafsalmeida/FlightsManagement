@@ -12,9 +12,9 @@
 <div class="form-group">
     <label for="inputHoraDescolagem">Hora Descolagem</label>
     <input
-        type="date-time" class="form-control"
+        type="datetime" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
-        placeholder="HoraDescolagem" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
+        placeholder="dd/mm/aaaa hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
     @if ($errors->has('hora_descolagem'))
         <em>{{ $errors->first('hora_descolagem') }}</em>
     @endif
@@ -24,7 +24,7 @@
     <input
         type="datetime" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
-        placeholder="HoraAterragem" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
+        placeholder="dd/mm/aaaa hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
     @if ($errors->has('hora_aterragem'))
         <em>{{ $errors->first('hora_aterragem') }}</em>
     @endif
@@ -64,7 +64,7 @@
     <input
         type="number" class="form-control"
         name="piloto_id" id="inputPiloto"
-        placeholder="Piloto" value="@if(isset($movimento)){{ old('piloto_id', $movimento->piloto_id) }}@endif" />
+        placeholder="Piloto" value="@if(isset($movimento)){{ old('piloto_id', $movimento->piloto_id) }}@else{{ Auth::user()->id }}@endif" />
     @if ($errors->has('piloto_id'))
         <em>{{ $errors->first('piloto_id') }}</em>
     @endif
@@ -196,7 +196,7 @@
 -->
 <div class="form-group">
     <label for="inputTPagamento">Modo de Pagamento</label>
-    <div class='radio'>
+    <div class='radio' name='modo_pagamento'>
         @if(isset($movimento))
         <div>
             {!! Form::radio('modo_pagamento','N', $movimento->modo_pagamento == 'N')  !!}
@@ -254,27 +254,38 @@
         <em>{{ $errors->first('observacoes') }}</em>
     @endif
 </div>
-@if($movimento->natureza == 'I' || !isset($movimento))
-    <div class="form-group">
-        <label for="inputTInstrucao">Tipo de Instrução</label>
-        <input
-            type="text" class="form-control"
-            name="tipo_instrucao" id="inputRInstrucao"
-            placeholder="TInstrucao" value="@if(isset($movimento)){{ old('tipo_instrucao', $movimento->tipo_instrucao) }}@endif" />
-        @if ($errors->has('tipo_instrucao'))
-            <em>{{ $errors->first('tipo_instrucao') }}</em>
+<div class="form-group">
+    <label for="inputTInstrucao">Tipo de Instrução</label>
+    <div class='radio' name='tipo_instrucao'>
+        @if(isset($movimento))
+        <div>
+            {!! Form::radio('tipo_instrucao','D', $movimento->tipo_instrucao == 'D')  !!}
+            <label class="form-check-label">Duplo Comando</label>
+        </div>
+        <div>
+            {!! Form::radio('tipo_instrucao','S',$movimento->tipo_instrucao == 'S')  !!}
+            <label class="form-check-label">Solo</label>
+        </div>
+        @else
+        <div>
+            {!! Form::radio('tipo_instrucao','D')  !!}
+            <label class="form-check-label">Duplo Comando</label>
+        </div>
+        <div>
+            {!! Form::radio('tipo_instrucao','S')  !!}
+            <label class="form-check-label">Solo</label>
+        </div>
         @endif
     </div>
-
-    <div class="form-group">
-        <label for="inputInstrutor">Instrutor Id</label>
-        <input
-            type="number" class="form-control"
-            name="instrutor_id" id="inputInstrutor"
-            placeholder="Instrutor" value="@if(isset($movimento)){{ old('instrutor_id', $movimento->instrutor_id) }}@endif" />
-        @if ($errors->has('instrutor_id'))
-            <em>{{ $errors->first('instrutor_id') }}</em>
-        @endif
-    </div>
-@endif
+</div>
+<div class="form-group">
+    <label for="inputInstrutor">Instrutor Id</label>
+    <input
+        type="number" class="form-control"
+        name="instrutor_id" id="inputInstrutor"
+        placeholder="Instrutor" value="@if(isset($movimento)){{ old('instrutor_id', $movimento->instrutor_id) }}@endif" />
+    @if ($errors->has('instrutor_id'))
+        <em>{{ $errors->first('instrutor_id') }}</em>
+    @endif
+</div>
 @endsection
