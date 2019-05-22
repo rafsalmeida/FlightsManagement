@@ -22,9 +22,11 @@ class SocioController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy','mudarEstado']]);
+        $this->middleware('direcao', ['only' => ['create','store','destroy','mudarEstado']]);
 
         $this->middleware('verified');
+
+
 
 
     }
@@ -64,20 +66,14 @@ class SocioController extends Controller
         //$socio = $request->validated();
         
         $socio = new Socio();
-       
+        $request->validated();
         $socio->fill($request->all());
-
-
         if(! is_null($request['file_foto'])) {
             $image = $request->file('file_foto');
             $name = time().'.'.$image->getClientOriginalExtension();
             $path = $request->file('file_foto')->storeAs('public/fotos', $name);
             $socio->foto_url = $name;
         }
-
-
-
-        $request->validated();
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
 
@@ -124,23 +120,22 @@ class SocioController extends Controller
      */
     public function update(StoreSocio $request,  $id)
     {
+
         //validar e dar store na bd
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
+        $request->validated();
+        $socio = Socio::findOrFail($id);
         if(! is_null($request['file_foto'])) {
             $image = $request->file('file_foto');
             $name = time().'.'.$image->getClientOriginalExtension();
-
+            $socio->foto_url = $name;
             $path = $request->file('file_foto')->storeAs('public/fotos', $name);
             // OR
             // Storage::putFileAs('public/img', $image, $name);
         }
-        $request->validated();
-
-        $socio = Socio::findOrFail($id);
         $socio->fill($request->all());
-        $socio->foto_url = $name;
         $socio->save();
         return redirect()
                 ->action("SocioController@index")
