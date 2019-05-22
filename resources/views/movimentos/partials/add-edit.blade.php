@@ -14,7 +14,7 @@
     <input
         type="datetime" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
-        placeholder="dd/mm/aaaa hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
     @if ($errors->has('hora_descolagem'))
         <em>{{ $errors->first('hora_descolagem') }}</em>
     @endif
@@ -24,7 +24,7 @@
     <input
         type="datetime" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
-        placeholder="dd/mm/aaaa hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
     @if ($errors->has('hora_aterragem'))
         <em>{{ $errors->first('hora_aterragem') }}</em>
     @endif
