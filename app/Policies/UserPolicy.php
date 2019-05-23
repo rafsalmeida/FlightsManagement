@@ -32,4 +32,18 @@ class UserPolicy
         return false;
 
     }
+
+    public function update(User $socioLogged, Socio $socio){
+        if($socioLogged->direcao){
+            return true;
+        }
+
+        if($socioLogged->id === $socio->id){
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
