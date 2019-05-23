@@ -137,6 +137,8 @@ class SocioController extends Controller
                 $request = $request->all();
 
             } else if(Auth::user()->tipo_socio == 'P'){
+                $dirty = $this->wasChanged();
+                dd($dirty);
                 $request = $request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco','num_licenca','tipo_licenca','validade_licenca','num_certificado','classe_certificado','validade_certificado']);
             } else {
 
@@ -200,5 +202,24 @@ class SocioController extends Controller
 
         $socio->save();
         return redirect()->action("SocioController@index")->with('success', 'Estado alterado corretamente');
+    }
+
+    public function mudarEstadoQuota($id){
+
+        $socio = Socio::findOrFail($id);
+        if($socio->quota_paga == 1){
+            $socio->quota_paga = 0;
+        } else {
+            $socio->quota_paga = 1;
+        }
+
+        $socio->save();
+        return redirect()->action("SocioController@index")->with('success', 'Estado de quotas alterado corretamente');
+    }
+
+    public function enviarEmailConfirmacao($id){
+
+        $socio = Socio::findOrFail($id);
+        Auth::socio()->sendEmailVerificationNotification();
     }
 }
