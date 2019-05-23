@@ -12,7 +12,7 @@
 <div class="form-group">
     <label for="inputHoraDescolagem">Hora Descolagem</label>
     <input
-        type="datetime" class="form-control"
+        type="time" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
         placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
     @if ($errors->has('hora_descolagem'))
@@ -22,7 +22,7 @@
 <div class="form-group">
     <label for="inputHoraAterragem">Hora Aterragem</label>
     <input
-        type="datetime" class="form-control"
+        type="time" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
         placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
     @if ($errors->has('hora_aterragem'))
