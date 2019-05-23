@@ -9,11 +9,25 @@
             <th>ID</th>
             <th>Aeronave</th>
             <th>Data</th>
+            <th>Hora Descolagem</th>
+            <th>Hora Aterragem</th>
+            <th>Tempo Voo</th>
             <th>Natureza</th>
-            <th>Confirmado</th>
             <th>Piloto</th>
+            <th>Cod. Aerodromo Partida</th>
+            <th>Cod. Aerodromo Chegada</th>
+            <th>Nº Aterreagens</th>
+            <th>Nº Descolagens</th>
+            <!--<th>Nº Diario</th>
+            <th>Nº Serviço</th>
+            <th>Conta-Horas Inicial</th>
+            <th>Conta-Horas Final</th>
+            <th>Nº Pessoas a Bordo</th>
+            <th>Tipo de Instrução</th>
             <th>Instrutor</th>
-            <th></th>
+            <th>Confirmado</th>
+            <th>Instrutor</th>
+            -->
         </tr>
     </thead>
     <tbody>
@@ -22,6 +36,9 @@
             <td>{{ $movimento->id }}</td>
             <td>{{ $movimento->aeronave }}</td>
             <td>{{ $movimento->data }}</td>
+            <td>{{ $movimento->hora_descolagem }}</td>
+            <td>{{ $movimento->hora_aterragem }}</td>
+            <td>{{ $movimento->tempo_voo }}</td>
             <td>@if($movimento->natureza == "T")
                     Treino
                 @elseif ($movimento->natureza == "I")
@@ -29,21 +46,25 @@
                 @else
                     Especial
                 @endif</td>
-            <td>@if($movimento->confirmado == 1)
-                    Sim
-                @else
-                    Não
-                @endif</td>
-            <td>{{ $movimento->piloto_id }}</td>
-            <td>@if(isset($movimento->instrutor_id))
+            <td>{{ \app\Socio::find($movimento->piloto_id)->nome_informal }}</td>
+            <td>{{ $movimento->aerodromo_partida }}</td>
+            <td>{{ $movimento->aerodromo_chegada }}</td>
+            <td>{{ $movimento->num_aterragens }}</td>
+            <td>{{ $movimento->num_descolagens }}</td>
+            <!--<td>@if(isset($movimento->instrutor_id))
                     {{ $movimento->instrutor_id }}
                 @else
                     Não tem Instrutor
                 @endif</td>
+            <td>@if($movimento->confirmado == 1)
+                    Sim
+                @else
+                    Não
+                @endif</td>-->
             <td>
                 <div style="text-align: center; margin: auto">
                 <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
-                <form action="#" method="POST" role="form" class="inline">
+                <form method="POST" action="#" role="form" class="inline">
                     @csrf
                     @method('delete')
                     @include('partials.deletemodal')
