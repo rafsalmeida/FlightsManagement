@@ -1,9 +1,13 @@
 @extends('master')
 @section('title', "Lista de Sócios")
 @section('content')
-<div style="padding: 2vh 0"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a></div>
+@can('is-direcao', Auth::user())
+<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
+</div>
+@endcan
+<div style="padding-top: 10px">
 @if (count($socios))
-    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
     <thead class="thead-light">
         <tr>
             <th>Foto</th>
@@ -76,7 +80,7 @@
         </tr>
     @endforeach
     </table>
-
+</div>
 
 @else
     <h2>Nenhum sócio encontrado </h2>
