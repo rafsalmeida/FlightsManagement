@@ -1,4 +1,6 @@
 @section('form')
+
+
 <div class="form-group">
     <label for="inputNumSocio">Nº de sócio</label>
     <input
@@ -188,7 +190,11 @@
         <label class="form-check-label">Não pertence</label>
     </div>
     @endif
+
+
 </div>
+
+@can('is-piloto', Auth::user())
 <div class="form-group">
     <label for="inputAluno">Aluno</label>
     @if(isset($socio))
@@ -346,7 +352,7 @@
    
 </div>
 
-<!-- fazer os uploads de ficheiros (tem de se adicionar os campos a bd???) -->
+@endcan
 
 
 
