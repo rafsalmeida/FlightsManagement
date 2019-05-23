@@ -24,17 +24,17 @@
         </tr>
         </thead>
     <tbody>
-    @for ($i = 0; $i< 10; $i++)
+    @foreach ($valores as $valor)    
         <tr>
-            <td>{{$i+1}} </td>
-            <td> <input type="text" class="form-control" name="tempos[]" id="inputTempo"
-            value="{{ old('tempos.' .$i,$valores[$i]->minutos) }}" /> </td>
-            <td><input type="text" class="form-control" name="precos[]" id="inputPreco"
-            value="{{ old('precos.' .$i,$valores[$i]->preco) }}"  /> </td>
+            <td>{{$valor->unidade_conta_horas}} </td>
+            <td> <input type="text" class="form-control" name="tempos[{{$valor->unidade_conta_horas}}]" id="inputTempo"
+            value="{{ old('tempos.' .$valor,$valor->minutos) }}" /> </td>
+            <td><input type="text" class="form-control" name="precos[{{$valor->unidade_conta_horas}}]" id="inputPreco"
+            value="{{ old('precos.' .$valor,$valor->preco) }}"  /> </td>
            
         </tr>
 
-       @endfor
+    @endforeach
     </tbody>
     </table>
 

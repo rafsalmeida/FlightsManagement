@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Aeronave;
 use App\AeronaveValor;
+use App\Http\Requests\StoreAeronave;
 
 
 class AeronaveController extends Controller
@@ -47,7 +48,7 @@ class AeronaveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAeronave $request)
     {
 
 
@@ -55,24 +56,11 @@ class AeronaveController extends Controller
             return redirect()->action('AeronaveController@index');
         }
 
-        $aeronave = $request->validate([
-        'matricula' => 'unique:aeronaves,matricula|required|string|max:8',
-        'marca' => 'required|string|max:40',
-        'modelo' => 'required|string|max:40',
-        'num_lugares' => 'required|integer',
-        'conta_horas' => 'required|integer',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
-        //'minuto' => 'required|integer|max:60',///acrescente
-        'tempos' => 'required',
-        'precos' => 'required',
-        ], [ // Custom Messages
-        'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
-        'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
-        ]);
+        $aeronave = $request->validated();
 
         
 
-       $aeronaveCriada = Aeronave::create($aeronave); ////
+        $aeronaveCriada = Aeronave::create($aeronave); ////
         $valor = array();
         for($i=0; $i<10;$i++){
             $valor['matricula'] = $aeronaveCriada->matricula;
@@ -104,15 +92,15 @@ class AeronaveController extends Controller
      * @param  int  $id //
      * @return \Illuminate\Http\Response
      */
-    public function edit(Aeronave $aeronave)
+    public function edit($id)
     {
         //ir buscar a aeronave com um certo id
         //chamar o form de edit passando a aeronave
         
 
         $title = "Editar Aeronave";
-        //$valores = AeronaveValor::where('matricula', $aeronave->matricula)->get();
-        //$aeronave = Aeronave::findOrFail($aeronave);
+
+        $aeronave = Aeronave::findOrFail($id);
         $valores = $aeronave->valores;
         return view('aeronaves.edit', compact('title', 'aeronave', 'valores'));
         
@@ -126,41 +114,30 @@ class AeronaveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Aeronave $aeronave)
+    public function update(StoreAeronave $request, $id)
     {
 
         //validar e dar store na bd
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
         }
-        $aeronaveValidador = $request->validate([
-        'matricula' => 'required|string|unique:aeronaves,matricula,'.$request->matricula.',matricula',
-        'marca' => 'required|string|max:40',
-        'modelo' => 'required|string|max:40',
-        'num_lugares' => 'required|integer',
-        'conta_horas' => 'required|integer',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
-        'tempos' => 'required',
-        'precos' => 'required',
-        ], [ // Custom Messages
-        'preco_hora.regex' => 'Formato preço/hora: ex - xxx.xx (número inteiro até 13 digitos)',
-        'marca' => 'Marca deve ser obrigatória e inferior 40 carateres',
-        ]);
-        $aeronave->fill($aeronaveValidador);
+        $dadosAGravar = $request->validated();
+        $aeronave = Aeronave::findOrFail($id);
+        $aeronave->fill($dadosAGravar);
         $aeronave->save();
 
         $valores= $aeronave->valores;
    
-        $i=0;
-        $array= array();
+      
+        
+        
         foreach ( $valores as $valor) {
-            $array['matricula'] = $aeronave->matricula;
-            $array['unidade_conta_horas'] = $i+1;
-            $array['minutos'] = $aeronaveValidador['tempos'][$i];
-            $array['preco'] =$aeronaveValidador['precos'][$i];
-            $valor->fill($request->all());
+            dump($valor);
+            $valor->minutos = $dadosAGravar['tempos'][$valor->unidade_conta_horas];
+            $valor->preco =$dadosAGravar['precos'][$valor->unidade_conta_horas];
+    
             $valor->save();
-            $i++;
+          
         }
            
         return redirect()
