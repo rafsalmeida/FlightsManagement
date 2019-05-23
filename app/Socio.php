@@ -22,5 +22,9 @@ class Socio extends Model
 		return $this->belongsTo('App\ClasseCertificado', 'classe_certificado','code');
 
 	}
+
+	public function movimentos(){
+		return $this->hasMany('App\Movimentos');
+	}
     
 }

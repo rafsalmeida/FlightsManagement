@@ -6,8 +6,8 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
-<form action="{{ action('MovimentoController@update', $movimento->id)}}" method="post" class="form-group">
-	@method('put')
+<form method="POST" action="{{ action('MovimentoController@update', $movimento->id)}}" class="form-group">
+	@method('PUT')
 	@csrf
     <input type="hidden" name="id" value="{{ $movimento->id }}" />
     <div class="container" style="padding-top: 15px">
