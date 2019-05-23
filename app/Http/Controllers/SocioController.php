@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Socio;
 use App\TipoLicenca;
 use App\ClasseCertificado;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreSocio;
+use Illuminate\Support\Facades\Auth;
 
 class SocioController extends Controller
 {
@@ -25,6 +27,7 @@ class SocioController extends Controller
         $this->middleware('direcao', ['only' => ['create','store','destroy','mudarEstado']]);
 
         $this->middleware('verified');
+
 
 
 
@@ -104,11 +107,19 @@ class SocioController extends Controller
      */
     public function edit($id)
     {
-        $title = "Editar Sócio";
         $socio = Socio::findOrFail($id);
-        $tipos_licenca = TipoLicenca::pluck('nome','code');
-        $classes_certificado = ClasseCertificado::pluck('nome','code');
-        return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
+
+        if(Auth::user()->can('view',$socio)){
+            $title = "Editar Sócio";
+            $tipos_licenca = TipoLicenca::pluck('nome','code');
+            $classes_certificado = ClasseCertificado::pluck('nome','code');
+            return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
+        } else {
+            return redirect()
+                    ->action("SocioController@index")
+                    ->with("success", "Não tem permissões para efetuar essa ação.");
+        }
+
     }
 
     /**
