@@ -28,10 +28,6 @@ class SocioController extends Controller
 
         $this->middleware('verified');
 
-
-
-
-
     }
     
     public function index()
@@ -107,6 +103,7 @@ class SocioController extends Controller
      */
     public function edit($id)
     {
+
         $socio = Socio::findOrFail($id);
 
         if(Auth::user()->can('view',$socio)){
@@ -131,28 +128,52 @@ class SocioController extends Controller
      */
     public function update(StoreSocio $request,  $id)
     {
-
-        //validar e dar store na bd
-        if ($request->has("cancel")) {
-            return redirect()->action("SocioController@index");
-        }
-        $request->validated();
         $socio = Socio::findOrFail($id);
-        if(! is_null($request['file_foto'])) {
-            $image = $request->file('file_foto');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $socio->foto_url = $name;
-            $path = $request->file('file_foto')->storeAs('public/fotos', $name);
-            // OR
-            // Storage::putFileAs('public/img', $image, $name);
-        }
-        $socio->fill($request->all());
-        $socio->save();
-        return redirect()
-                ->action("SocioController@index")
-                ->with("success", "Sócio editado corretamente");
+        if(Auth::user()->can('update', $socio)){
 
+
+            if(Auth::user()->direcao){
+
+                $request = $request->all();
+
+            } else if(Auth::user()->tipo_socio == 'P'){
+                $request = $request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco','num_licenca','tipo_licenca','validade_licenca','num_certificado','classe_certificado','validade_certificado']);
+            } else {
+
+                $request = $request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco']);
+            }
+
+
+            if ($request->has("cancel")) {
+                return redirect()->action("SocioController@index");
+            }
+
+            $request->validated();
+
+            if(! is_null($request['file_foto'])) {
+                $image = $request->file('file_foto');
+                $name = time().'.'.$image->getClientOriginalExtension();
+                $socio->foto_url = $name;
+                $path = $request->file('file_foto')->storeAs('public/fotos', $name);
+                // OR
+                // Storage::putFileAs('public/img', $image, $name);
+            }
+
+            $socio->fill($request->all());
+            $socio->save();
+            return redirect()
+                    ->action("SocioController@index")
+                    ->with("success", "Sócio editado corretamente");
+                
+     
+        } 
+
+            
         
+
+
+
+       
     }
 
     /**
