@@ -62,7 +62,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'direcao' => \App\Http\Middleware\IsDirecao::class,
         'passwd_changed' => \App\Http\Middleware\IsPasswdChanged::class,
-        'owner' => \App\Http\Middleware\IsOwner::class,
     ];
 
     /**
