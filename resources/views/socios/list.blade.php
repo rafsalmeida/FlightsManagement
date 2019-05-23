@@ -73,6 +73,12 @@
                     <input type="hidden" name="_method" value="patch">
                     {!! Form::button('<i class="fas fa-pencil-alt"></i> Ativar/Desativar', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
                 </form>
+                <form method="POST" action="{{url('/socios/'.$socio->id.'/quota')}}"  role="form" class="inline">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="_method" value="patch">
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-sm btn-xs btn-warning rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
+                </form>
                 
             </div>
             </td>
