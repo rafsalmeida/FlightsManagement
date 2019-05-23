@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\validation\Rule;
 use App\Socio;
 use App\AeronaveValor;
+use App\User;
 
 class MovimentoController extends Controller
 {
@@ -26,7 +27,8 @@ class MovimentoController extends Controller
     {
         $movimentos = Movimento::paginate(15);
         $title = "Lista de Movimentos";
-        return view('movimentos.list', compact('movimentos','title'));
+        $pilotos = Socio::all();
+        return view('movimentos.list', compact('movimentos','title','pilotos'));
     }
 
     /**
@@ -69,7 +71,7 @@ class MovimentoController extends Controller
         'num_descolagens' => 'required|integer',
         'num_pessoas' => 'required|integer',
         'conta_horas_inicio' => 'required|integer',
-        'conta_horas_fim' => 'required|integer',
+        'conta_horas_fim' => 'required|integer|min:'.$request->conta_horas_inicio.'+1',
         'num_recibo' => 'required|integer',
         'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
         'tipo_instrucao' => 'required_if:natureza,I',
@@ -81,6 +83,8 @@ class MovimentoController extends Controller
 
         $movimento->fill($movimentoModel);
 
+        $movimento->hora_aterragem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_aterragem;
+        $movimento->hora_descolagem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_descolagem;
         $movimento->num_licenca_piloto = $piloto->num_licenca;
         $movimento->validade_licenca_piloto = $piloto->validade_licenca;
         $movimento->tipo_licenca_piloto = $piloto->tipo_licenca;
@@ -99,6 +103,10 @@ class MovimentoController extends Controller
             $movimento->num_certificado_instrutor = $instrutor->num_certificado;
             $movimento->validade_certificado_instrutor = $instrutor->validade_certificado;
             $movimento->classe_certificado_instrutor = $instrutor->classe_certificado;
+        }
+
+        if($request->conta_horas_inicio<5){
+
         }
 
         $movimento->save();
