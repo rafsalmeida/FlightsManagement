@@ -16,7 +16,9 @@
             <th>Nº de Lugares</th>
             <th>Conta-horas</th>
             <th>Preço/hora</th>
+             @can('is-direcao', Auth::user())
             <th></th>
+            @endcan
         </tr>
     </thead>
     <tbody>
