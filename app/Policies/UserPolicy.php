@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\User;
-use App\Socio;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -20,7 +19,7 @@ class UserPolicy
         //
     }
 
-    public function view(User $socioLogged, Socio $socio){
+    public function view(User $socioLogged, User $socio){
         if($socioLogged->direcao){
             return true;
         }
@@ -33,7 +32,7 @@ class UserPolicy
 
     }
 
-    public function update(User $socioLogged, Socio $socio){
+    public function update(User $socioLogged, User $socio){
         if($socioLogged->direcao){
             return true;
         }
