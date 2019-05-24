@@ -29,9 +29,9 @@ class StoreAeronave extends FormRequest
         'matricula' => 'required|string|max:8'.Rule::unique('aeronaves')->ignore($this->matricula),
         'marca' => 'required|string|max:40',
         'modelo' => 'required|string|max:40',
-        'num_lugares' => 'required|integer',
-        'conta_horas' => 'required|integer',
-        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/',
+        'num_lugares' => 'required|integer|min:1',
+        'conta_horas' => 'required|integer|min:1',
+        'preco_hora' => 'required|regex:/^-?[0-9]{1,13}+(?:\.[0-9]{1,2})?$/|min:1',
         //'minuto' => 'required|integer|max:60',///acrescente
         'tempos' => 'required',
         'precos' => 'required',
