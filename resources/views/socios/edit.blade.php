@@ -18,7 +18,9 @@
     <div class="form-group" style="padding-left: 15px;">
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
         <button type="submit" class="btn btn-danger" name="cancel">Cancelar</button>
-        <a href="{{ action('SocioController@enviarEmailConfirmacao',$socio->id) }} " class="btn btn-primary">Reeviar Email de Verficação</a>
+        @if(!$socio->hasVerifiedEmail())
+            <a href="{{ action('SocioController@enviarEmailConfirmacao',$socio->id) }} " class="btn btn-primary">Reeviar Email de Verficação</a>
+        @endif
     </div>
 </form>
 @endsection
