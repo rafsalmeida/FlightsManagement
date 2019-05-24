@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    protected $fillable = ['num_socio', 'name', 'nome_informal', 'email','nif','sexo','data_nascimento','telefone','endereco','num_licenca','validade_licenca','num_certificado','validade_certificado'];
+    protected $fillable = ['num_socio', 'name', 'nome_informal', 'email','nif','sexo','data_nascimento','telefone','endereco','tipo_socio','quota_paga','ativo','direcao','aluno','instrutor','num_licenca','tipo_licenca','licenca_confirmada','validade_licenca','num_certificado','classe_certificado','certificado_confirmado','validade_certificado','foto_url'];
 
     public function tipoLicenca()
     {
