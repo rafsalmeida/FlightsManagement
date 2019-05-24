@@ -116,9 +116,9 @@
     <label for="inputType">Tipo de Sócio</label>
     <div>
         @if(isset($socio))
-            {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly']) }}
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] + array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly']) }}
         @else
-            {{ Form::select('tipo_socio', array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'))}}
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'))}}
         @endif
        
     </div>
@@ -147,9 +147,9 @@
         @endif
     </div>
 </div>
+@if(isset($socio))
 <div class="form-group">
     <label for="inputAtivo">Ativo</label>
-    @if(isset($socio))
     <div>
         {!! Form::radio('ativo','1',$socio->ativo == '1', [Auth::user()->direcao == 1 ? null : 'readonly'])  !!}
         <label class="form-check-label">Ativo</label>
@@ -158,17 +158,12 @@
         {!! Form::radio('ativo','0',$socio->ativo == '0', [Auth::user()->direcao == 1 ? null : 'readonly'])  !!}
         <label class="form-check-label">Não ativo</label>
     </div>
-    @else
-    <div>
-        {!! Form::radio('ativo','1')  !!}
-        <label class="form-check-label">Ativo</label>
-    </div>
-    <div>
-        {!! Form::radio('ativo','0')  !!}
-        <label class="form-check-label">Não ativo</label>
-    </div>
-    @endif
 </div>
+@else
+<input type="hidden" name="ativo" value="0" />
+@endif
+
+
 <div class="form-group">
     <label for="inputDirecao">Direção</label>
     @if(isset($socio))
