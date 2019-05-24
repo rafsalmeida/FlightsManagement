@@ -28,6 +28,8 @@ class SocioController extends Controller
 
         $this->middleware('verified');
 
+        $this->middleware('ativo');
+
     }
     
     public function index()
