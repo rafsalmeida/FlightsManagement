@@ -19,11 +19,10 @@ class UserPolicy
         //
     }
 
-    public function viewSociosDesativados(User $socioLogged, User $socio){
+    public function viewSociosDesativados(User $socioLogged){
         if($socioLogged->direcao){
             return true;
         }
-
 
         return false;
 
