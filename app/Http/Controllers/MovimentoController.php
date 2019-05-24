@@ -56,32 +56,10 @@ class MovimentoController extends Controller
         
         $movimento = new Movimento();
        
-        $movimentoModel = $request->validate([
-        'data' => 'required',
-        'hora_descolagem' => 'required',
-        'hora_aterragem' => 'required',
-        'aeronave' => 'required|string|exists:aeronaves,matricula',
-        'natureza' => 'required',
-        'num_diario' => 'required|integer',
-        'num_servico' => 'required|integer',
-        'piloto_id' => 'required|integer|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
-        'aerodromo_partida' => 'required|string|exists:aerodromos,code',
-        'aerodromo_chegada' => 'required|string|exists:aerodromos,code',
-        'num_aterragens' => 'required|integer',
-        'num_descolagens' => 'required|integer',
-        'num_pessoas' => 'required|integer',
-        'conta_horas_inicio' => 'required|integer',
-        'conta_horas_fim' => 'required|integer|min:'.$request->conta_horas_inicio.'+1',
-        'num_recibo' => 'required|integer',
-        'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
-        'tipo_instrucao' => 'required_if:natureza,I',
-        'modo_pagamento' => 'required',
-        'observacoes' => 'nullable'
-        ]);
+        $request->validated();
+        $movimento->fill($request->all());
 
         $piloto = User::find($request->piloto_id);
-
-        $movimento->fill($movimentoModel);
 
         $movimento->hora_aterragem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_aterragem;
         $movimento->hora_descolagem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_descolagem;
@@ -155,32 +133,12 @@ class MovimentoController extends Controller
             return redirect()->action('MovimentoController@index');
         }
 
-        $movimento = $request->validate([
-        'aeronave' => 'required|string|exists:aeronaves,matricula',
-        'natureza' => 'required',
-        'num_diario' => 'required|integer',
-        'num_servico' => 'required|integer',
-        'piloto_id' => 'required|integer|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
-        'aerodromo_partida' => 'required|string|exists:aerodromos,code',
-        'aerodromo_chegada' => 'required|string|exists:aerodromos,code',
-        'num_aterragens' => 'required|integer',
-        'num_descolagens' => 'required|integer',
-        'num_pessoas' => 'required|integer',
-        'conta_horas_inicio' => 'required|integer',
-        'conta_horas_fim' => 'required|integer',
-        'num_recibo' => 'required|integer',
-        'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
-        'tipo_instrucao' => 'required_if:natureza,I',
-        'modo_pagamento' => 'required',
-        'observacoes' => 'nullable'
-        ]);
+        $request->validated();
+            
+        $movimento = Movimento::findOrFail($id);
+        $movimento->fill($request->all());
 
-     
-
-        $movimentoModel = Movimento::findOrFail($id);
-        $movimentoModel->fill($movimento);
-
-        $movimentoModel->save();
+        $movimento->save();
         return redirect()
                 ->action('MovimentoController@index')
                 ->with('success', 'Movimento editada corretamente');
