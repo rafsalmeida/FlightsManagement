@@ -24,21 +24,23 @@ class StoreSocio extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules =  [
             "num_socio" => "required|integer|regex:/^\d{1,11}$/|".Rule::unique('users')->ignore($this->id),
             "name" => "required|string|max:255|regex:/^[\pL\s]+$/u",
             "nome_informal" => "required|string|max:40",
-            "sexo" => "required", 
-            "tipo_socio" => "required",
+            "sexo" => "required|string|in:F,M", 
+            "tipo_socio" => "required|string|in:P,NP,A",
             "email" => "required|email|max:255|".Rule::unique('users')->ignore($this->id),
             "nif" => "digits:9|nullable|".Rule::unique('users')->ignore($this->id),
             "data_nascimento" => "required|date|before:today",
             "telefone" => "string|max:20|nullable",
-            "quota_paga" => "required",
-            "ativo" => "required",
-            "direcao" => "required",
-            "licenca_confirmada" => "between:0,1",
-            "certificado_confirmado" => "between:0,1",
+            "quota_paga" => "required|in:0,1",
+            "ativo" => "required|in:0,1",
+            "direcao" => "required|in:0,1",
+            "aluno" => "in:0,1",
+            "instrutor" => "in:0,1",
+            "licenca_confirmada" => "in:0,1",
+            "certificado_confirmado" => "in:0,1",
             "endereco" => "string|nullable",
             "num_licenca" => "string|max:30|nullable",
             "validade_licenca" => "date|nullable",
@@ -46,5 +48,13 @@ class StoreSocio extends FormRequest
             "validade_certificado" => "date|nullable",
             "foto_url" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable",
         ];
+
+
+        if($this->has('aluno') && $this->get('aluno') == '1' && $this->has('instrutor') && $this->get('instrutor') == '1'){
+            $rules['instrutor'] = 'different:aluno';
+            $rules['aluno'] = 'different:instrutor';
+        }
+
+        return $rules;
     }
 }
