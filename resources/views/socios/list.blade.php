@@ -25,7 +25,7 @@
     <tbody>
     @foreach ($socios as $socio)
         <tr>
-            <td><div style="text-align: center"><img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" height="75" width="75"></div></td>
+            <td><div style="text-align: center"><img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" height="65" width="65"></div></td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
             <td>
@@ -71,7 +71,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="_method" value="patch">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Ativar/Desativar', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Estado', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
                 </form>
                 <form method="POST" action="{{url('/socios/'.$socio->id.'/quota')}}"  role="form" class="inline">
                     @csrf
