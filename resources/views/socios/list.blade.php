@@ -25,7 +25,7 @@
     <tbody>
     @foreach ($socios as $socio)
         <tr>
-            <td><a href="{{url('/storage/fotos').'/'.$socio->foto_url}}">Foto</a></td>
+            <td><img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" style="padding-bottom: 5px"></td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
             <td>
