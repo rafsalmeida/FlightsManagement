@@ -141,14 +141,12 @@ class SocioController extends Controller
 
         $request->validated();
 
-        if(Auth::user()->can('update', $socio)){
+        if(Auth::user()->can('update', $socio) && Auth::user()->can('view', $socio)){
 
             if(Auth::user()->direcao){
                 $socio->fill($request->all());
 
             } else if(Auth::user()->tipo_socio == 'P'){
-                $dirty = $this->wasChanged();
-                dd($dirty);
                 $socio->fill($request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco','num_licenca','tipo_licenca','validade_licenca','num_certificado','classe_certificado','validade_certificado']));
             } else {
                 $socio->fill($request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco']));
