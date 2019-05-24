@@ -132,7 +132,7 @@ class AeronaveController extends Controller
         
         
         foreach ( $valores as $valor) {
-            dump($valor);
+        
             $valor->minutos = $dadosAGravar['tempos'][$valor->unidade_conta_horas];
             $valor->preco =$dadosAGravar['precos'][$valor->unidade_conta_horas];
     
