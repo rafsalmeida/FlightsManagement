@@ -46,7 +46,7 @@
                 @else
                     Especial
                 @endif</td>
-            <td>{{ \app\Socio::find($movimento->piloto_id)->nome_informal }}</td>
+            <td>{{ \app\User::find($movimento->piloto_id)->nome_informal }}</td>
             <td>{{ $movimento->aerodromo_partida }}</td>
             <td>{{ $movimento->aerodromo_chegada }}</td>
             <td>{{ $movimento->num_aterragens }}</td>
