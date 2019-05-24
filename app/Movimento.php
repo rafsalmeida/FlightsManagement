@@ -12,4 +12,8 @@ class Movimento extends Model
     public function piloto(){
     	return $this->belongsTo('App\User');
     }
+
+    public function aeronaves(){
+    	return $this->belongsTo('App\Aeronave');
+    }
 }
