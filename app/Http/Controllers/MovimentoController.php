@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Movimento;
 use Illuminate\Http\Request;
 use Illuminate\validation\Rule;
-use App\Socio;
 use App\AeronaveValor;
 use App\User;
 
@@ -27,7 +26,7 @@ class MovimentoController extends Controller
     {
         $movimentos = Movimento::paginate(15);
         $title = "Lista de Movimentos";
-        $pilotos = Socio::all();
+        $pilotos = User::all();
         return view('movimentos.list', compact('movimentos','title','pilotos'));
     }
 
@@ -79,7 +78,7 @@ class MovimentoController extends Controller
         'observacoes' => 'nullable'
         ]);
 
-        $piloto = Socio::find($request->piloto_id);
+        $piloto = User::find($request->piloto_id);
 
         $movimento->fill($movimentoModel);
 
@@ -96,7 +95,7 @@ class MovimentoController extends Controller
         $movimento->preco_voo = $aeronave_precos->preco;
         $movimento->confirmado = 0;
         if ($request->natureza == 'I'){
-            $instrutor = Socio::find($request->piloto_id);
+            $instrutor = User::find($request->piloto_id);
             $movimento->num_licenca_instrutor = $instrutor->num_licenca;
             $movimento->validade_licenca_instrutor = $instrutor->validade_licenca;
             $movimento->tipo_licenca_instrutor = $instrutor->tipo_licenca;
