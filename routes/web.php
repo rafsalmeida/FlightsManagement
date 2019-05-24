@@ -30,7 +30,7 @@ Route::patch('password', 'Auth\ChangePasswordController@updatePassword')->name('
 
 //Route::get('aeronaves', 'AeronaveController@index');
 
-Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => 'aeronave']);;
+Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => 'aeronave']);
 //Route::get('aeronaves{aeronave}/edit', 'AeronaveController@edit($aeronave)');
 //
 Route::resource('socios', 'SocioController');
