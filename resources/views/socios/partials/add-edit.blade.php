@@ -112,17 +112,7 @@
         <em>{{ $errors->first('endereco') }}</em>
     @endif
 </div>
-<div class="form-group">
-    <label for="inputType">Tipo de Sócio</label>
-    <div>
-        @if(isset($socio))
-            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] + array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly']) }}
-        @else
-            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'))}}
-        @endif
-       
-    </div>
-</div>
+
 <div class="form-group">
     <label for="inputQuotas">Quotas</label>
     <div class='radio'>
@@ -189,7 +179,20 @@
 
 </div>
 
+<div class="form-group">
+    <label for="inputType">Tipo de Sócio</label>
+    <div>
+        @if(isset($socio))
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] + array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly', 'id' => 'idTipoSocio']) }}
+        @else
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio'])}}
+        @endif 
+       
+    </div>
+</div>
+
 @can('is-piloto', Auth::user())
+<div id="pilot_form">
 <div class="form-group">
     <label for="inputAluno">Aluno</label>
     @if(isset($socio))
@@ -351,10 +354,22 @@
     </div>
    
 </div>
+</div>
 
 @endcan
 
-
-
+<script type="text/javascript">
+    
+    $(function() {
+      $("#idTipoSocio").change(function() {
+        var val = $(this).val();
+        if (val === "P") {
+          $("#pilot_form").show();
+        } else {
+          $("#pilot_form").hide();
+        }
+      }).trigger('change');
+    });
+</script>
 
 @endsection
