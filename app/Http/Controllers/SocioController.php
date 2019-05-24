@@ -34,12 +34,14 @@ class SocioController extends Controller
     
     public function index()
     {
-        if(Auth::user()->can('viewSociosDesativados')){
-            $socios = User::paginate(15); 
+
+        //dd(Auth::user()->direcao, Auth::user()->can('viewSociosDesativados'));
+        /*if(Auth::user()->can('viewSociosDesativados')){
+            $socios = User::paginate(15);
         } else {
             $socios = User::where('ativo',1)->paginate(15);
-        }
-
+        }*/
+        $socios = User::paginate(15);
         $title = "Lista de Sócios";
         return view("socios.list", compact("socios","title"));
     }
@@ -190,8 +192,14 @@ class SocioController extends Controller
      */
     public function destroy($id)
     {
+        $socio = User::findOrFail($id);
+        $movimentos = $socio->movimentos;
+        if(($socio->instrutor || $socio->tipo_socio == 'P') && count($movimentos) > 0){
+            $socio->delete();
+        } else {
+            $socio->forceDelete();
+        }
 
-        User::destroy($id);
         return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');
     }
 
