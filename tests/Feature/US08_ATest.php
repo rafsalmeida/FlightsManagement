@@ -85,7 +85,7 @@ class US08_ATest extends USTestBase
     {
         $response = $this->actingAs($this->userToSimulate)->get('/socios');
         $response->assertStatus(200);
-        $response->assertSeeInOrder_2(['<img', 'href=', $this->normalUserComFoto->foto_url],
+        $response->assertSeeInOrder_2(['<img', 'src=', $this->normalUserComFoto->foto_url],
             "A lista com os sócios ativos não apresenta fotografias");
     }       
 }

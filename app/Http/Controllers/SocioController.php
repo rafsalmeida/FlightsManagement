@@ -34,7 +34,12 @@ class SocioController extends Controller
     
     public function index()
     {
-        $socios = User::paginate(15);
+        if(Auth::user()->can('viewSociosDesativados')){
+            $socios = User::paginate(15); 
+        } else {
+            $socios = User::where('ativo',1)->paginate(15);
+        }
+
         $title = "Lista de Sócios";
         return view("socios.list", compact("socios","title"));
     }

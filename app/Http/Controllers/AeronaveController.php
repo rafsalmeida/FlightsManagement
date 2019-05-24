@@ -21,6 +21,7 @@ class AeronaveController extends Controller
         $this->middleware('auth');
         $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
         $this->middleware('ativo');
+        $this->middleware('verified');
 
     }
 
@@ -158,8 +159,19 @@ class AeronaveController extends Controller
     }
     public function destroy($id)
     {
+        $aeronave = Aeronave::findOrFail($id);
+        $movimentos = $aeronave->movimentos;
 
-        Aeronave::destroy($id);
+        if(count($movimentos)==0){
+            $aeronave->forceDelete();
+            $valores = $aeronave->valores;
+         
+            foreach ($valores as $valor) {
+                $valor->delete();
+            }
+        }else{
+            $aeronave->delete();
+        }
         return redirect()->action('AeronaveController@index')
                          ->with('success', 'Aeronave apagada corretamente');;
     }
