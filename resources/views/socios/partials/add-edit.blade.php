@@ -347,7 +347,12 @@
 <div class="form-group">
     <label for="inputFoto">Foto</label>
     <div> 
-        <input type="file" name="file_foto" id="inputFoto" value="@if(isset($socio)){{ old('file_foto', $socio->file_url) }}@endif"/>
+        @if(isset($socio))
+        <img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" style="padding-bottom: 5px">
+        @endif
+        <br>
+        <input type="file" name="file_foto" id="inputFoto"/>
+
     </div>
    
 </div>
