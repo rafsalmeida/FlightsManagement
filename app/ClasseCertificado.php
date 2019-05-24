@@ -10,7 +10,7 @@ class ClasseCertificado extends Model
 
     public function socio()
 	{
-		return $this->hasMany('App\Socio', 'classe_certificado', 'code');
+		return $this->hasMany('App\User', 'classe_certificado', 'code');
 	}
 }
 
