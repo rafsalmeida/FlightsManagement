@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'direcao' => \App\Http\Middleware\IsDirecao::class,
+        'ativo' =>  \App\Http\Middleware\IsAtivo::class,
         'passwd_changed' => \App\Http\Middleware\IsPasswdChanged::class,
     ];
 
