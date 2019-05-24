@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Socio;
+use App\User;
 use App\TipoLicenca;
 use App\ClasseCertificado;
 use App\Policies\UserPolicy;
@@ -32,7 +32,7 @@ class SocioController extends Controller
     
     public function index()
     {
-        $socios = Socio::paginate(15);
+        $socios = User::paginate(15);
         $title = "Lista de Sócios";
         return view("socios.list", compact("socios","title"));
     }
@@ -64,7 +64,7 @@ class SocioController extends Controller
 
         //$socio = $request->validated();
         
-        $socio = new Socio();
+        $socio = new User();
         $request->validated();
         $socio->fill($request->all());
         if(! is_null($request['file_foto'])) {
@@ -75,7 +75,7 @@ class SocioController extends Controller
         }
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
-
+        $socio->sendEmailVerificationNotification();
         //Socio::create($socio);
         
 
@@ -104,7 +104,7 @@ class SocioController extends Controller
     public function edit($id)
     {
 
-        $socio = Socio::findOrFail($id);
+        $socio = User::findOrFail($id);
 
         if(Auth::user()->can('view',$socio)){
             $title = "Editar Sócio";
@@ -128,31 +128,30 @@ class SocioController extends Controller
      */
     public function update(StoreSocio $request,  $id)
     {
-        $socio = Socio::findOrFail($id);
+        $socio = User::findOrFail($id);
+
+        if ($request->has("cancel")) {
+            return redirect()->action("SocioController@index");
+        }
+
+
+        $request->validated();
+
         if(Auth::user()->can('update', $socio)){
 
-
             if(Auth::user()->direcao){
-
-                $request = $request->all();
+                $socio->fill($request->all());
 
             } else if(Auth::user()->tipo_socio == 'P'){
                 $dirty = $this->wasChanged();
                 dd($dirty);
-                $request = $request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco','num_licenca','tipo_licenca','validade_licenca','num_certificado','classe_certificado','validade_certificado']);
+                $socio->fill($request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco','num_licenca','tipo_licenca','validade_licenca','num_certificado','classe_certificado','validade_certificado']));
             } else {
-
-                $request = $request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco']);
+                $socio->fill($request->only(['nome_informal', 'name', 'email','foto_url','data_nascimento','nif','telefone','endereco']));
             }
 
 
-            if ($request->has("cancel")) {
-                return redirect()->action("SocioController@index");
-            }
-
-            $request->validated();
-
-            if(! is_null($request['file_foto'])) {
+            if(! is_null($request['file_foto'])) { 
                 $image = $request->file('file_foto');
                 $name = time().'.'.$image->getClientOriginalExtension();
                 $socio->foto_url = $name;
@@ -160,8 +159,6 @@ class SocioController extends Controller
                 // OR
                 // Storage::putFileAs('public/img', $image, $name);
             }
-
-            $socio->fill($request->all());
             $socio->save();
             return redirect()
                     ->action("SocioController@index")
@@ -187,13 +184,13 @@ class SocioController extends Controller
     public function destroy($id)
     {
 
-        Socio::destroy($id);
+        User::destroy($id);
         return redirect()->action("SocioController@index")->with('success', 'Sócio apagado corretamente');
     }
 
     public function mudarEstado($id){
 
-        $socio = Socio::findOrFail($id);
+        $socio = User::findOrFail($id);
         if($socio->ativo == 1){
             $socio->ativo = 0;
         } else {
@@ -206,7 +203,7 @@ class SocioController extends Controller
 
     public function mudarEstadoQuota($id){
 
-        $socio = Socio::findOrFail($id);
+        $socio = User::findOrFail($id);
         if($socio->quota_paga == 1){
             $socio->quota_paga = 0;
         } else {
@@ -219,7 +216,10 @@ class SocioController extends Controller
 
     public function enviarEmailConfirmacao($id){
 
-        $socio = Socio::findOrFail($id);
-        Auth::socio()->sendEmailVerificationNotification();
+        $socio = User::findOrFail($id);
+        $socio->sendEmailVerificationNotification();
+        return redirect()
+                ->action("SocioController@index")
+                ->with("success", "Email reenviado corretamente");
     }
 }
