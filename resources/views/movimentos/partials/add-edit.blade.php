@@ -71,37 +71,16 @@
 </div>
 
 <div class="form-group">
-    <label for="inputNatureza">Natureza do Voo</label>
-    <div class='radio' name='natureza'>
+    <label for="inputType">Natureza do Voo</label>
+    <div>
         @if(isset($movimento))
-        <div>
-            {!! Form::radio('natureza','T', $movimento->natureza == 'T')  !!}
-            <label class="form-check-label">Treino</label>
-        </div>
-        <div>
-            {!! Form::radio('natureza','I',$movimento->natureza == 'I')  !!}
-            <label class="form-check-label">Instrução</label>
-        </div>
-        <div>
-            {!! Form::radio('natureza','E',$movimento->natureza == 'E')  !!}
-            <label class="form-check-label">Especial</label>
-        </div>
+            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] + array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), $movimento->natureza, ['id' => 'natureza']) }}
         @else
-        <div>
-            {!! Form::radio('natureza','T')  !!}
-            <label class="form-check-label">Treino</label>
-        </div>
-        <div>
-            {!! Form::radio('natureza','I')  !!}
-            <label class="form-check-label">Instrução</label>
-        </div>
-        <div>
-            {!! Form::radio('natureza','E')  !!}
-            <label class="form-check-label">Especial</label>
-        </div>
+            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'natureza'])}}
         @endif
     </div>
 </div>
+
 <div class="form-group">
     <label for="inputAerPartida">Aerodromo de Partida</label>
     <input
@@ -112,6 +91,7 @@
         <em>{{ $errors->first('aerodromo_partida') }}</em>
     @endif
 </div>
+
 <div class="form-group">
     <label for="inputAerChegada">Aerodromo de Chegada</label>
     <input
@@ -122,6 +102,7 @@
         <em>{{ $errors->first('aerodromo_chegada') }}</em>
     @endif
 </div>
+
 <div class="form-group">
     <label for="inputNAterragens">Nº de Aterragens</label>
     <input
@@ -172,28 +153,6 @@
         <em>{{ $errors->first('conta_horas_fim') }}</em>
     @endif
 </div>
-<!-- 
-<div class="form-group">
-    <label for="inputTempVoo">Tempo de Voo</label>
-    <input
-        type="number" class="form-control"
-        name="tempo_voo" id="inputTempVoo"
-        placeholder="TempVoo" value="@if(isset($movimento)){{ old('tempo_voo', $movimento->tempo_voo) }}@endif" />
-    @if ($errors->has('tempo_voo'))
-        <em>{{ $errors->first('tempo_voo') }}</em>
-    @endif
-</div>
-<div class="form-group">
-    <label for="inputPreVoo">Preço do Voo</label>
-    <input
-        type="number" class="form-control"
-        name="preco_voo" id="inputPreVoo"
-        placeholder="PreVoo" value="@if(isset($movimento)){{ old('preco_voo', $movimento->preco_voo) }}@endif" />
-    @if ($errors->has('preco_voo'))
-        <em>{{ $errors->first('preco_voo') }}</em>
-    @endif
-</div>
--->
 <div class="form-group">
     <label for="inputTPagamento">Modo de Pagamento</label>
     <div class='radio' name='modo_pagamento'>
@@ -254,6 +213,7 @@
         <em>{{ $errors->first('observacoes') }}</em>
     @endif
 </div>
+<div id="instrucao_form">
 <div class="form-group">
     <label for="inputTInstrucao">Tipo de Instrução</label>
     <div class='radio' name='tipo_instrucao'>
@@ -288,4 +248,20 @@
         <em>{{ $errors->first('instrutor_id') }}</em>
     @endif
 </div>
+</div>
+
+<script type="text/javascript">
+    
+    $(function() {
+      $("#natureza").change(function() {
+        var val = $(this).val();
+        if (val === "I") {
+          $("#instrucao_form").show();
+        } else {
+          $("#instrucao_form").hide();
+        }
+      }).trigger('change');
+    });
+</script>
+
 @endsection
