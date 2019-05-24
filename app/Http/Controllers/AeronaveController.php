@@ -20,12 +20,15 @@ class AeronaveController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('ativo');
+
     }
 
     public function index()
     {
         $aeronaves = Aeronave::All();
         $title = "Lista de Aeronaves";
+
         return view('aeronaves.list', compact('aeronaves','title'));
     }
 
