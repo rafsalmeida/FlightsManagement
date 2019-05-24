@@ -163,9 +163,10 @@ class AeronaveController extends Controller
         $movimentos = $aeronave->movimentos;
 
         if(count($movimentos)==0){
-            $aeronave->forceDelete();
             $valores = $aeronave->valores;
-         
+            $aeronave->forceDelete();
+            
+           
             foreach ($valores as $valor) {
                 $valor->delete();
             }
