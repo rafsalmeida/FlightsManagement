@@ -67,6 +67,8 @@ class SocioController extends Controller
         //$socio = $request->validated();
         
         $socio = new User();
+
+        $request->ativo = 0;
         $request->validated();
         $socio->fill($request->all());
         if(! is_null($request['file_foto'])) {
