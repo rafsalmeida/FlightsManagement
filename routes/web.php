@@ -38,8 +38,9 @@ Route::resource('socios', 'SocioController');
 Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socios.mudarEstado');
 Route::patch('socios/{socio}/quota', 'SocioController@mudarEstadoQuota')->name('socios.mudarEstadoQuota');
 Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailConfirmacao')->name('socios.enviarEmailConfirmacao');
-Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('socios.mostrarFicheiroCertificado');
-Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('socios.mostrarFicheiroCertificado');
+
+Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado');
+Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca');
 
 Route::resource('movimentos', 'MovimentoController');
 
