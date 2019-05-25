@@ -32,7 +32,7 @@ class SocioController extends Controller
 
     }
     
-    public function index()
+    public function index(Request $request)
     {
 
         //dd(Auth::user()->direcao, Auth::user()->can('viewSociosDesativados'));
@@ -41,8 +41,66 @@ class SocioController extends Controller
         } else {
             $socios = User::where('ativo',1)->paginate(15);
         }*/
-        $socios = User::paginate(15);
+
         $title = "Lista de Sócios";
+        /*if ( isset($request['num_socio']) && trim($request['num_socio'] !== '') ) {
+            $socios = User::where('num_socio', '=', trim($request['num_socio']))->paginate(15);
+            return view("socios.list", compact("socios","title"));
+        }
+
+        if ( isset($request['nome_informal']) && trim($request['nome_informal']) !== '' )
+        {
+            $query->where('nome_informal', 'LIKE', trim($request['nome_informal'] .'%'));
+            return view("socios.list", compact("socios","title"));
+        }
+        if ( isset($request['email']) && trim($request['email']) !== '' )
+        {
+            $query->where('email', 'LIKE', trim($request['email']).'%');
+        }
+        if ( isset($request['tipo_socio']) && trim($request['tipo_socio'] !== '') ) {
+            $query->where('tipo_socio', '=', trim($request['tipo_socio']));
+        }
+        if ( isset($request['direcao']) && trim($request['direcao'] !== '') ) {
+            $query->where('direcao', '=', trim($request['direcao']));
+        }*/
+
+        $query = User::limit(10);
+
+        if ($request->filled('num_socio')) {
+            $query->where('num_socio', $request->get('num_socio'));
+        }
+
+        if ($request->filled('nome_informal')) {
+            $nome = $request->get('nome_informal');
+            $query->where('nome_informal', 'like', "%$nome%");
+        }
+
+        if ($request->filled('email')) {
+            $email = $request->get('email');
+            $query->where('email', 'like', "%$email%");
+        }
+
+        if ($request->filled('tipo_socio')) {
+            $query->where('tipo_socio', $request->get('tipo_socio'));
+        }
+
+        if ($request->filled('direcao')) {
+            $query->where('direcao', $request->get('direcao'));
+        }
+
+        if ($request->filled('quota_paga')) {
+            $query->where('quota_paga', $request->get('quota_paga'));
+        }
+
+        if ($request->filled('ativo')) {
+            $query->where('ativo', $request->get('ativo'));
+        }
+
+
+
+        $socios = $query->paginate(15);
+        //$socios = User::paginate(15);
+
         return view("socios.list", compact("socios","title"));
     }
 
@@ -237,4 +295,6 @@ class SocioController extends Controller
                 ->action("SocioController@index")
                 ->with("success", "Email reenviado corretamente");
     }
+
+
 }
