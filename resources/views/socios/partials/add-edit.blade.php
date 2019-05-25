@@ -251,9 +251,9 @@
     <label for="inputTipoLicenca">Tipo de Licença</label>
     <div>
         @if(isset($socio->tipo_licenca))
-            {!! Form::select('tipo_licenca', $tipos_licenca, $socio->tipoLicenca->code) !!}
+            {!! Form::select('tipo_licenca', $tipos_licenca, $socio->tipoLicenca->code, ['class' => 'form-control']) !!}
         @else
-             {!! Form::select('tipo_licenca', $tipos_licenca) !!}
+             {!! Form::select('tipo_licenca', $tipos_licenca, null, ['class' => 'form-control']) !!}
         @endif
     </div>
 </div>
@@ -303,9 +303,9 @@
     <label for="inputClasseCertificado">Classe Certificado</label>
     <div>
         @if(isset($socio->classe_certificado))
-            {!! Form::select('classe_certificado', $classes_certificado, $socio->classeCertificado->code) !!}
+            {!! Form::select('classe_certificado', $classes_certificado, $socio->classeCertificado->code, ['class' => 'form-control']) !!}
         @else
-            {!! Form::select('classe_certificado', $classes_certificado)!!}
+            {!! Form::select('classe_certificado', $classes_certificado, null, ['class' => 'form-control'])!!}
         @endif
 
     </div>
@@ -345,12 +345,38 @@
 <div class="form-group">
     <label for="inputFoto">Foto</label>
     <div> 
-        @if(isset($socio))
+        @if(isset($socio->foto_url))
         <img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" style="padding-bottom: 5px">
-        @endif
         <br>
+        @endif
+
         <input type="file" name="file_foto" id="inputFoto"/>
 
+    </div>
+   
+</div>
+
+<div class="form-group">
+    <label for="inputFoto">Licença</label>
+    <div> 
+        @if(isset($socio))
+        <a href="{{action('SocioController@mostrarFicheiroLicenca', $socio->id)}}">Licença atual</a>
+        <br>
+        @endif
+        <input type="file" name="file_licenca" id="inputLicenca"/>
+
+    </div>
+   
+</div>
+
+<div class="form-group">
+    <label for="inputFoto">Certificado</label>
+    <div> 
+        @if(isset($socio))
+        <a href="{{ action('SocioController@mostrarFicheiroCertificado', $socio->id)}}">Certificado atual</a>
+        <br>
+        @endif
+        <input type="file" name="file_certificado" id="idInputCertificado"/>
     </div>
    
 </div>
