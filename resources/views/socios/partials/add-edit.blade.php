@@ -183,9 +183,9 @@
     <label for="inputType">Tipo de Sócio</label>
     <div>
         @if(isset($socio))
-            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] + array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly', 'id' => 'idTipoSocio']) }}
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] + array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), $socio->tipo_socio, [Auth::user()->direcao == 1 ? null : 'readonly', 'id' => 'idTipoSocio', 'class' => 'form-control']) }}
         @else
-            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio'])}}
+            {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control'])}}
         @endif 
        
     </div>
