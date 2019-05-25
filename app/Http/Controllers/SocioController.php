@@ -141,6 +141,19 @@ class SocioController extends Controller
             $path = $request->file('file_foto')->storeAs('public/fotos', $name);
             $socio->foto_url = $name;
         }
+
+        if(! is_null($request['file_licenca'])) {
+            $fileLicenca = $request->file('file_licenca');
+            $name = 'licenca_'.$request->id.'.'.$file->getClientOriginalExtension();
+            $path = $request->file('file_licenca')->storeAs('docs_piloto', $name);
+        }
+
+        if(! is_null($request['file_certificado'])) {
+            $fileCertificado = $request->file('file_certificado');
+            $name = 'certificado_'.$request->id.'.'.$file->getClientOriginalExtension();
+            $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
+        }
+
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
         $socio->sendEmailVerificationNotification();
@@ -294,6 +307,17 @@ class SocioController extends Controller
                 ->action("SocioController@index")
                 ->with("success", "Email reenviado corretamente");
     }
+
+    public function mostrarFicheiroCertificado($id){
+        $socio = User::findOrFail($id);
+        return response()->file(storage_path('app/docs_piloto/certificado_'.$socio->id.'.pdf'));
+    }
+
+    public function mostrarFicheiroLicenca($id){
+        $socio = User::findOrFail($id);
+        return response()->file(storage_path('app/docs_piloto/licenca_'.$socio->id.'.pdf'));
+    }
+
 
 
 }
