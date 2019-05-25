@@ -47,7 +47,10 @@ class StoreSocio extends FormRequest
             "validade_licenca" => "date|nullable",
             "num_certificado" => "string|max:30|nullable",
             "validade_certificado" => "date|nullable",
-            "foto_url" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable",
+            "file_foto" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable",
+            "file_licenca" => "file|mimes:pdf|max:2048|nullable",
+            "file_certificado" => "file|mimes:pdf|max:2048|nullable",
+            "foto_url" => "string",
         ];
 
 
