@@ -373,7 +373,7 @@
     <label for="inputFoto">Certificado</label>
     <div> 
         @if(isset($socio))
-        <a href="{{ action('SocioController@mostrarFicheiroCertificado', $socio->id)}}">Certificado atual</a>
+        <a href="{{ route('pilotos.mostrarFicheiroCertificado', $socio->id)}}">Certificado atual</a>
         <br>
         @endif
         <input type="file" name="file_certificado" id="idInputCertificado"/>
