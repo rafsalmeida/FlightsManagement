@@ -322,11 +322,13 @@ class SocioController extends Controller
 
     public function mostrarFicheiroCertificado($id){
         $socio = User::findOrFail($id);
+        dd($this->authorize('view', $socio));
         return response()->file(storage_path('app/docs_piloto/certificado_'.$socio->id.'.pdf'));
     }
 
     public function mostrarFicheiroLicenca($id){
         $socio = User::findOrFail($id);
+        dd($this->authorize('view', $socio));
         return response()->file(storage_path('app/docs_piloto/licenca_'.$socio->id.'.pdf'));
     }
 
