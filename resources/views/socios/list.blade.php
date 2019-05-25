@@ -35,6 +35,12 @@
                     Ativo
                 </label>
             </div>
+            <div class="form-group form-check-inline">
+                {{ Form::checkbox('quota_paga', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label" for="ativo">
+                    Quotas Pagas
+                </label>
+            </div>
             @endcan
             <div class="col-auto">
                 <button type="submit" class="btn btn-sm btn-success mb-3" >
