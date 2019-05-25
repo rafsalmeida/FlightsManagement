@@ -2,9 +2,49 @@
 @section('title', "Lista de Sócios")
 @section('content')
 @can('is-direcao', Auth::user())
-<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
+<div style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
 </div>
 @endcan
+<div class="form-group" style="padding-top: 10px; float: right;">            
+    <form action="{{action('SocioController@index')}}" method="get">
+        <div class="form-row ">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nome Informal" name="nome_informal">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Email" name="email">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nºsócio" name="num_socio">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control'])}}
+            </div>
+            <div class="form-group form-check-inline" style="padding-left: 10px">
+                {{ Form::checkbox('direcao', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label">
+                    Direção
+                </label>
+            </div>
+            @can('is-direcao', Auth::user())
+            <div class="form-group form-check-inline">
+                {{ Form::checkbox('ativo', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label" for="ativo">
+                    Ativo
+                </label>
+            </div>
+            @endcan
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-success mb-3" >
+                    <i class="fas fa-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div style="padding-top: 10px">
 @if (count($socios))
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
