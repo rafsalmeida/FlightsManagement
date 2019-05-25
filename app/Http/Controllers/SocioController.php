@@ -65,34 +65,33 @@ class SocioController extends Controller
         }*/
 
         $query = User::limit(10);
-
-        if ($request->filled('num_socio')) {
+        if ($request->filled('num_socio') && $request['num_socio'] != null) {
             $query->where('num_socio', $request->get('num_socio'));
         }
 
-        if ($request->filled('nome_informal')) {
+        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
             $nome = $request->get('nome_informal');
             $query->where('nome_informal', 'like', "%$nome%");
         }
 
-        if ($request->filled('email')) {
+        if ($request->filled('email') && $request['email'] != null) {
             $email = $request->get('email');
             $query->where('email', 'like', "%$email%");
         }
 
-        if ($request->filled('tipo_socio')) {
+        if ($request->filled('tipo_socio') && $request['tipo_socio'] != null) {
             $query->where('tipo_socio', $request->get('tipo_socio'));
         }
 
-        if ($request->filled('direcao')) {
+        if ($request->filled('direcao') && $request['direcao'] != null) {
             $query->where('direcao', $request->get('direcao'));
         }
 
-        if ($request->filled('quota_paga')) {
+        if ($request->filled('quota_paga') && $request['quota_paga'] != null) {
             $query->where('quota_paga', $request->get('quota_paga'));
         }
 
-        if ($request->filled('ativo')) {
+        if ($request->filled('ativo') && $request['ativo'] != null) {
             $query->where('ativo', $request->get('ativo'));
         }
 
