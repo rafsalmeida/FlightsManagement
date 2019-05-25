@@ -144,13 +144,13 @@ class SocioController extends Controller
 
         if(! is_null($request['file_licenca'])) {
             $fileLicenca = $request->file('file_licenca');
-            $name = 'licenca_'.$request->id.'.'.$file->getClientOriginalExtension();
+            $name = 'licenca_'.$request->id.'.'.$fileLicenca->getClientOriginalExtension();
             $path = $request->file('file_licenca')->storeAs('docs_piloto', $name);
         }
 
         if(! is_null($request['file_certificado'])) {
             $fileCertificado = $request->file('file_certificado');
-            $name = 'certificado_'.$request->id.'.'.$file->getClientOriginalExtension();
+            $name = 'certificado_'.$request->id.'.'.$fileCertificado->getClientOriginalExtension();
             $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
         }
 
@@ -237,6 +237,18 @@ class SocioController extends Controller
                 $path = $request->file('file_foto')->storeAs('public/fotos', $name);
                 // OR
                 // Storage::putFileAs('public/img', $image, $name);
+            }
+
+            if(! is_null($request['file_licenca'])) {
+                $fileLicenca = $request->file('file_licenca');
+                $name = 'licenca_'.$request->id.'.'.$fileLicenca->getClientOriginalExtension();
+                $path = $request->file('file_licenca')->storeAs('docs_piloto', $name);
+            }
+
+            if(! is_null($request['file_certificado'])) {
+                $fileCertificado = $request->file('file_certificado');
+                $name = 'certificado_'.$request->id.'.'.$fileCertificado->getClientOriginalExtension();
+                $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
             }
             $socio->save();
             return redirect()
