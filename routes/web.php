@@ -38,6 +38,7 @@ Route::resource('socios', 'SocioController');
 Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socios.mudarEstado');
 Route::patch('socios/{socio}/quota', 'SocioController@mudarEstadoQuota')->name('socios.mudarEstadoQuota');
 Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailConfirmacao')->name('socios.enviarEmailConfirmacao');
+//Route::get('socios', 'SocioController@searchSocio')->name('searchSocio');
 
 Route::resource('movimentos', 'MovimentoController');
 
