@@ -6,7 +6,7 @@
 </div>
 @endcan
 <div class="form-group" style="padding-top: 10px; float: right;">            
-    <form action="{{action('SocioController@index')}}" method="get">
+    <form  method="GET" action="{{action('SocioController@index')}}">
         <div class="form-row ">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Nome Informal" name="nome_informal">
@@ -20,7 +20,7 @@
         </div>
         <div class="form-row">
             <div class="form-group">
-                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control'])}}
+                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control', 'name' => 'tipo'])}}
             </div>
             <div class="form-group form-check-inline" style="padding-left: 10px">
                 {{ Form::checkbox('direcao', '1', false, ['class' => 'form-check-input']) }}
