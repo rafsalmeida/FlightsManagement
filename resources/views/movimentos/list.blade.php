@@ -4,7 +4,7 @@
 
 <div style="padding: 2vh 0"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
 @if (count($movimentos))
-    <div style="overflow-x: auto;" align="right">
+    <div style="overflow-x: auto;">
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
                 <thead class="thead-light">
                 <tr>
