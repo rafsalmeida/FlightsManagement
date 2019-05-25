@@ -12,7 +12,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use SoftDeletes;
     protected $table = 'users';
-    use SoftDeletes;
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -48,6 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function movimentos(){
         return $this->hasMany('App\Movimento');
     }
+
    
     
 }
