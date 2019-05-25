@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\validation\Rule;
 use App\AeronaveValor;
 use App\User;
+use App\Http\Requests\StoreMovimento;
 
 class MovimentoController extends Controller
 {
