@@ -14,7 +14,7 @@
 </div>
 @endcan
 <div class="form-group" style="padding-top: 10px; float: right;">            
-    <form  method="GET" action="{{action('SocioController@index')}}">
+    <form  method="GET" action="{{action('SocioController@index')}}" id="pesquisarSocio">
         <div class="form-row ">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Nome Informal" name="nome_informal">
@@ -28,7 +28,7 @@
         </div>
         <div class="form-row">
             <div class="form-group">
-                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control', 'name' => 'tipo'])}}
+                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control', 'name' => 'tipo_socio'])}}
             </div>
             <div class="form-group form-check-inline" style="padding-left: 10px">
                 {{ Form::checkbox('direcao', '1', false, ['class' => 'form-check-input']) }}
@@ -69,10 +69,10 @@
             <th>Email</th>
             <th>Tipo de Sócio</th>
             <th>Direção</th>
-            <th>Quotas</th>
-            <th>Ativo</th>
             <th>NºSócio</th>
             @can('is-direcao', Auth::user())
+            <th>Quotas</th>
+            <th>Ativo</th>
             <th></th>
             @endcan
         </tr>
@@ -80,7 +80,13 @@
     <tbody>
     @foreach ($socios as $socio)
         <tr>
-            <td><div style="text-align: center"><img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" height="65" width="65"></div></td>
+            <td>
+                @if(isset($socio->foto_url))
+                <div style="text-align: center">
+                    <img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" height="65" width="65">
+                </div>
+                @endif
+            </td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
             <td>
@@ -99,6 +105,11 @@
                 @endif
             </td>
             <td>
+                {{$socio->num_socio}}
+            </td>
+
+            @can('is-direcao', Auth::user())
+            <td>
                 @if ($socio->quota_paga == 1)
                     Pagas
                 @else
@@ -112,20 +123,17 @@
                     Não-ativo
                 @endif
             </td>
-            <td>
-                {{$socio->num_socio}}
-            </td>
-            @can('is-direcao', Auth::user())
+
             <td>                
                 <div style="text-align: center; margin: auto">
                 <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
-                <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline">
+                <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline" style="margin:0">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="socio_id" value="{{ $socio->id }}">
                     {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                 </form>
-                <form method="POST" action="{{url('/socios/'.$socio->id.'/ativo')}}"  role="form" class="inline">
+                <form method="POST" action="{{url('/socios/'.$socio->id.'/ativo')}}"  role="form" class="inline" style="margin:0">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="_method" value="patch">
@@ -150,6 +158,25 @@
     <h2>Nenhum sócio encontrado </h2>
 @endif
 
-{{ $socios->links() }}
+{{ $socios->appends(request()->except('page'))->links() }}
 
 @endsection
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+  
+  // Remove empty fields from GET forms
+  // Author: Bill Erickson
+  // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/
+  
+    // Change 'form' to class or ID of your specific form
+    $("#pesquisarSocio").submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+    
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "pesquisarSocio" ).find( ":input" ).prop( "disabled", false );
+    
+});
+</script>
