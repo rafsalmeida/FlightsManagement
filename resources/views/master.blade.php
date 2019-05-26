@@ -63,10 +63,13 @@
             </div>
         </div>
     </body>
+    <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
     <script>
+        $(document).ready(function () {
             $(".vertical-menu .nav-item").on("click", function(){
                $(".vertical-menu").find(".active").removeClass("active");
                $(this).addClass("active");
             });
-        </script>
+        });
+    </script>
 </html>
