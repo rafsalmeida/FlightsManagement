@@ -71,6 +71,7 @@
             <th>Direção</th>
             <th>Quotas</th>
             <th>Ativo</th>
+            <th>NºSócio</th>
             @can('is-direcao', Auth::user())
             <th></th>
             @endcan
@@ -110,6 +111,9 @@
                 @else
                     Não-ativo
                 @endif
+            </td>
+            <td>
+                {{$socio->num_socio}}
             </td>
             @can('is-direcao', Auth::user())
             <td>                
