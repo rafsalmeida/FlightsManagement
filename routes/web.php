@@ -42,5 +42,7 @@ Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailC
 Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado');
 Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca');
 
+Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
+
 Route::resource('movimentos', 'MovimentoController');
 
