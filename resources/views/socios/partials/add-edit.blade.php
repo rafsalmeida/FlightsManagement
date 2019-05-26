@@ -360,7 +360,7 @@
     <label for="inputFoto">Licença</label>
     <div> 
         @if(isset($socio))
-        <a href="{{action('SocioController@mostrarFicheiroLicenca', $socio->id)}}">Licença atual</a>
+        <a href="{{ route('pilotos.mostrarFicheiroLicenca', $socio->id)}}">Licença atual</a>
         <br>
         @endif
         <input type="file" name="file_licenca" id="inputLicenca"/>
