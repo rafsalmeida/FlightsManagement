@@ -4,17 +4,20 @@
 <div style="padding-top: 10px">
 @if (count($pilotos))
     <br>
-    <h3>{{$title}}</h3>
+    <h4>{{$title}}</h4>
+    <br>
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
     <thead class="thead-light">
         <tr>
             <th>Id</th>
+            <th>Nome Informal</th>
         </tr>
     </thead>
     <tbody>
     @foreach ($pilotos as $piloto)
         <tr>
-            <td>{{ $piloto->piloto_id }}</td>
+            <td>{{ $piloto->id }}</td>
+            <td>{{ $piloto->nome_informal }}</td>
 
 
         </tr>
@@ -24,7 +27,7 @@
 
 
 @else
-    <h2>Nenhum piloto encontrad </h2>
+    <h2>Nenhum piloto encontrado </h2>
 @endif
 
 
