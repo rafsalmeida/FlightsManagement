@@ -32,7 +32,7 @@ class SocioController extends Controller
 
     }
     
-    public function index()
+    public function index(Request $request)
     {
 
         //dd(Auth::user()->direcao, Auth::user()->can('viewSociosDesativados'));
@@ -41,8 +41,45 @@ class SocioController extends Controller
         } else {
             $socios = User::where('ativo',1)->paginate(15);
         }*/
-        $socios = User::paginate(15);
+
         $title = "Lista de Sócios";
+
+        $query = User::limit(10);
+        if ($request->filled('num_socio') && $request['num_socio'] != null) {
+            $query->where('num_socio', $request->get('num_socio'));
+        }
+
+        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
+            $nome = $request->get('nome_informal');
+            $query->where('nome_informal', 'like', "%$nome%");
+        }
+
+        if ($request->filled('email') && $request['email'] != null) {
+            $email = $request->get('email');
+            $query->where('email', 'like', "%$email%");
+        }
+
+        if ($request->filled('tipo_socio') && $request['tipo_socio'] != null) {
+            $query->where('tipo_socio', $request->get('tipo_socio'));
+        }
+
+        if ($request->filled('direcao') && $request['direcao'] != null) {
+            $query->where('direcao', $request->get('direcao'));
+        }
+
+        if ($request->filled('quota_paga') && $request['quota_paga'] != null) {
+            $query->where('quota_paga', $request->get('quota_paga'));
+        }
+
+        if ($request->filled('ativo') && $request['ativo'] != null) {
+            $query->where('ativo', $request->get('ativo'));
+        }
+
+
+
+        $socios = $query->paginate(15);
+        //$socios = User::paginate(15);
+
         return view("socios.list", compact("socios","title"));
     }
 
@@ -84,6 +121,19 @@ class SocioController extends Controller
             $path = $request->file('file_foto')->storeAs('public/fotos', $name);
             $socio->foto_url = $name;
         }
+
+        if(! is_null($request['file_licenca'])) {
+            $fileLicenca = $request->file('file_licenca');
+            $name = 'licenca_'.$request->id.'.'.$fileLicenca->getClientOriginalExtension();
+            $path = $request->file('file_licenca')->storeAs('docs_piloto', $name);
+        }
+
+        if(! is_null($request['file_certificado'])) {
+            $fileCertificado = $request->file('file_certificado');
+            $name = 'certificado_'.$request->id.'.'.$fileCertificado->getClientOriginalExtension();
+            $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
+        }
+
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
         $socio->sendEmailVerificationNotification();
@@ -168,6 +218,18 @@ class SocioController extends Controller
                 // OR
                 // Storage::putFileAs('public/img', $image, $name);
             }
+
+            if(! is_null($request['file_licenca'])) {
+                $fileLicenca = $request->file('file_licenca');
+                $name = 'licenca_'.$request->id.'.'.$fileLicenca->getClientOriginalExtension();
+                $path = $request->file('file_licenca')->storeAs('docs_piloto', $name);
+            }
+
+            if(! is_null($request['file_certificado'])) {
+                $fileCertificado = $request->file('file_certificado');
+                $name = 'certificado_'.$request->id.'.'.$fileCertificado->getClientOriginalExtension();
+                $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
+            }
             $socio->save();
             return redirect()
                     ->action("SocioController@index")
@@ -237,4 +299,28 @@ class SocioController extends Controller
                 ->action("SocioController@index")
                 ->with("success", "Email reenviado corretamente");
     }
+
+    public function mostrarFicheiroCertificado($id){
+        $socio = User::findOrFail($id);
+        $this->authorize('view', $socio);
+        return response()->file(storage_path('app/docs_piloto/certificado_'.$socio->id.'.pdf'));
+    }
+
+    public function mostrarFicheiroLicenca($id){
+        $socio = User::findOrFail($id);
+        $this->authorize('view', $socio);
+        return response()->file(storage_path('app/docs_piloto/licenca_'.$socio->id.'.pdf'));
+    }
+
+    public function resetQuotas(){
+        //not tested yet
+        DB::table('users')
+                ->whereNull('deleted_at')
+                ->where('quota_paga',1)
+                ->update(['quota_paga' => 0]);
+        return redirect()->action("SocioController@index")->with('success', 'Estado de quotas de todos os sócios alterado corretamente');
+    }
+
+
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Aeronave;
 use App\AeronaveValor;
+use App\AeronavePilotos;
 use App\Http\Requests\StoreAeronave;
 
 
@@ -175,5 +176,13 @@ class AeronaveController extends Controller
         }
         return redirect()->action('AeronaveController@index')
                          ->with('success', 'Aeronave apagada corretamente');;
+    }
+
+    public function indexPilotos($id){
+        $aeronave = Aeronave::findOrFail($id);
+        $title = "Pilotos da Aeronave ".$aeronave->matricula;
+        $pilotos = $aeronave->user()->paginate(15);
+        dd($aeronave->doesntHave('User')->get);
+        return view('aeronaves.pilotos-list', compact('pilotos','title'));
     }
 }

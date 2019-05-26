@@ -2,9 +2,63 @@
 @section('title', "Lista de Sócios")
 @section('content')
 @can('is-direcao', Auth::user())
-<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
+<div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}"><i class="fas fa-user-plus"></i> Adicionar Sócio</a>
+</div>
+<div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left">
+<form method="POST" action="{{route('socios.resetQuotas')}}"  role="form" class="">
+    @csrf
+    @method('PATCH')
+    <input type="hidden" name="_method" value="patch">
+    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-danger ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
+</form>
 </div>
 @endcan
+<div class="form-group" style="padding-top: 10px; float: right;">            
+    <form  method="GET" action="{{action('SocioController@index')}}">
+        <div class="form-row ">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nome Informal" name="nome_informal">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Email" name="email">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nºsócio" name="num_socio">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                {{ Form::select('tipo_socio', [null => 'Tipo (Selecione)'] +  array('P' => 'Piloto', 'NP' => 'Não Piloto', 'A' => 'Aeromodelista'), null, ['id' => 'idTipoSocio', 'class' => 'form-control', 'name' => 'tipo'])}}
+            </div>
+            <div class="form-group form-check-inline" style="padding-left: 10px">
+                {{ Form::checkbox('direcao', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label">
+                    Direção
+                </label>
+            </div>
+            @can('is-direcao', Auth::user())
+            <div class="form-group form-check-inline">
+                {{ Form::checkbox('ativo', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label" for="ativo">
+                    Ativo
+                </label>
+            </div>
+            <div class="form-group form-check-inline">
+                {{ Form::checkbox('quota_paga', '1', false, ['class' => 'form-check-input']) }}
+                <label class="form-check-label" for="ativo">
+                    Quotas Pagas
+                </label>
+            </div>
+            @endcan
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-success mb-3" >
+                    <i class="fas fa-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div style="padding-top: 10px">
 @if (count($socios))
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
@@ -17,6 +71,7 @@
             <th>Direção</th>
             <th>Quotas</th>
             <th>Ativo</th>
+            <th>NºSócio</th>
             @can('is-direcao', Auth::user())
             <th></th>
             @endcan
@@ -56,6 +111,9 @@
                 @else
                     Não-ativo
                 @endif
+            </td>
+            <td>
+                {{$socio->num_socio}}
             </td>
             @can('is-direcao', Auth::user())
             <td>                

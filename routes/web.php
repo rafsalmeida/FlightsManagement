@@ -35,9 +35,16 @@ Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => '
 //
 Route::resource('socios', 'SocioController');
 
-Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socios.mudarEstado');
-Route::patch('socios/{socio}/quota', 'SocioController@mudarEstadoQuota')->name('socios.mudarEstadoQuota');
-Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailConfirmacao')->name('socios.enviarEmailConfirmacao');
+Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socios.mudarEstado')->middleware('direcao');
+Route::patch('socios/{socio}/quota', 'SocioController@mudarEstadoQuota')->name('socios.mudarEstadoQuota')->middleware('direcao');
+Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailConfirmacao')->name('socios.enviarEmailConfirmacao')->middleware('direcao');
+
+Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado');
+Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca');
+
+Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
+
+Route::get('aeronaves/{aeronave}/pilotos', 'AeronaveController@indexPilotos')->middleware('direcao');
 
 Route::resource('movimentos', 'MovimentoController');
 

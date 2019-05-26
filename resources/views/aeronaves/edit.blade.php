@@ -6,6 +6,7 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
+
 <form  method="POST" action="{{ action('AeronaveController@update', $aeronave->matricula)}}"  class="form-group">
 	@method('PUT')
 	@csrf
@@ -41,8 +42,12 @@
     </div>
     <div class="form-group" style="padding-left: 15px;">
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
-        <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
+        <button type="submit" class="btn btn-danger" name="cancel">Cancelar</button>
     </div>
+</form>
+
+<form method="GET" action="{{ action('AeronaveController@indexPilotos',$aeronave->matricula)}}" class ="form-group" style="padding-left: 15px">
+        <button type="submit" class="btn btn-primary">Lista de Pilotos</button>
 </form>
 @endsection
 
