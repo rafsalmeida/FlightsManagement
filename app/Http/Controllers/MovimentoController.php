@@ -28,8 +28,7 @@ class MovimentoController extends Controller
     {
         $movimentos = Movimento::paginate(15);
         $title = "Lista de Movimentos";
-        $pilotos = User::all();
-        return view('movimentos.list', compact('movimentos','title','pilotos'));
+        return view('movimentos.list', compact('movimentos','title'));
     }
 
     /**
@@ -61,7 +60,7 @@ class MovimentoController extends Controller
         $movimento->fill($request->all());
 
         $piloto = User::find($request->piloto_id);
-
+        $movimento->observacoes = $request->observacoes;
         $movimento->hora_aterragem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_aterragem;
         $movimento->hora_descolagem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_descolagem;
         $movimento->num_licenca_piloto = $piloto->num_licenca;
@@ -82,10 +81,6 @@ class MovimentoController extends Controller
             $movimento->num_certificado_instrutor = $instrutor->num_certificado;
             $movimento->validade_certificado_instrutor = $instrutor->validade_certificado;
             $movimento->classe_certificado_instrutor = $instrutor->classe_certificado;
-        }
-
-        if($request->conta_horas_inicio<5){
-
         }
 
         $movimento->save();

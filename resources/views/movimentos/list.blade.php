@@ -4,13 +4,13 @@
 
 <div style="padding: 2vh 0"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
 @if (count($movimentos))
-    <div style="overflow-x: auto;">
-        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
+    <div style="overflow-x: auto; overflow-y: hidden;">
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-light">
                 <tr>
                     <th>ID</th>
                     <th>Aeronave</th>
-                    <th>Data</th>
+                    <th>&emsp;Data&emsp;&emsp;&emsp;</th>
                     <th>Hora Descolagem</th>
                     <th>Hora Aterragem</th>
                     <th>Tempo Voo</th>
@@ -28,6 +28,7 @@
                     <th>Tipo de Instrução</th>
                     <th>Instrutor</th>
                     <th>Confirmado</th>
+                    <th>Observações</th>
                     <th></th>
                 </tr>
             </thead>
@@ -37,8 +38,8 @@
                         <td>{{ $movimento->id }}</td>
                         <td>{{ $movimento->aeronave }}</td>
                         <td>{{ $movimento->data }}</td>
-                        <td>{{ $movimento->hora_descolagem }}</td>
-                        <td>{{ $movimento->hora_aterragem }}</td>
+                        <td>{{ date("H:i",strtotime($movimento->hora_descolagem)) }}</td>
+                        <td>{{ date("H:i",strtotime($movimento->hora_aterragem)) }}</td>
                         <td>{{ $movimento->tempo_voo }}</td>
                         <td>@if($movimento->natureza == "T")
                                 Treino
@@ -76,6 +77,7 @@
                             @else
                                 Não
                             @endif</td>
+                        <td>{{ $movimento->observacoes }}</td>
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
