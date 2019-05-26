@@ -44,7 +44,7 @@ Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')
 
 Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
 
-Route::get('aeronaves/{aeronave}/pilotos', 'AeronaveController@indexPilotos');
+Route::get('aeronaves/{aeronave}/pilotos', 'AeronaveController@indexPilotos')->middleware('direcao');
 
 Route::resource('movimentos', 'MovimentoController');
 
