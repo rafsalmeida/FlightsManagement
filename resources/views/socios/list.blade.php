@@ -2,7 +2,13 @@
 @section('title', "Lista de Sócios")
 @section('content')
 @can('is-direcao', Auth::user())
-<div style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
+<div class="row-md-2">
+    <div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}">Adicionar Sócio</a>
+    </div>
+</div>
+<div class="row-md-2">
+    <div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-danger" href="{{ route('socios.resetQuotas') }}">Reset às Quotas</a>
+    </div>
 </div>
 @endcan
 <div class="form-group" style="padding-top: 10px; float: right;">            
