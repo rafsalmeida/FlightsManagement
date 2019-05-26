@@ -335,6 +335,7 @@ class SocioController extends Controller
     public function resetQuotas(){
         //not tested yet
         DB::table('users')
+                ->whereNull('deleted_at')
                 ->where('quota_paga',1)
                 ->update(['quota_paga' => 0]);
         return redirect()->action("SocioController@index")->with('success', 'Estado de quotas de todos os sócios alterado corretamente');
