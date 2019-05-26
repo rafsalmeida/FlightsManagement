@@ -43,26 +43,6 @@ class SocioController extends Controller
         }*/
 
         $title = "Lista de Sócios";
-        /*if ( isset($request['num_socio']) && trim($request['num_socio'] !== '') ) {
-            $socios = User::where('num_socio', '=', trim($request['num_socio']))->paginate(15);
-            return view("socios.list", compact("socios","title"));
-        }
-
-        if ( isset($request['nome_informal']) && trim($request['nome_informal']) !== '' )
-        {
-            $query->where('nome_informal', 'LIKE', trim($request['nome_informal'] .'%'));
-            return view("socios.list", compact("socios","title"));
-        }
-        if ( isset($request['email']) && trim($request['email']) !== '' )
-        {
-            $query->where('email', 'LIKE', trim($request['email']).'%');
-        }
-        if ( isset($request['tipo_socio']) && trim($request['tipo_socio'] !== '') ) {
-            $query->where('tipo_socio', '=', trim($request['tipo_socio']));
-        }
-        if ( isset($request['direcao']) && trim($request['direcao'] !== '') ) {
-            $query->where('direcao', '=', trim($request['direcao']));
-        }*/
 
         $query = User::limit(10);
         if ($request->filled('num_socio') && $request['num_socio'] != null) {
@@ -322,13 +302,13 @@ class SocioController extends Controller
 
     public function mostrarFicheiroCertificado($id){
         $socio = User::findOrFail($id);
-        dd($this->authorize('view', $socio));
+        $this->authorize('view', $socio);
         return response()->file(storage_path('app/docs_piloto/certificado_'.$socio->id.'.pdf'));
     }
 
     public function mostrarFicheiroLicenca($id){
         $socio = User::findOrFail($id);
-        dd($this->authorize('view', $socio));
+        $this->authorize('view', $socio);
         return response()->file(storage_path('app/docs_piloto/licenca_'.$socio->id.'.pdf'));
     }
 
