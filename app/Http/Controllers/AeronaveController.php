@@ -182,6 +182,7 @@ class AeronaveController extends Controller
         $aeronave = Aeronave::findOrFail($id);
         $title = "Pilotos da Aeronave ".$aeronave->matricula;
         $pilotos = $aeronave->user()->paginate(15);
+        dd($aeronave->doesntHave('User')->get);
         return view('aeronaves.pilotos-list', compact('pilotos','title'));
     }
 }
