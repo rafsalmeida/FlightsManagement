@@ -7,7 +7,7 @@ use App\Aeronave;
 use App\AeronaveValor;
 use App\AeronavePilotos;
 use App\Http\Requests\StoreAeronave;
-
+use App\User;
 
 class AeronaveController extends Controller
 {
@@ -182,7 +182,11 @@ class AeronaveController extends Controller
         $aeronave = Aeronave::findOrFail($id);
         $title = "Pilotos da Aeronave ".$aeronave->matricula;
         $pilotos = $aeronave->user()->paginate(15);
-        dd($aeronave->doesntHave('User')->get);
-        return view('aeronaves.pilotos-list', compact('pilotos','title'));
+       /** Pilotos Não Autorizados (e apenas pilotos) **/
+        $pilotosNao=User::whereDoesntHave('aeronave', function ($query) use($id) {
+                $query->where('aeronaves_pilotos.matricula','=',$id);
+            })->where('tipo_socio','=','P')
+        ->paginate(15); 
+        return view('aeronaves.pilotos-list', compact('pilotos','title','pilotosNao'));
     }
 }
