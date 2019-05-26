@@ -35,12 +35,7 @@ class SocioController extends Controller
     public function index(Request $request)
     {
 
-        //dd(Auth::user()->direcao, Auth::user()->can('viewSociosDesativados'));
-        /*if(Auth::user()->can('viewSociosDesativados')){
-            $socios = User::paginate(15);
-        } else {
-            $socios = User::where('ativo',1)->paginate(15);
-        }*/
+
 
         $title = "Lista de Sócios";
 
@@ -67,18 +62,22 @@ class SocioController extends Controller
             $query->where('direcao', $request->get('direcao'));
         }
 
-        if ($request->filled('quota_paga') && $request['quota_paga'] != null) {
-            $query->where('quota_paga', $request->get('quota_paga'));
+        if(Auth::user()->can('viewSociosDesativados', Auth::user())){
+
+            if ($request->filled('quota_paga') && $request['quota_paga'] != null) {
+                $query->where('quota_paga', $request->get('quota_paga'));
+            }
+
+            if ($request->filled('ativo') && $request['ativo'] != null) {
+                $query->where('ativo', $request->get('ativo'));
+            } 
         }
 
-        if ($request->filled('ativo') && $request['ativo'] != null) {
-            $query->where('ativo', $request->get('ativo'));
+        if(Auth::user()->can('viewSociosDesativados')){
+            $socios =  $query->paginate(15);
+        } else {
+            $socios = $query->where('ativo',1)->paginate(15);
         }
-
-
-
-        $socios = $query->paginate(15);
-        //$socios = User::paginate(15);
 
         return view("socios.list", compact("socios","title"));
     }
