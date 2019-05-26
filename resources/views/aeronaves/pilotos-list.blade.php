@@ -18,8 +18,6 @@
         <tr>
             <td>{{ $piloto->id }}</td>
             <td>{{ $piloto->nome_informal }}</td>
-
-
         </tr>
     @endforeach
     </table>
