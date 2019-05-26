@@ -2,13 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class AeronavePilotos extends Model
+class AeronavePilotos extends Pivot
 {
     protected $table = "aeronaves_pilotos";
 
     public $timestamps = false;
 
     protected $fillable = ['matricula', 'piloto_id'];
+
 }
