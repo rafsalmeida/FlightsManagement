@@ -43,8 +43,7 @@ class StoreMovimento extends FormRequest
         'num_recibo' => 'required|integer',
         'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$request->aeronave.'',
         'tipo_instrucao' => 'required_if:natureza,I',
-        'modo_pagamento' => 'required',
-        'observacoes' => 'nullable'
+        'modo_pagamento' => 'required'
         ];
     }
 }
