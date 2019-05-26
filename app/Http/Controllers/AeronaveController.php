@@ -181,8 +181,7 @@ class AeronaveController extends Controller
     public function indexPilotos($id){
         $aeronave = Aeronave::findOrFail($id);
         $title = "Pilotos da Aeronave ".$aeronave->matricula;
-        $pilotos = AeronavePilotos::where('matricula','LIKE',$id)->paginate(15);
-
+        $pilotos = $aeronave->user()->paginate(15);
         return view('aeronaves.pilotos-list', compact('pilotos','title'));
     }
 }
