@@ -50,7 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function aeronave()
     {
-        return $this->belongsToMany('App\Aeronave','aeronaves_pilotos', 'matricula', 'piloto_id');
+        return $this->belongsToMany('App\Aeronave','aeronaves_pilotos', 'piloto_id', 'matricula');
     }
 
    
