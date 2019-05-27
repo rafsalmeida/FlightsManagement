@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
-        <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarSocio">
+        <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
             <div class="form-row ">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="ID do Movimento" name="id">
@@ -141,4 +141,22 @@
 
 @endsection
 
-
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+  
+  // Remove empty fields from GET forms
+  // Author: Bill Erickson
+  // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/
+  
+    // Change 'form' to class or ID of your specific form
+    $("#pesquisarMovimento").submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+    
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "pesquisarMovimento" ).find( ":input" ).prop( "disabled", false );
+    
+});
+</script>
