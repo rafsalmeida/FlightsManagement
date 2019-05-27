@@ -155,8 +155,16 @@ class MovimentoController extends Controller
      * @param  \App\Movimento  $movimento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Movimento $movimento)
+    public function destroy($id)
     {
-        //
+        $movimento = Movimento::findOrFail($id);
+        //$movimentos = $socio->movimentos;
+        if($movimento->confirmado == 0){
+            $movimento->delete();
+        } else {
+            return redirect()->action("MovimentoController@index")->with('sucess', 'Movimento Confirmado. Impossivel Apagar');
+        }
+
+        return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
     }
 }
