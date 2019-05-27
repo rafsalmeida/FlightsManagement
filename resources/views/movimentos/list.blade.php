@@ -2,7 +2,44 @@
 @section('title', "Lista de Movimentos")
 @section('content')
 
-<div style="padding: 2vh 0"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+<div class="row">
+    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+    <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
+        <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
+            <div class="form-row ">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="ID do Movimento" name="id">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Aeronave" name="aeronave">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Piloto" name="nome_informal_piloto">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Instrutor" name="nome_informal_instrutor">
+                </div>
+                <div class="form-group">
+                    {{ Form::select('natureza', [null => 'Tipo (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'idNatureza', 'class' => 'form-control', 'name' => 'natureza'])}}
+                </div>
+                <div class="form-group form-check-inline" style="padding-left: 30px">
+                    {{ Form::checkbox('confirmado', '1', false, ['class' => 'form-check-input']) }}
+                    <label class="form-check-label">
+                        Confirmado
+                    </label>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-sm btn-success mb-3" >
+                        <i class="fas fa-search"></i> Pesquisar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
 @if (count($movimentos))
     <div style="overflow-x: auto; overflow-y: hidden;">
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
@@ -68,7 +105,7 @@
                                 Não é um voo de instrução
                             @endif</td>
                         <td>@if(isset($movimento->instrutor_id))
-                                {{ $movimento->instrutor_id }}
+                                {{ \app\User::find($movimento->instrutor_id)->nome_informal }}
                             @else
                                 Não tem Instrutor
                             @endif</td>
@@ -81,12 +118,11 @@
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
-                            <form method="POST" action="#" role="form" class="inline">
+                            <form method="POST" action="{{action('MovimentoController@destroy', $movimento->id)}}" role="form" class="inline">
                                 @csrf
                                 @method('delete')
-                                @include('partials.deletemodal')
-                                <input type="hidden" name="aeronave_matricula" value="{{ $movimento->id }}">
-                                <button type="button" class="btn btn-sm btn-xs btn-danger rounded-pill" data-target="#deleteconfirm" data-toggle="modal" style="width: 100%">Apagar</button>
+                                <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
+                                {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                             </form>
                             </div>
                         </td>
@@ -98,9 +134,28 @@
     @else
     <h2>Nenhum movimento encontrado </h2>
 @endif
+</div>
 
-{{ $movimentos->links() }}
+{{ $movimentos->appends(request()->except('page'))->links() }}
 
 @endsection
 
-
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+  
+  // Remove empty fields from GET forms
+  // Author: Bill Erickson
+  // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/
+  
+    // Change 'form' to class or ID of your specific form
+    $("#pesquisarMovimento").submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+    
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "pesquisarMovimento" ).find( ":input" ).prop( "disabled", false );
+    
+});
+</script>

@@ -24,10 +24,43 @@ class MovimentoController extends Controller
     }
 
     
-    public function index()
+    public function index(Request $request)
     {
-        $movimentos = Movimento::paginate(15);
+        $query = Movimento::limit(10);
+
+        if ($request->filled('id') && $request['id'] != null) {
+            $query->where('id', $request->get('id'));
+        }
+
+        if ($request->filled('aeronave') && $request['aeronave'] != null) {
+            $matricula = $request->get('aeronave');
+            $query->where('aeronave', 'like', "%$matricula%");
+        }
+
+        if ($request->filled('nome_informal_piloto') && $request['nome_informal_piloto'] != null) {
+            $nome = $request->get('nome_informal_piloto');
+            $piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->whereIn('piloto_id', $piloto_id);
+        }
+
+        if ($request->filled('nome_informal_instrutor') && $request['nome_informal_instrutor'] != null) {
+            $nome = $request->get('nome_informal_instrutor');
+            $instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->whereIn('instrutor_id', $instrutor_id);
+        }
+
+        if ($request->filled('natureza') && $request['natureza'] != null) {
+            $query->where('natureza', $request->get('natureza'));
+        }
+
+        if ($request->filled('confirmado') && $request['confirmado'] != null) {
+            $query->where('confirmado', $request->get('confirmado'));
+        }
+
+        $movimentos = $query->paginate(15);
+
         $title = "Lista de Movimentos";
+        
         return view('movimentos.list', compact('movimentos','title'));
     }
 
@@ -155,8 +188,16 @@ class MovimentoController extends Controller
      * @param  \App\Movimento  $movimento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Movimento $movimento)
+    public function destroy($id)
     {
-        //
+        $movimento = Movimento::findOrFail($id);
+        //$movimentos = $socio->movimentos;
+        if($movimento->confirmado == 0){
+            $movimento->delete();
+        } else {
+            return redirect()->action("MovimentoController@index")->with('sucess', 'Movimento Confirmado. Impossivel Apagar');
+        }
+
+        return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
     }
 }
