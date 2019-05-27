@@ -4,6 +4,8 @@
 
 <div class="row">
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
+        left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>''
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
         <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
             <div class="form-row ">
