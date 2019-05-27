@@ -136,7 +136,7 @@
 @endif
 </div>
 
-{{ $movimentos->links() }}
+{{ $movimentos->appends(request()->except('page'))->links() }}
 
 @endsection
 
