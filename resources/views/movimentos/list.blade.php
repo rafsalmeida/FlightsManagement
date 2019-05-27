@@ -118,12 +118,11 @@
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
-                            <form method="POST" action="#" role="form" class="inline">
+                            <form method="POST" action="{{action('MovimentoController@destroy', $movimento->id)}}" role="form" class="inline">
                                 @csrf
                                 @method('delete')
-                                @include('partials.deletemodal')
-                                <input type="hidden" name="aeronave_matricula" value="{{ $movimento->id }}">
-                                <button type="button" class="btn btn-sm btn-xs btn-danger rounded-pill" data-target="#deleteconfirm" data-toggle="modal" style="width: 100%">Apagar</button>
+                                <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
+                                {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                             </form>
                             </div>
                         </td>
