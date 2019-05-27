@@ -46,7 +46,7 @@
     </div>
 </form>
 
-<form method="GET" action="{{ action('AeronaveController@indexPilotos',$aeronave->matricula)}}" class ="form-group" style="padding-left: 15px">
+<form method="GET" action="{{ action('AeronavePilotosController@index',$aeronave->matricula)}}" class ="form-group" style="padding-left: 15px">
         <button type="submit" class="btn btn-primary">Lista de Pilotos</button>
 </form>
 @endsection
