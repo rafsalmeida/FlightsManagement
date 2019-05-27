@@ -32,7 +32,9 @@
     </table>
 </div>
 @else
-    <h2>Nenhum piloto encontrado </h2>
+    <div class="col-md-12">    
+        <h2>Nenhum piloto encontrado </h2>
+    </div>
 @endif
 
 {{ $pilotos->links() }}
@@ -69,7 +71,9 @@
 
 
 @else
-    <h2>Nenhum piloto encontrado </h2>
+    <div class="col-md-12">    
+        <h2>Nenhum piloto encontrado </h2>
+    </div>
 @endif
 
 
