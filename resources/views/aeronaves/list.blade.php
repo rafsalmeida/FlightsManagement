@@ -2,7 +2,7 @@
 @section('title', "Lista de Aeronaves")
 @section('content')
 @can('is-direcao', Auth::user())
-<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('aeronaves.create') }}">Adicionar Aeronave</a></div>
+<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('aeronaves.create') }}"><i class="fas fa-plus"></i> Adicionar Aeronave</a></div>
 @endcan
 <div style="padding-top: 10px">
 @if (count($aeronaves))
@@ -34,7 +34,7 @@
             <td>
               
                 <div style="text-align: center; margin: auto">
-                <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('AeronaveController@edit', $aeronave->matricula)}}">Editar</a>
+                <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('AeronaveController@edit', $aeronave->matricula)}}"><i class="fas fa-fighter-jet"></i> Editar</a>
                 <form action="{{action('AeronaveController@destroy', $aeronave->matricula)}}" method="POST" role="form" class="inline">
                     @csrf
                     @method('delete')
@@ -52,7 +52,9 @@
 
 
 @else
-    <h2>Nenhuma aeronave encontrada </h2>
+    <div class="col-md-12">    
+        <h2>Nenhum aeronave encontrada </h2>
+    </div>
 @endif
 
 @endsection
