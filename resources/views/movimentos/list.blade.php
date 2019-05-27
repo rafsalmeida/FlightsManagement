@@ -18,18 +18,30 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Piloto" name="nome_informal_piloto">
                 </div>
-            </div>
-            <div class="form-row">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Instrutor" name="nome_informal_instrutor">
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
                     {{ Form::select('natureza', [null => 'Tipo (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'idNatureza', 'class' => 'form-control', 'name' => 'natureza'])}}
+                </div>
+                <div class="form-group">
+                    <input type="date" class="form-control" placeholder="De" name="data_de">
+                </div>
+                <div class="form-group">
+                    <input type="date" class="form-control" placeholder="Ate" name="data_ate">
                 </div>
                 <div class="form-group form-check-inline" style="padding-left: 30px">
                     {{ Form::checkbox('confirmado', '1', false, ['class' => 'form-check-input']) }}
                     <label class="form-check-label">
                         Confirmado
+                    </label>
+                </div>
+                <div class="form-group form-check-inline" style="padding-left: 30px">
+                    {{ Form::checkbox('meus_voos', '1', false, ['class' => 'form-check-input']) }}
+                    <label class="form-check-label">
+                        Meus Voos
                     </label>
                 </div>
                 <div class="col-auto">

@@ -58,6 +58,19 @@ class MovimentoController extends Controller
             $query->where('confirmado', $request->get('confirmado'));
         }
 
+        if ($request->filled('data_de') && $request['data_de'] != null) {
+            $query->where('data', '>=', $request->get('data_de'));
+        }
+
+        if ($request->filled('data_ate') && $request['data_ate'] != null) {
+            $query->where('data', '<=', $request->get('data_ate'));
+        }
+
+        if ($request->filled('meus_voos') && $request['meus_voos'] != null) {
+            $id = auth()->user()->id;
+            $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
+        }
+
         $movimentos = $query->paginate(15);
 
         $title = "Lista de Movimentos";
