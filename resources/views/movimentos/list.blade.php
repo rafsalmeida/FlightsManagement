@@ -134,7 +134,9 @@
         </table>
         </div>
     @else
-    <h2>Nenhum movimento encontrado </h2>
+    <div class="col-md-12">    
+        <h2>Nenhum movimento encontrado </h2>
+    </div>
 @endif
 </div>
 
