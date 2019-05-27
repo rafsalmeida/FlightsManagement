@@ -335,15 +335,19 @@ class SocioController extends Controller
         return response()->file(storage_path('app/docs_piloto/licenca_'.$socio->id.'.pdf'));
     }
 
-    public function resetQuotas(){
-        //not tested yet
-        DB::table('users')
-                ->whereNull('deleted_at')
-                ->where('quota_paga',1)
-                ->update(['quota_paga' => 0]);
-        return redirect()->action("SocioController@index")->with('success', 'Estado de quotas de todos os sócios alterado corretamente');
+    public function resetQuotas(){    
+        User::where('quota_paga','=',1)->update(['quota_paga' => 0]);  
+        return redirect()
+                ->action("SocioController@index")
+                ->with('success', 'Estado de quotas de todos os sócios alterado corretamente');
     }
 
+    public function desativarSemQuotas(){    
+        User::where('quota_paga','=',0)->update(['ativo' => 0]);  
+        return redirect()
+                ->action("SocioController@index")
+                ->with('success', 'Estado de quotas dos sócios desativados alterado corretamente');
+    }
 
 
 }
