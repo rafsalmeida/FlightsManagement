@@ -32,7 +32,9 @@ Route::patch('password', 'Auth\ChangePasswordController@updatePassword')->name('
 
 Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => 'aeronave']);
 //Route::get('aeronaves{aeronave}/edit', 'AeronaveController@edit($aeronave)');
-//
+Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
+Route::patch('socios/desativar_sem_quotas', 'SocioController@desativarSemQuotas')->name('socios.desativarSemQuotas')->middleware('direcao');
+
 Route::resource('socios', 'SocioController');
 
 Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socios.mudarEstado')->middleware('direcao');
@@ -42,7 +44,6 @@ Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailC
 Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado');
 Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca');
 
-Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
 
 Route::get('aeronaves/{aeronave}/pilotos', 'AeronavePilotosController@index')->middleware('direcao');
 
