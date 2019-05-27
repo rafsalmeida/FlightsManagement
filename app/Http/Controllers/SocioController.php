@@ -40,28 +40,28 @@ class SocioController extends Controller
 
         $title = "Lista de Sócios";
 
-        $query = User::limit(10);
-        if ($request->filled('num_socio') && $request['num_socio'] != null) {
-            $query->where('num_socio', $request->get('num_socio'));
-        }
+            $query = User::limit(10);
+            if ($request->filled('num_socio') && $request['num_socio'] != null) {
+                $query->where('num_socio', $request->get('num_socio'));
+            }
 
-        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
-            $nome = $request->get('nome_informal');
-            $query->where('nome_informal', 'like', "%$nome%");
-        }
+            if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
+                $nome = $request->get('nome_informal');
+                $query->where('nome_informal', 'like', "%$nome%");
+            }
 
-        if ($request->filled('email') && $request['email'] != null) {
-            $email = $request->get('email');
-            $query->where('email', 'like', "%$email%");
-        }
+            if ($request->filled('email') && $request['email'] != null) {
+                $email = $request->get('email');
+                $query->where('email', 'like', "%$email%");
+            }
 
-        if ($request->filled('tipo') && $request['tipo'] != null) {
-            $query->where('tipo_socio', $request->get('tipo'));
-        }
+            if ($request->filled('tipo') && $request['tipo'] != null) {
+                $query->where('tipo_socio', $request->get('tipo'));
+            }
 
-        if ($request->filled('direcao') && $request['direcao'] != null) {
-            $query->where('direcao', $request->get('direcao'));
-        }
+            if ($request->filled('direcao') && $request['direcao'] != null) {
+                $query->where('direcao', $request->get('direcao'));
+            }
 
         if(Auth::user()->can('viewSociosDesativados', Auth::user())){
 
