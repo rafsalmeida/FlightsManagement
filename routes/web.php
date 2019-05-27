@@ -54,5 +54,7 @@ Route::delete('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosControlle
 
 Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->name('pilotos.add')->middleware('direcao');
 
+Route::get('movimentos/estatisticas', 'MovimentoController@statistics')->name('movimentos.estatisticas');
 Route::resource('movimentos', 'MovimentoController');
+
 
