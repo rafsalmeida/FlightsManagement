@@ -6,7 +6,7 @@
     <input
         type="text" class="form-control"
         name="num_socio" id="inputNumSocio"
-        placeholder="Numero de Sócio" value="@if(isset($socio)){{old('num_socio', $socio->num_socio)}}@endif" @cannot('is-direcao', Auth::user()){{ "readonly" }}@endcannot/>
+        placeholder="Numero de Sócio" value="@if(isset($socio)){{old('num_socio', $socio->num_socio)}}@else {{old('name')}} @endif" @cannot('is-direcao', Auth::user()){{ "readonly" }}@endcannot/>
     @if ($errors->has('num_socio'))
         <em>{{ $errors->first('num_socio') }}</em>
     @endif
@@ -17,7 +17,7 @@
     <input
         type="text" class="form-control"
         name="name" id="inputNome"
-        placeholder="Nome" value="@if(isset($socio)){{ old('name', $socio->name) }}@endif" />
+        placeholder="Nome" value="@if(isset($socio)){{ old('name', $socio->name) }}@else {{old('name')}}@endif" />
     @if ($errors->has('name'))
         <em>{{ $errors->first('name') }}</em>
     @endif
@@ -27,7 +27,7 @@
     <input
         type="text" class="form-control"
         name="nome_informal" id="inputNomeInformal"
-        placeholder="Nome Informal" value="@if(isset($socio)){{ old('nome_informal', $socio->nome_informal) }}@endif" />
+        placeholder="Nome Informal" value="@if(isset($socio)){{ old('nome_informal', $socio->nome_informal) }}@else {{old('nome_informal')}}@endif" />
     @if ($errors->has('nome_informal'))
         <em>{{ $errors->first('nome_informal') }}</em>
     @endif
@@ -63,7 +63,7 @@
     <input
         type="email" class="form-control"
         name="email" id="inputEmail"
-        placeholder="Email" value="@if(isset($socio)){{ old('email', $socio->email) }}@endif" />
+        placeholder="Email" value="@if(isset($socio)){{ old('email', $socio->email) }}@else {{old('email')}}@endif" />
     @if ($errors->has('email'))
         <em>{{ $errors->first('email') }}</em>
     @endif
@@ -73,7 +73,7 @@
     <input
         type="text" class="form-control"
         name="nif" id="inputNif"
-        placeholder="Nif" value="@if(isset($socio)){{ old('nif', $socio->nif) }}@endif" />
+        placeholder="Nif" value="@if(isset($socio)){{ old('nif', $socio->nif) }}@else {{old('nif')}}@endif" />
     @if ($errors->has('nif'))
         <em>{{ $errors->first('nif') }}</em>
     @endif
@@ -83,7 +83,7 @@
     <input
         type="date" class="form-control"
         name="data_nascimento" id="inputDataNascimento"
-        placeholder="Data de Nascimento" value="@if(isset($socio)){{ old('data_nascimento', $socio->data_nascimento) }}@endif" />
+        placeholder="Data de Nascimento" value="@if(isset($socio)){{ old('data_nascimento', $socio->data_nascimento) }}@else {{old('data_nascimento')}}@endif" />
     @if ($errors->has('data_nascimento'))
         <em>{{ $errors->first('data_nascimento') }}</em>
     @endif
@@ -93,7 +93,7 @@
     <input
         type="text" class="form-control"
         name="telefone" id="inputTelefone"
-        placeholder="Telefone" value="@if(isset($socio)){{ old('telefone', $socio->telefone) }}@endif" />
+        placeholder="Telefone" value="@if(isset($socio)){{ old('telefone', $socio->telefone) }}@else {{old('telefone')}}@endif" />
     @if ($errors->has('telefone'))
         <em>{{ $errors->first('telefone') }}</em>
     @endif
@@ -190,6 +190,18 @@
        
     </div>
 </div>
+<div class="form-group">
+    <label for="inputFoto">Foto</label>
+    <div> 
+        @if(isset($socio->foto_url))
+        <img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" style="padding-bottom: 5px">
+        <br>
+        @endif
+        <input type="file" name="file_foto" id="inputFoto"/>
+
+    </div>
+   
+</div>
 
 @can('is-piloto', Auth::user())
 <div id="pilot_form">
@@ -242,7 +254,7 @@
     <input
         type="text" class="form-control"
         name="num_licenca" id="inputLicenca"
-        placeholder="NumLicenca" value="@if(isset($socio)){{ old('num_licenca', $socio->num_licenca) }}@endif" />
+        placeholder="NumLicenca" value="@if(isset($socio)){{ old('num_licenca', $socio->num_licenca) }}@else {{old('num_licenca')}}@endif" />
     @if ($errors->has('num_licenca'))
         <em>{{ $errors->first('num_licenca') }}</em>
     @endif
@@ -262,7 +274,7 @@
     <input
         type="date" class="form-control"
         name="validade_licenca" id="inputValidadeLicenca"
-        placeholder="ValidadeLicenca" value="@if(isset($socio)){{ old('validade_licenca', $socio->validade_licenca) }}@endif" />
+        placeholder="ValidadeLicenca" value="@if(isset($socio)){{ old('validade_licenca', $socio->validade_licenca) }}@else {{old('validade_licenca')}}@endif" />
     @if ($errors->has('validade_licenca'))
         <em>{{ $errors->first('validade_licenca') }}</em>
     @endif
@@ -294,7 +306,7 @@
     <input
         type="text" class="form-control"
         name="num_certificado" id="inputCertificado"
-        placeholder="NumCertificado" value="@if(isset($socio)){{ old('num_certificado', $socio->num_certificado) }}@endif" />
+        placeholder="NumCertificado" value="@if(isset($socio)){{ old('num_certificado', $socio->num_certificado) }}@else {{old('num_certificado')}}@endif" />
     @if ($errors->has('num_certificado'))
         <em>{{ $errors->first('num_certificado') }}</em>
     @endif
@@ -315,7 +327,7 @@
     <input
         type="date" class="form-control"
         name="validade_certificado" id="inputValidadeCertificado"
-        placeholder="ValidadeCertificado" value="@if(isset($socio)){{ old('validade_certificado', $socio->validade_certificado) }}@endif" />
+        placeholder="ValidadeCertificado" value="@if(isset($socio)){{ old('validade_certificado', $socio->validade_certificado) }}@else {{old('validade_certificado')}}@endif" />
     @if ($errors->has('validade_certificado'))
         <em>{{ $errors->first('validade_certificado') }}</em>
     @endif
@@ -342,19 +354,7 @@
     </div>
     @endif
 </div>
-<div class="form-group">
-    <label for="inputFoto">Foto</label>
-    <div> 
-        @if(isset($socio->foto_url))
-        <img src="{{url('/storage/fotos').'/'.$socio->foto_url}}" style="padding-bottom: 5px">
-        <br>
-        @endif
 
-        <input type="file" name="file_foto" id="inputFoto"/>
-
-    </div>
-   
-</div>
 
 <div class="form-group">
     <label for="inputFoto">Licença</label>
