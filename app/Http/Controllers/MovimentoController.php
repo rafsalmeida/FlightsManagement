@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Movimento;
 use Illuminate\Http\Request;
-use Illuminate\validation\Rule;
 use App\AeronaveValor;
 use App\User;
 use App\Http\Requests\StoreMovimento;
@@ -60,7 +59,7 @@ class MovimentoController extends Controller
         $movimentos = $query->paginate(15);
 
         $title = "Lista de Movimentos";
-        
+
         return view('movimentos.list', compact('movimentos','title'));
     }
 
@@ -90,30 +89,28 @@ class MovimentoController extends Controller
         $movimento = new Movimento();
        
         $request->validated();
+
         $movimento->fill($request->all());
 
-        $piloto = User::find($request->piloto_id);
         $movimento->observacoes = $request->observacoes;
         $movimento->hora_aterragem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_aterragem;
         $movimento->hora_descolagem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_descolagem;
-        $movimento->num_licenca_piloto = $piloto->num_licenca;
-        $movimento->validade_licenca_piloto = $piloto->validade_licenca;
-        $movimento->tipo_licenca_piloto = $piloto->tipo_licenca;
-        $movimento->num_certificado_piloto = $piloto->num_certificado;
-        $movimento->validade_certificado_piloto = $piloto->validade_certificado;
-        $movimento->classe_certificado_piloto = $piloto->classe_certificado;
+        $movimento->num_licenca_piloto = $movimento->piloto->num_licenca;
+        $movimento->validade_licenca_piloto = $movimento->piloto->validade_licenca;
+        $movimento->tipo_licenca_piloto = $movimento->piloto->tipo_licenca;
+        $movimento->num_certificado_piloto = $movimento->piloto->num_certificado;
+        $movimento->validade_certificado_piloto = $movimento->piloto->validade_certificado;
+        $movimento->classe_certificado_piloto = $movimento->piloto->classe_certificado;
         $movimento->tempo_voo = ($request->conta_horas_fim-$request->conta_horas_inicio)*6;
-        $aeronave_precos = AeronaveValor::whereMatricula($request->aeronave)->whereUnidadeContaHoras($request->conta_horas_fim-$request->conta_horas_inicio)->first();
-        $movimento->preco_voo = $aeronave_precos->preco;
+        $movimento->preco_voo = $movimento->thisAeronave->valores->where('unidade_conta_horas', '$request->conta_horas_fim-$request->conta_horas_inicio')->first->preco->preco;
         $movimento->confirmado = 0;
         if ($request->natureza == 'I'){
-            $instrutor = User::find($request->piloto_id);
-            $movimento->num_licenca_instrutor = $instrutor->num_licenca;
-            $movimento->validade_licenca_instrutor = $instrutor->validade_licenca;
-            $movimento->tipo_licenca_instrutor = $instrutor->tipo_licenca;
-            $movimento->num_certificado_instrutor = $instrutor->num_certificado;
-            $movimento->validade_certificado_instrutor = $instrutor->validade_certificado;
-            $movimento->classe_certificado_instrutor = $instrutor->classe_certificado;
+            $movimento->num_licenca_instrutor = $movimento->instrutor->num_licenca;
+            $movimento->validade_licenca_instrutor = $movimento->instrutor->validade_licenca;
+            $movimento->tipo_licenca_instrutor = $movimento->instrutor->tipo_licenca;
+            $movimento->num_certificado_instrutor = $movimento->instrutor->num_certificado;
+            $movimento->validade_certificado_instrutor = $movimento->instrutor->validade_certificado;
+            $movimento->classe_certificado_instrutor = $movimento->instrutor->classe_certificado;
         }
 
         $movimento->save();
