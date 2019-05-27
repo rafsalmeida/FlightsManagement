@@ -118,6 +118,9 @@ class MovimentoController extends Controller
         $movimento->tempo_voo = ($request->conta_horas_fim-$request->conta_horas_inicio)*6;
         $movimento->preco_voo = $movimento->thisAeronave->valores->where('unidade_conta_horas', '$request->conta_horas_fim-$request->conta_horas_inicio')->first->preco->preco;
         $movimento->confirmado = 0;
+        if($request->has("confirmar")){
+            $movimento->confirmado = 1;
+        }
         if ($request->natureza == 'I'){
             $movimento->num_licenca_instrutor = $movimento->instrutor->num_licenca;
             $movimento->validade_licenca_instrutor = $movimento->instrutor->validade_licenca;
