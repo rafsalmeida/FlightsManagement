@@ -14,6 +14,7 @@
     	@yield('form')
     </div>
     <div class="form-group" style="padding-left: 15px;">
+        <button type="submit" class="btn btn-success" name="confirmar">Confirmar Voo</button>
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
         <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
     </div>
