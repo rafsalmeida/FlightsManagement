@@ -27,6 +27,28 @@ class MovimentoController extends Controller
     public function index()
     {
         $movimentos = Movimento::paginate(15);
+        $query = User::limit(10);
+        if ($request->filled('num_socio') && $request['num_socio'] != null) {
+            $query->where('num_socio', $request->get('num_socio'));
+        }
+
+        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
+            $nome = $request->get('nome_informal');
+            $query->where('nome_informal', 'like', "%$nome%");
+        }
+
+        if ($request->filled('email') && $request['email'] != null) {
+            $email = $request->get('email');
+            $query->where('email', 'like', "%$email%");
+        }
+
+        if ($request->filled('tipo') && $request['tipo'] != null) {
+            $query->where('tipo_socio', $request->get('tipo'));
+        }
+
+        if ($request->filled('direcao') && $request['direcao'] != null) {
+            $query->where('direcao', $request->get('direcao'));
+        }
         $title = "Lista de Movimentos";
         return view('movimentos.list', compact('movimentos','title'));
     }

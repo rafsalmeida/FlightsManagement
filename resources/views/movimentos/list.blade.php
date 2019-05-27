@@ -2,7 +2,44 @@
 @section('title', "Lista de Movimentos")
 @section('content')
 
-<div style="padding: 2vh 0"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+<div class="row">
+    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+    <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
+        <form  method="GET" action="{{action('SocioController@index')}}" id="pesquisarSocio">
+            <div class="form-row ">
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="ID do Movimento" name="id">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Aeronave" name="aeronave">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Piloto" name="piloto_id">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Instrutor" name="instrutor_id">
+                </div>
+                <div class="form-group">
+                    {{ Form::select('natureza', [null => 'Tipo (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'idNatureza', 'class' => 'form-control', 'name' => 'natureza'])}}
+                </div>
+                <div class="form-group form-check-inline" style="padding-left: 30px">
+                    {{ Form::checkbox('confirmado', '1', false, ['class' => 'form-check-input']) }}
+                    <label class="form-check-label">
+                        Confirmado
+                    </label>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-sm btn-success mb-3" >
+                        <i class="fas fa-search"></i> Pesquisar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
 @if (count($movimentos))
     <div style="overflow-x: auto; overflow-y: hidden;">
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
@@ -97,6 +134,7 @@
     @else
     <h2>Nenhum movimento encontrado </h2>
 @endif
+</div>
 
 {{ $movimentos->links() }}
 
