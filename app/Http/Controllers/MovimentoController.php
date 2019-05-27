@@ -60,6 +60,7 @@ class MovimentoController extends Controller
         $movimentos = $query->paginate(15);
 
         $title = "Lista de Movimentos";
+        
         return view('movimentos.list', compact('movimentos','title'));
     }
 
