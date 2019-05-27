@@ -6,8 +6,9 @@ use App\Movimento;
 use Illuminate\Http\Request;
 use App\AeronaveValor;
 use App\User;
+use App\Aeronave;
 use App\Http\Requests\StoreMovimento;
-use khill\Lavacharts\Lavacharts;
+use Khill\Lavacharts\Lavacharts;
 
 class MovimentoController extends Controller
 {
@@ -133,6 +134,33 @@ class MovimentoController extends Controller
     }
 
     public function statistics(){
+
+        $aeronaveYearTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+        $aeronaveYearTable->addDateColumn('Ano')
+                          ->addNumberColumn('Horas');
+        $anos=[];
+        $aeronave = Aeronave::findOrFail('D-EAYV');
+        foreach($aeronave->movimentos as $movimento){
+            if(!in_array(date('Y',strtotime($movimento->data)),$anos)){
+            array_push($anos, date('Y',strtotime($movimento->data)));
+        }
+        }
+        dd($anos);
+        // Random Data For Example
+        foreach (Aeronave::first()->movimentos->get() as $movimento) {
+            $aeronaveYearTable->addRow([
+                $movimento->data->format('Y'), 
+            ]);
+        }
+        
+        /*for ($a = 1; $a < 30; $a++) {
+            $stocksTable->addRow([
+              '2015-10-' . $a, rand(800,1000), rand(800,1000)
+            ]);
+        }*/
+
+        $chart = \Lava::LineChart('MyStocks', $stocksTable);
+        echo \Lava::render('LineChart', 'MyStocks', 'stocks-chart');
     
        return view("movimentos.statistics");
 
