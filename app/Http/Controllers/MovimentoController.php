@@ -24,31 +24,41 @@ class MovimentoController extends Controller
     }
 
     
-    public function index()
+    public function index(Request $request)
     {
-        $movimentos = Movimento::paginate(15);
-        $query = User::limit(10);
-        if ($request->filled('num_socio') && $request['num_socio'] != null) {
-            $query->where('num_socio', $request->get('num_socio'));
+        $query = Movimento::limit(10);
+
+        if ($request->filled('id') && $request['id'] != null) {
+            $query->where('id', $request->get('id'));
         }
 
-        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
-            $nome = $request->get('nome_informal');
-            $query->where('nome_informal', 'like', "%$nome%");
+        if ($request->filled('aeronave') && $request['aeronave'] != null) {
+            $matricula = $request->get('aeronave');
+            $query->where('aeronave', 'like', "%$matricula%");
         }
 
-        if ($request->filled('email') && $request['email'] != null) {
-            $email = $request->get('email');
-            $query->where('email', 'like', "%$email%");
+        if ($request->filled('nome_informal_piloto') && $request['nome_informal_piloto'] != null) {
+            $nome = $request->get('nome_informal_piloto');
+            $piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->whereIn('piloto_id', $piloto_id);
         }
 
-        if ($request->filled('tipo') && $request['tipo'] != null) {
-            $query->where('tipo_socio', $request->get('tipo'));
+        if ($request->filled('nome_informal_instrutor') && $request['nome_informal_instrutor'] != null) {
+            $nome = $request->get('nome_informal_instrutor');
+            $instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->whereIn('instrutor_id', $instrutor_id);
         }
 
-        if ($request->filled('direcao') && $request['direcao'] != null) {
-            $query->where('direcao', $request->get('direcao'));
+        if ($request->filled('natureza') && $request['natureza'] != null) {
+            $query->where('natureza', $request->get('natureza'));
         }
+
+        if ($request->filled('confirmado') && $request['confirmado'] != null) {
+            $query->where('confirmado', $request->get('confirmado'));
+        }
+
+        $movimentos = $query->paginate(15);
+
         $title = "Lista de Movimentos";
         return view('movimentos.list', compact('movimentos','title'));
     }
