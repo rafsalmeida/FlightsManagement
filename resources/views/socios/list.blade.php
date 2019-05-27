@@ -5,12 +5,21 @@
 <div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}"><i class="fas fa-user-plus"></i> Adicionar Sócio</a>
 </div>
 <div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left">
-<form method="POST" action="{{route('socios.resetQuotas')}}"  role="form" class="">
+<form method="POST" action="{{route('socios.resetQuotas')}}"  role="form" >
     @csrf
     @method('PATCH')
     <input type="hidden" name="_method" value="patch">
-    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-danger ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
+    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-warning ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
 </form>
+<form method="POST" action="{{route('socios.desativarSemQuotas')}}"  role="form" >
+    @csrf
+    @method('PATCH')
+    <input type="hidden" name="_method" value="patch">
+    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas Sócios Desativados', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas dos sócios desativados?')"]) !!}
+</form>
+
+
+
 </div>
 @endcan
 <div class="form-group" style="padding-top: 10px; float: right;">            
