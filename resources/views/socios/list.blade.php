@@ -82,10 +82,9 @@
         </div>
     </form>
 </div>
-
 <div style="padding-top: 10px">
 @if (count($socios))
-    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" >
+    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" style="white-space: nowrap;">
     <thead class="thead-light">
         <tr>
             <th>Foto</th>
@@ -115,7 +114,8 @@
             <td>{{ $socio->email }}</td>
             <td>
                 @if($socio->tipo_socio == "P")
-                    Piloto
+                    Piloto <br>
+                    Nº Licença: {{$socio->num_licenca}}
                 @elseif ($socio->tipo_socio == "NP")
                     Não-Piloto
                 @else
@@ -149,25 +149,25 @@
             </td>
 
             <td>                
-                <div style="text-align: center; margin: auto">
+                <div style="text-align: center; margin: auto ">
                 <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
                 <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline" style="margin:0">
                     @csrf
                     @method('DELETE')
                     <input type="hidden" name="socio_id" value="{{ $socio->id }}">
-                    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
+                    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
                 </form>
                 <form method="POST" action="{{route('socios.mudarEstado', $socio->id)}}"  role="form" class="inline" style="margin:0">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="_method" value="patch">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Estado', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Estado', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
                 </form>
                 <form method="POST" action="{{route('socios.mudarEstadoQuota', $socio->id)}}"  role="form" class="inline">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="_method" value="patch">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-warning rounded-pill', 'style' => 'width: 100%', 'name' => 'quota_paga','onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-warning rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'name' => 'quota_paga','onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
                 </form>
                 
             </div>
