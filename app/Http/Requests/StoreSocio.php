@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\validation\Rule;
+use Illuminate\Validation\Rule;
 
 class StoreSocio extends FormRequest
 {
@@ -25,7 +25,7 @@ class StoreSocio extends FormRequest
     public function rules()
     {
         $rules =  [
-            "num_socio" => "required|integer|regex:/^\d{1,11}$/|".Rule::unique('users')->ignore($this->id),
+           "num_socio" => "required|integer|regex:/^\d{1,11}$/|".Rule::unique('users')->ignore($this->id),
             "name" => "required|string|max:255|regex:/^[\pL\s]+$/u",
             "nome_informal" => "required|string|max:40",
             "sexo" => "required|string|in:F,M", 
@@ -33,7 +33,7 @@ class StoreSocio extends FormRequest
             "email" => "required|email|max:255|".Rule::unique('users')->ignore($this->id),
             "nif" => "digits:9|nullable",
             //.Rule::unique('users')->ignore($this->id), ^
-            "data_nascimento" => "required|date|before:today",
+            "data_nascimento" => "required|date_format:\"Y-m-d\"|before:today",
             "telefone" => "string|max:20|nullable",
             "quota_paga" => "required|in:0,1",
             "ativo" => "required|in:0,1",
@@ -44,9 +44,11 @@ class StoreSocio extends FormRequest
             "certificado_confirmado" => "in:0,1|nullable",
             "endereco" => "string|nullable",
             "num_licenca" => "string|max:30|nullable",
-            "validade_licenca" => "date|nullable",
+            "tipo_licenca" => "exists:tipos_licencas,code|nullable",
+            "validade_licenca" => "date_format:\"Y-m-d\"|nullable",
             "num_certificado" => "string|max:30|nullable",
-            "validade_certificado" => "date|nullable",
+            "classe_certificado" => "exists:classes_certificados,code|nullable",
+            "validade_certificado" => "date_format:\"Y-m-d\"|nullable",
             "file_foto" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable",
             "file_licenca" => "file|mimes:pdf|max:2048|nullable",
             "file_certificado" => "file|mimes:pdf|max:2048|nullable",
