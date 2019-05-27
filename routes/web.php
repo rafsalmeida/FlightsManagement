@@ -44,7 +44,14 @@ Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')
 
 Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');
 
-Route::get('aeronaves/{aeronave}/pilotos', 'AeronaveController@indexPilotos')->middleware('direcao');
+Route::get('aeronaves/{aeronave}/pilotos', 'AeronavePilotosController@index')->middleware('direcao');
+
+Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->middleware('direcao');
+
+Route::delete('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@destroy')->name('pilotos.delete')->middleware('direcao');
+
+
+Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->name('pilotos.add')->middleware('direcao');
 
 Route::resource('movimentos', 'MovimentoController');
 
