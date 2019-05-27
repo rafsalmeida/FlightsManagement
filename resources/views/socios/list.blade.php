@@ -2,27 +2,42 @@
 @section('title', "Lista de Sócios")
 @section('content')
 @can('is-direcao', Auth::user())
-<div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('socios.create') }}"><i class="fas fa-user-plus"></i> Adicionar Sócio</a>
+<div class="col-md-3" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left">
+    <a class="btn btn-primary" href="{{ route('socios.create') }}" style="width: 100%"><i class="fas fa-user-plus"></i> Adicionar Sócio</a>
+    <button style="margin-top: 10px; width: 100%" class="btn btn-success" type="button" data-toggle="modal" data-target="#gerir-quotas"><i class="fas fa-euro-sign"></i> Gerir Quotas</button>
 </div>
-<div class="col-md-2" style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left">
-<form method="POST" action="{{route('socios.resetQuotas')}}"  role="form" >
-    @csrf
-    @method('PATCH')
-    <input type="hidden" name="_method" value="patch">
-    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-warning ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
-</form>
-<form method="POST" action="{{route('socios.desativarSemQuotas')}}"  role="form" >
-    @csrf
-    @method('PATCH')
-    <input type="hidden" name="_method" value="patch">
-    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas Sócios Desativados', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas dos sócios desativados?')"]) !!}
-</form>
+<div class="modal" id="gerir-quotas">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Gerir Quotas</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+        <div class="modal-body">
+        <form method="POST" action="{{route('socios.resetQuotas')}}"  role="form" >
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="_method" value="patch">
+            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-warning ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
+        </form>
+        <form method="POST" action="{{route('socios.desativarSemQuotas')}}"  role="form" >
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="_method" value="patch">
+            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas Sócios Desativados', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas dos sócios desativados?')"]) !!}
+        </form>
+        </div>
+<!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar    </button>
+      </div>
 
-
-
+    </div>
+  </div>
 </div>
 @endcan
-<div class="form-group" style="padding-top: 10px; float: right;">            
+<div class="form-group " style="padding-top: 10px; float: right;">            
     <form  method="GET" action="{{action('SocioController@index')}}" id="pesquisarSocio">
         <div class="form-row ">
             <div class="form-group">
@@ -164,7 +179,10 @@
 </div>
 
 @else
-    <h2>Nenhum sócio encontrado </h2>
+    <div class="col-md-12">    
+        <h2>Nenhum sócio encontrado </h2>
+    </div>
+
 @endif
 
 {{ $socios->appends(request()->except('page'))->links() }}
