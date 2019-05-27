@@ -52,6 +52,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany('App\Aeronave','aeronaves_pilotos', 'piloto_id', 'matricula');
     }
+    
+    public function scopeIsPiloto()
+    {
+        if($this->tipo_socio=='P'){
+            return true;
+        }
+        return false;
+    }
 
    
     
