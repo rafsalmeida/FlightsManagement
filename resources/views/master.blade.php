@@ -12,6 +12,7 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
     	<script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+        
     </head>
     <body>
 	    <nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
