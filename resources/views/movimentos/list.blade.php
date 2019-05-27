@@ -5,21 +5,21 @@
 <div class="row">
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
-        <form  method="GET" action="{{action('SocioController@index')}}" id="pesquisarSocio">
+        <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarSocio">
             <div class="form-row ">
                 <div class="form-group">
-                    <input type="number" class="form-control" placeholder="ID do Movimento" name="id">
+                    <input type="text" class="form-control" placeholder="ID do Movimento" name="id">
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Aeronave" name="aeronave">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Piloto" name="piloto_id">
+                    <input type="text" class="form-control" placeholder="Piloto" name="nome_informal_piloto">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Instrutor" name="instrutor_id">
+                    <input type="text" class="form-control" placeholder="Instrutor" name="nome_informal_instrutor">
                 </div>
                 <div class="form-group">
                     {{ Form::select('natureza', [null => 'Tipo (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'idNatureza', 'class' => 'form-control', 'name' => 'natureza'])}}
@@ -105,7 +105,7 @@
                                 Não é um voo de instrução
                             @endif</td>
                         <td>@if(isset($movimento->instrutor_id))
-                                {{ $movimento->instrutor_id }}
+                                {{ \app\User::find($movimento->instrutor_id)->nome_informal }}
                             @else
                                 Não tem Instrutor
                             @endif</td>
