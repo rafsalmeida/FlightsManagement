@@ -8,6 +8,7 @@ use Illuminate\validation\Rule;
 use App\AeronaveValor;
 use App\User;
 use App\Http\Requests\StoreMovimento;
+use khill\Lavacharts\Lavacharts;
 
 class MovimentoController extends Controller
 {
@@ -133,6 +134,15 @@ class MovimentoController extends Controller
     {
         //
     }
+
+    public function statistics(){
+    
+       return view("movimentos.statistics");
+
+        
+    }
+        
+    
 
     /**
      * Show the form for editing the specified resource.
