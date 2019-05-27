@@ -7,6 +7,10 @@
     @include('partials.errors')
 @endif
 
+<form method="GET" action="{{ action('AeronavePilotosController@index',$aeronave->matricula)}}" class ="form-group" style="padding-left: 15px; padding-top: 10px">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-users"></i> Lista de Pilotos</button>
+</form>
+
 <form  method="POST" action="{{ action('AeronaveController@update', $aeronave->matricula)}}"  class="form-group">
 	@method('PUT')
 	@csrf
