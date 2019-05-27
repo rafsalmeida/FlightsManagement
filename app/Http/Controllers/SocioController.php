@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreSocio;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SocioController extends Controller
 {
@@ -54,8 +55,8 @@ class SocioController extends Controller
             $query->where('email', 'like', "%$email%");
         }
 
-        if ($request->filled('tipo_socio') && $request['tipo_socio'] != null) {
-            $query->where('tipo_socio', $request->get('tipo_socio'));
+        if ($request->filled('tipo') && $request['tipo'] != null) {
+            $query->where('tipo_socio', $request->get('tipo'));
         }
 
         if ($request->filled('direcao') && $request['direcao'] != null) {
@@ -64,8 +65,8 @@ class SocioController extends Controller
 
         if(Auth::user()->can('viewSociosDesativados', Auth::user())){
 
-            if ($request->filled('quota_paga') && $request['quota_paga'] != null) {
-                $query->where('quota_paga', $request->get('quota_paga'));
+            if ($request->filled('quotas_pagas') && $request['quotas_pagas'] != null) {
+                $query->where('quota_paga', $request->get('quotas_pagas'));
             }
 
             if ($request->filled('ativo') && $request['ativo'] != null) {
@@ -73,10 +74,12 @@ class SocioController extends Controller
             } 
         }
 
-        if(Auth::user()->can('viewSociosDesativados')){
+        if(Auth::user()->can('viewSociosDesativados', Auth::user())){
             $socios =  $query->paginate(15);
+
         } else {
             $socios = $query->where('ativo',1)->paginate(15);
+                        
         }
 
         return view("socios.list", compact("socios","title"));
@@ -91,7 +94,9 @@ class SocioController extends Controller
     {
         $title = "Adicionar Sócio";
         $tipos_licenca = TipoLicenca::pluck('nome','code');
+        $tipos_licenca[''] = 'Escolha uma licença';
         $classes_certificado = ClasseCertificado::pluck('nome','code');
+        $classes_certificado[''] = 'Escolha um certificado';
         return view("socios.add", compact("title","tipos_licenca","classes_certificado"));
     }
 
@@ -115,6 +120,7 @@ class SocioController extends Controller
         $request->validated();
         $socio->fill($request->all());
         if(! is_null($request['file_foto'])) {
+            
             $image = $request->file('file_foto');
             $name = time().'.'.$image->getClientOriginalExtension();
             $path = $request->file('file_foto')->storeAs('public/fotos', $name);
@@ -169,7 +175,9 @@ class SocioController extends Controller
         if(Auth::user()->can('view',$socio)){
             $title = "Editar Sócio";
             $tipos_licenca = TipoLicenca::pluck('nome','code');
+            $tipos_licenca[''] = 'Escolha uma licença';
             $classes_certificado = ClasseCertificado::pluck('nome','code');
+            $classes_certificado[''] = 'Escolha um certificado';
             return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
         } else {
             return redirect()
@@ -190,12 +198,15 @@ class SocioController extends Controller
     {
         $socio = User::findOrFail($id);
 
+
+
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
 
 
         $request->validated();
+
 
         if(Auth::user()->can('update', $socio) && Auth::user()->can('view', $socio)){
 
@@ -210,6 +221,9 @@ class SocioController extends Controller
 
 
             if(! is_null($request['file_foto'])) { 
+                if(isset($socio->foto_url)){
+                    Storage::delete('public/fotos/'.$socio->foto_url);
+                }
                 $image = $request->file('file_foto');
                 $name = time().'.'.$image->getClientOriginalExtension();
                 $socio->foto_url = $name;
@@ -230,6 +244,16 @@ class SocioController extends Controller
                 $path = $request->file('file_certificado')->storeAs('docs_piloto', $name);
             }
             $socio->save();
+             if(Auth::user()->isPiloto()) {
+                if ($socio->wasChanged(['num_licenca', 'tipo_licenca', 'validade_licenca'])) {
+                    $socio->licenca_confirmada = 0;
+                    $socio->save();
+                }
+                if ($socio->wasChanged(['num_certificado', 'classe_certificado', 'validade_certificado'])) {
+                    $socio->certificado_confirmado = 0;
+                    $socio->save();
+                }
+            }
             return redirect()
                     ->action("SocioController@index")
                     ->with("success", "Sócio editado corretamente");
