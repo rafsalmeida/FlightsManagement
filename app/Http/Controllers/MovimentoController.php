@@ -24,6 +24,10 @@ class MovimentoController extends Controller
         $this->middleware('ativo');
     }
 
+    public function confirmar(){
+        
+    }
+
     
     public function index(Request $request)
     {
