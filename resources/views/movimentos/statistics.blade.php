@@ -6,6 +6,13 @@
 	<h4>{{$title}}</h4>
 </div>
 
+<div style="text-align: center; margin-top: 10px">
+	<h5>{{$titleAeronave}}</h5>
+</div>
+<div style="text-align: center; margin-top: 10px">
+	<h5>{{$titlePiloto}}</h5>
+</div>
+<br>
 <div id="year-chart"></div>
 <div id="month-chart"></div>
 <div id="pilot-month-chart"></div>
@@ -28,7 +35,7 @@
 			            <td>{{ $piloto->num_socio }}</td>
 			            <td>{{ $piloto->nome_informal }}</td>
 			            <td>
-			            	<a class="btn btn-link" href="?id={{$piloto->id}}" style="width: 100%">Ver</a>
+			            	<a class="btn btn-link" href="?id={{$piloto->id}}" name="id" style="width: 100%">Ver</a>
 			            </td>
 			        </tr>
 			    @endforeach
