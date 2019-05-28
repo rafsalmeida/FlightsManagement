@@ -26,12 +26,31 @@ class AeronaveController extends Controller
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $aeronaves = Aeronave::All();
         $title = "Lista de Aeronaves";
 
-        return view('aeronaves.list', compact('aeronaves','title'));
+        $query = Aeronave::limit(10);
+            if ($request->filled('matricula') && $request['matricula'] != null) {
+                $query->where('matricula', $request->get('matricula'));
+            }
+
+            if ($request->filled('marca') && $request['marca'] != null) {
+                $marca = $request->get('marca');
+                $query->where('marca', 'like', "%$marca%");
+            }
+
+            if ($request->filled('modelo') && $request['modelo'] != null) {
+                $modelo = $request->get('modelo');
+                $query->where('modelo', 'like', "%$modelo%");
+            }
+            if ($request->filled('num_lugares') && $request['num_lugares'] != null) {
+                $num_lugares = $request->get('num_lugares');
+                $query->where('num_lugares', 'like', "%$num_lugares%");
+            }
+
+            $aeronaves = $query->paginate(15);
+        return view('aeronaves.list', compact('aeronaves', 'title'));
     }
 
     /**
