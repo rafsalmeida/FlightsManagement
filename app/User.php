@@ -45,11 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function movimentosPiloto(){
-        return $this->hasMany('App\Movimento','id', 'piloto_id');
+        return $this->hasMany('App\Movimento','piloto_id', 'id');
     }
 
     public function movimentosInstrutor(){
-        return $this->hasMany('App\Movimento','id', 'instrutor_id');
+        return $this->hasMany('App\Movimento','instrutor_id', 'id');
     }
 
     public function aeronave()
@@ -63,6 +63,12 @@ class User extends Authenticatable implements MustVerifyEmail
             return true;
         }
         return false;
+    }
+
+    public function scopeGetPilotos()
+    {
+        return $this->where('tipo_socio','=','P');
+
     }
 
    
