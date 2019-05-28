@@ -2,6 +2,6 @@
 @section('title', "Estatisticas")
 @section('content')
 	
-<div id="stocks-chart"></div>
+<div id="year-chart"></div>
 
 @endsection
