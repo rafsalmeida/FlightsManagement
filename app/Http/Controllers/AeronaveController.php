@@ -62,7 +62,8 @@ class AeronaveController extends Controller
     {
 
         $title = "Adicionar Aeronave";
-        return view('aeronaves.add', compact('title'));
+        $aeronave = new Aeronave();
+        return view('aeronaves.add', compact('title', 'aeronave'));
 
     }
 
@@ -80,18 +81,25 @@ class AeronaveController extends Controller
             return redirect()->action('AeronaveController@index');
         }
 
-        $aeronave = $request->validated();
+        //$aeronave = $request->validated();
 
         
 
-        $aeronaveCriada = Aeronave::create($aeronave); ////
-        $valor = array();
-        for($i=0; $i<10;$i++){
-            $valor['matricula'] = $aeronaveCriada->matricula;
-            $valor['unidade_conta_horas'] = $i+1;
-            $valor['minutos'] = $aeronave['tempos'][$i];
-            $valor['preco'] =$aeronave['precos'][$i];
-            AeronaveValor::create($valor);
+        $aeronave = new Aeronave();
+        $aeronave->fill($request->all());
+        $aeronave->save();////
+       
+        for($i=1; $i<11;$i++){
+            $aeronavevalor = new AeronaveValor();
+            $aeronavevalor->matricula = $aeronave->matricula;
+            $aeronavevalor->unidade_conta_horas = $i;
+            $aeronavevalor->minutos = $request->tempos[$i];
+            $aeronavevalor->preco =$request->precos[$i];
+
+            $aeronavevalor->save();
+            
+
+
         }
         return redirect()
                  ->action('AeronaveController@index')            
@@ -140,7 +148,6 @@ class AeronaveController extends Controller
      */
     public function update(StoreAeronave $request, $id)
     {
-
         //validar e dar store na bd
         if ($request->has('cancel')) {
             return redirect()->action('AeronaveController@index');
@@ -152,13 +159,13 @@ class AeronaveController extends Controller
 
         $valores= $aeronave->valores;
    
-      
         
         
         foreach ( $valores as $valor) {
         
             $valor->minutos = $dadosAGravar['tempos'][$valor->unidade_conta_horas];
             $valor->preco =$dadosAGravar['precos'][$valor->unidade_conta_horas];
+
     
             $valor->save();
           
