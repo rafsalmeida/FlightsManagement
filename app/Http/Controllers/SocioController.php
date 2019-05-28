@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreSocio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SocioController extends Controller
 {
@@ -180,9 +181,11 @@ class SocioController extends Controller
             $classes_certificado[''] = 'Escolha um certificado';
             return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
         } else {
-            return redirect()
+
+            throw new AccessDeniedHttpException('Unauthorized.');
+           /* return redirect()
                     ->action("SocioController@index")
-                    ->with("success", "Não tem permissões para efetuar essa ação.");
+                    ->with("success", "Não tem permissões para efetuar essa ação.");*/
         }
 
     }
@@ -259,7 +262,12 @@ class SocioController extends Controller
                     ->with("success", "Sócio editado corretamente");
                 
      
-        } 
+        } else {
+            throw new AccessDeniedHttpException('Unauthorized.');
+        }
+
+
+
 
             
         
