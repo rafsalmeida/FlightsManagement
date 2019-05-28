@@ -40,7 +40,7 @@ class StoreMovimento extends FormRequest
         'num_descolagens' => 'required|integer',
         'num_pessoas' => 'required|integer',
         'conta_horas_inicio' => 'required|integer',
-        'conta_horas_fim' => 'required|integer|'.Rule::min($this->conta_horas_inicio),
+        'conta_horas_fim' => 'required|integer|min:'.$this->conta_horas_inicio,
         'num_recibo' => 'required|integer',
         'instrutor_id' => 'nullable|required_if:natureza,I|'.Rule::exists('aeronaves_pilotos','piloto_id','matricula',$this->aeronave),
         'tipo_instrucao' => 'required_if:natureza,I',
