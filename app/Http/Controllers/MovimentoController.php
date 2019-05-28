@@ -32,7 +32,10 @@ class MovimentoController extends Controller
     
     public function index(Request $request)
     {
+
         $query = Movimento::limit(10);
+
+
 
         if ($request->filled('id') && $request['id'] != null) {
             $query->where('id', $request->get('id'));
@@ -43,14 +46,14 @@ class MovimentoController extends Controller
             $query->where('aeronave', 'like', "%$matricula%");
         }
 
-        if ($request->filled('nome_informal_piloto') && $request['nome_informal_piloto'] != null) {
-            $nome = $request->get('nome_informal_piloto');
+        if ($request->filled('piloto') && $request['piloto'] != null) {
+            $nome = $request->get('piloto');
             $piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
             $query->whereIn('piloto_id', $piloto_id);
         }
 
-        if ($request->filled('nome_informal_instrutor') && $request['nome_informal_instrutor'] != null) {
-            $nome = $request->get('nome_informal_instrutor');
+        if ($request->filled('instrutor') && $request['instrutor'] != null) {
+            $nome = $request->get('instrutor');
             $instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
             $query->whereIn('instrutor_id', $instrutor_id);
         }
@@ -63,18 +66,33 @@ class MovimentoController extends Controller
             $query->where('confirmado', $request->get('confirmado'));
         }
 
-        if ($request->filled('data_de') && $request['data_de'] != null) {
-            $query->where('data', '>=', $request->get('data_de'));
+        if ($request->filled('data_inf') && $request['data_inf'] != null) {
+            $query->where('data', '>=', $request->get('data_inf'));
         }
 
-        if ($request->filled('data_ate') && $request['data_ate'] != null) {
-            $query->where('data', '<=', $request->get('data_ate'));
+        if ($request->filled('data_sup') && $request['data_sup'] != null) {
+            $query->where('data', '<=', $request->get('data_sup'));
         }
 
         if ($request->filled('meus_voos') && $request['meus_voos'] != null) {
             $id = auth()->user()->id;
             $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
         }
+
+        /*if ($request->filled('natureza') && $request['natureza'] != null && $request->filled('piloto') && $request['piloto'] != null && $request->filled('instrutor') && $request['instrutor'] != null ){
+
+            $nome_piloto = $request->get('piloto');
+            $natureza = $request->get('natureza');
+            $nome_instrutor = $request->get('instrutor');
+            $piloto_id = User::where('nome_informal','=', $nome_piloto)->get()->pluck('id'); 
+            $instrutor_id = User::where('nome_informal','=', $nome_instrutor)->get()->pluck('id');
+            $query->where('natureza', $natureza)
+            ->where('instrutor_id' ,$instrutor_id)
+            ->where('piloto_id',$piloto_id);
+
+             //dd($piloto_id, $natureza, $nome_instrutor);
+        }*/
+        
 
         $movimentos = $query->paginate(15);
 
