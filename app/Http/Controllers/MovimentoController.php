@@ -22,6 +22,7 @@ class MovimentoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('ativo');
+        $this->middleware('verified');
     }
 
     public function confirmar(){
