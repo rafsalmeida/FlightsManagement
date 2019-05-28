@@ -95,7 +95,7 @@ class MovimentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMovimento $request)
     {
         if ($request->has("cancel")) {
             return redirect()->action("MovimentoController@index");
@@ -195,6 +195,10 @@ class MovimentoController extends Controller
     {
         $title = "Editar Movimento";
         $movimento = Movimento::findOrFail($id);
+
+        if($movimento->confirmado == 1){
+            return redirect()->action("MovimentoController@index")->with('success','O movimento que pretende editar ja se encontra confirmado logo nao pode ser editado!');
+        }
         return view("movimentos.edit", compact("title", "movimento"));
     }
 
