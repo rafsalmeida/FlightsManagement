@@ -219,6 +219,11 @@ class MovimentoController extends Controller
         return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
     }
 
+
+
+
+    
+
     public function statistics(Request $request){
 
         $title="Estatísticas dos Movimentos";

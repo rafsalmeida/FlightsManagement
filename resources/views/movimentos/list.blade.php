@@ -59,6 +59,7 @@
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-light">
                 <tr>
+                    <th></th>
                     <th>ID</th>
                     <th>Aeronave</th>
                     <th>&emsp;Data&emsp;&emsp;&emsp;</th>
@@ -86,6 +87,7 @@
             <tbody>
                 @foreach ($movimentos as $movimento)
                     <tr>
+                        <td><input type="checkbox" name="{{$movimento->id}}" value="{{$movimento->id}}" />&nbsp;</td>
                         <td>{{ $movimento->id }}</td>
                         <td>{{ $movimento->aeronave }}</td>
                         <td>{{ $movimento->data }}</td>
