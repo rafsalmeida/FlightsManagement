@@ -2,8 +2,39 @@
 @section('title', "Lista de Aeronaves")
 @section('content')
 @can('is-direcao', Auth::user())
-<div style="padding-top: 10px"><a class="btn btn-primary" href="{{ route('aeronaves.create') }}"><i class="fas fa-plus"></i> Adicionar Aeronave</a></div>
+<div style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('aeronaves.create') }}"><i class="fas fa-plus"></i> Adicionar Aeronave</a></div>
 @endcan
+<div class="form-group" style="padding-top: 10px; padding-right: 10px; float: right;">            
+        <form  method="GET" action="{{action('AeronaveController@index')}}" id="pesquisarAeronave">
+            <div class="form-row ">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Matricula" name="matricula">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Marca" name="marca">
+                </div>
+            </div>    
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Modelo" name="modelo">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Numero de lugares" name="num_lugares">
+                </div>
+            </div>
+        
+            
+            <div class="form-row">
+                
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-sm btn-success mb-3" >
+                        <i class="fas fa-search"></i> Pesquisar
+                    </button>
+                </div>
+            </div>
+        </form>
+</div>
 <div style="padding-top: 10px">
 @if (count($aeronaves))
 
