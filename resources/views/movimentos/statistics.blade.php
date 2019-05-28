@@ -6,7 +6,10 @@
 	<h4>{{$title}}</h4>
 </div>
 
-
+<div id="year-chart"></div>
+<div id="month-chart"></div>
+<div id="pilot-month-chart"></div>
+<div id="pilot-year-chart"></div>
 <div class="container">
 	<div class="row">
 		@if (count($pilotos))
@@ -16,8 +19,7 @@
 			        <tr>
 			            <th>Nº Sócio</th>
 			            <th>Nome Informal</th>
-			            <th>Mês</th>
-			            <th>Ano</th>
+			            <th>Estatísticas</th>
 			        </tr>
 			    </thead>
 			    <tbody>
@@ -25,8 +27,9 @@
 			        <tr>
 			            <td>{{ $piloto->num_socio }}</td>
 			            <td>{{ $piloto->nome_informal }}</td>
-			            <td></td>
-			            <td></td>
+			            <td>
+			            	<a class="btn btn-link" href="?id={{$piloto->id}}" style="width: 100%">Ver</a>
+			            </td>
 			        </tr>
 			    @endforeach
 			    </tbody>
@@ -39,16 +42,16 @@
 			    <thead class="thead-light">
 			        <tr>
 			            <th>Matricula</th>
-			            <th>Mês</th>
-			            <th>Ano</th>
+			            <th>Estatísticas</th>
 			        </tr>
 			    </thead>
 			    <tbody>
 			    @foreach ($aeronaves as $aeronave)
 			        <tr>
 			            <td>{{ $aeronave->matricula }}</td>
-			            <td></td>
-			            <td></td>
+			            <td>
+			        		<a class="btn btn-link" href="?matricula={{$aeronave->matricula}}" name="matricula" style="width: 100%">Ver</a>
+    					</td>
 			        </tr>
 			    @endforeach
 			    </tbody>
@@ -65,5 +68,14 @@
 <div id="pilot-month-chart"></div>
 <div id="pilot-year-chart"></div> -->
 
+<script>
+// When the user clicks on <div>, open the popup
+function myFunction() {
+  var popup = document.getElementById("aeronaveMesPopup");
+  popup.classList.toggle("show");
+}
+</script>
 
 @endsection
+
+
