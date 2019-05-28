@@ -152,22 +152,42 @@ class MovimentoController extends Controller
     public function statistics(){
 
         $aeronaveYearTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
-        $aeronaveYearTable->addDateColumn('Ano')
+        $aeronaveYearTable->addStringColumn('Ano')
                           ->addNumberColumn('Horas');
+
+        // BUSCAR OS ANOs AQUI E OS TEMPOS
+        // 
+        // function($id)
         $anos=[];
-        $aeronave = Aeronave::findOrFail('D-EAYV');
+        $aeronave = Aeronave::findOrFail('D-EAYV'); //$id
         foreach($aeronave->movimentos as $movimento){
             if(!in_array(date('Y',strtotime($movimento->data)),$anos)){
-            array_push($anos, date('Y',strtotime($movimento->data)));
+                array_push($anos, date('Y',strtotime($movimento->data)));
+            }
         }
+
+        $temposAno = [];
+        $sum = 0;
+        $movimentos = $aeronave->movimentos;
+
+
+        foreach ($anos as $ano) {
+            $sum = 0;
+            foreach ($movimentos as $movimento) {
+                if((date('Y',strtotime($movimento->data))==$ano)){
+                    $sum = $sum + $movimento->tempo_voo;
+                }
+            }
+            array_push($temposAno, $sum);
         }
-        dd($anos);
-        // Random Data For Example
-        foreach (Aeronave::first()->movimentos->get() as $movimento) {
+
+
+        for($i=0; $i < count($anos); $i++) {
             $aeronaveYearTable->addRow([
-                $movimento->data->format('Y'), 
-            ]);
+                    $anos[$i], $temposAno[$i]
+            ]);     
         }
+
         
         /*for ($a = 1; $a < 30; $a++) {
             $stocksTable->addRow([
@@ -175,8 +195,8 @@ class MovimentoController extends Controller
             ]);
         }*/
 
-        $chart = \Lava::LineChart('MyStocks', $stocksTable);
-        echo \Lava::render('LineChart', 'MyStocks', 'stocks-chart');
+        \Lava::LineChart('Aeronave/Ano', $aeronaveYearTable);
+        echo \Lava::render('LineChart', 'Aeronave/Ano', 'year-chart');
     
        return view("movimentos.statistics");
 
