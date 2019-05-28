@@ -14,7 +14,7 @@
 <form  method="POST" action="{{ action('AeronaveController@update', $aeronave->matricula)}}"  class="form-group">
 	@method('PUT')
 	@csrf
-    <input type="hidden" name="_method" value="{{ $aeronave->matricula }}" />
+    <input type="hidden" name="matricula" value="{{ $aeronave->matricula }}" />
     <div class="container" style="padding-top: 15px">
     	@yield('form')
     </div>
@@ -40,6 +40,7 @@
         </tr>
 
     @endforeach
+
     </tbody>
     </table>
 
