@@ -5,7 +5,9 @@
 <div class="row">
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
-        left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>''
+        left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>
+    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
+        left"><a class="btn btn-secondary" href="#">Confirmar Voos</a></div>
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
         <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
             <div class="form-row ">
@@ -59,6 +61,7 @@
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-light">
                 <tr>
+                    <th></th>
                     <th>ID</th>
                     <th>Aeronave</th>
                     <th>&emsp;Data&emsp;&emsp;&emsp;</th>
@@ -86,6 +89,7 @@
             <tbody>
                 @foreach ($movimentos as $movimento)
                     <tr>
+                        <td><input type="checkbox" name="{{$movimento->id}}" value="{{$movimento->id}}" />&nbsp;</td>
                         <td>{{ $movimento->id }}</td>
                         <td>{{ $movimento->aeronave }}</td>
                         <td>{{ $movimento->data }}</td>

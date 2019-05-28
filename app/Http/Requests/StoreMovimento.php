@@ -19,6 +19,7 @@ class StoreMovimento extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     * exists:aeronaves_pilotos,piloto_id,matricula,'.$this->aeronave.'',
      *
      * @return array
      */
@@ -32,16 +33,16 @@ class StoreMovimento extends FormRequest
         'natureza' => 'required',
         'num_diario' => 'required|integer',
         'num_servico' => 'required|integer',
-        'piloto_id' => 'required|integer|exists:aeronaves_pilotos,piloto_id,matricula,'.$this->aeronave.'',
+        'piloto_id' => 'required|integer|'.Rule::exists('aeronaves_pilotos','piloto_id','matricula',$this->aeronave),
         'aerodromo_partida' => 'required|string|exists:aerodromos,code',
         'aerodromo_chegada' => 'required|string|exists:aerodromos,code',
         'num_aterragens' => 'required|integer',
         'num_descolagens' => 'required|integer',
         'num_pessoas' => 'required|integer',
         'conta_horas_inicio' => 'required|integer',
-        'conta_horas_fim' => 'required|integer|min:'.$this->conta_horas_inicio.'+1',
+        'conta_horas_fim' => 'required|integer|min:'.$this->conta_horas_inicio,
         'num_recibo' => 'required|integer',
-        'instrutor_id' => 'nullable|required_if:natureza,I|exists:aeronaves_pilotos,piloto_id,matricula,'.$this->aeronave.'',
+        'instrutor_id' => 'nullable|required_if:natureza,I|'.Rule::exists('aeronaves_pilotos','piloto_id','matricula',$this->aeronave),
         'tipo_instrucao' => 'required_if:natureza,I',
         'modo_pagamento' => 'required'
         ];
