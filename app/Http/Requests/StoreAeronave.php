@@ -33,14 +33,16 @@ class StoreAeronave extends FormRequest
         'conta_horas' => 'required|integer|min:1',
         'preco_hora' => 'required|regex:/^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]+)*$/',        
         //'minuto' => 'required|integer|max:60',///acrescente
-        'tempos' => 'required',
-        'precos' => 'required',
+        'tempos' => 'required|array|min:10|max:10',
+        'tempos.*' => 'required|integer|min:0',
+        'precos' => 'required|array|min:10|max:10',
+        'precos.*' => 'required|numeric|min:0.00',
     
     
         ];
     }
-
-    /*public function messages(){
+/*
+    public function messages(){
 
         return[
 
