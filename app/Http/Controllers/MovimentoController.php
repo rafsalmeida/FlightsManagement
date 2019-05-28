@@ -151,13 +151,16 @@ class MovimentoController extends Controller
 
     public function statistics(){
 
+        $title="Estatísticas dos Movimentos";
+
+        /*
+        //AERONAVE POR ANO -------------------------------
+
         $aeronaveYearTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
         $aeronaveYearTable->addStringColumn('Ano')
                           ->addNumberColumn('Horas');
 
-        // BUSCAR OS ANOs AQUI E OS TEMPOS
-        // 
-        // function($id)
+
         $anos=[];
         $aeronave = Aeronave::findOrFail('D-EAYV'); //$id
         foreach($aeronave->movimentos as $movimento){
@@ -169,7 +172,6 @@ class MovimentoController extends Controller
         $temposAno = [];
         $sum = 0;
         $movimentos = $aeronave->movimentos;
-
 
         foreach ($anos as $ano) {
             $sum = 0;
@@ -184,21 +186,153 @@ class MovimentoController extends Controller
 
         for($i=0; $i < count($anos); $i++) {
             $aeronaveYearTable->addRow([
+                    $anos[$i], $temposAno[$i]/60
+            ]);     
+        }
+
+        
+        \Lava::AreaChart('Aeronave/Ano', $aeronaveYearTable);
+        echo \Lava::render('AreaChart', 'Aeronave/Ano', 'year-chart');
+
+        //---------------------------------------------------------
+        //AERONAVE POR MES -------------------------------
+
+        $aeronaveMonthTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+        $aeronaveMonthTable->addStringColumn('Mês')
+                          ->addNumberColumn('Horas');
+
+
+        $meses=[];
+        $aeronave = Aeronave::findOrFail('D-EAYV'); //$id
+        foreach($aeronave->movimentos as $movimento){
+            if(!in_array(date('m',strtotime($movimento->data)),$meses)){
+                array_push($meses, date('m',strtotime($movimento->data)));
+            }
+        }
+
+
+        $temposMes = [];
+        $sum = 0;
+        $movimentos = $aeronave->movimentos;
+
+        foreach ($meses as $mes) {
+            $sum = 0;
+            foreach ($movimentos as $movimento) {
+                if((date('m',strtotime($movimento->data))==$mes)){
+                    $sum = $sum + $movimento->tempo_voo;
+                }
+            }
+            array_push($temposMes, $sum);
+        }
+
+
+
+        for($i=0; $i < count($meses); $i++) {
+            $aeronaveMonthTable->addRow([
+                    $meses[$i], $temposMes[$i]
+            ]);     
+        }
+
+        
+        \Lava::AreaChart('Aeronave/Mes', $aeronaveMonthTable);
+        echo \Lava::render('AreaChart', 'Aeronave/Mes', 'month-chart');
+
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        //PILOTO POR MES -------------------------------
+
+        $pilotMonthTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+        $pilotMonthTable->addStringColumn('Mês')
+                        ->addNumberColumn('Horas');
+
+
+        $meses=[];
+        $piloto = User::findOrFail('10000'); //$id
+        foreach($piloto->movimentosPiloto as $movimento){
+            if(!in_array(date('m',strtotime($movimento->data)),$meses)){
+                array_push($meses, date('m',strtotime($movimento->data)));
+            }
+        }
+
+
+        $temposMes = [];
+        $sum = 0;
+        $movimentos = $piloto->movimentosPiloto;
+
+        foreach ($meses as $mes) {
+            $sum = 0;
+            foreach ($movimentos as $movimento) {
+                if((date('m',strtotime($movimento->data))==$mes)){
+                    $sum = $sum + $movimento->tempo_voo;
+                }
+            }
+            array_push($temposMes, $sum);
+        }
+
+
+
+        for($i=0; $i < count($meses); $i++) {
+            $pilotMonthTable->addRow([
+                    $meses[$i], $temposMes[$i]
+            ]);     
+        }
+
+        
+        \Lava::AreaChart('Piloto/Mes', $pilotMonthTable);
+        echo \Lava::render('AreaChart', 'Piloto/Mes', 'pilot-month-chart');
+
+        //---------------------------------------------------------
+                //---------------------------------------------------------
+        //---------------------------------------------------------
+        //PILOTO POR ANO -------------------------------
+
+        $pilotYearTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+        $pilotYearTable->addStringColumn('Ano')
+                        ->addNumberColumn('Horas');
+
+
+        $anos=[];
+        $piloto = User::findOrFail('10000'); //$id
+        foreach($piloto->movimentosPiloto as $movimento){
+            if(!in_array(date('Y',strtotime($movimento->data)),$anos)){
+                array_push($anos, date('Y',strtotime($movimento->data)));
+            }
+        }
+
+
+        $temposAno = [];
+        $sum = 0;
+        $movimentos = $piloto->movimentosPiloto;
+
+        foreach ($anos as $ano) {
+            $sum = 0;
+            foreach ($movimentos as $movimento) {
+                if((date('Y',strtotime($movimento->data))==$ano)){
+                    $sum = $sum + $movimento->tempo_voo;
+                }
+            }
+            array_push($temposAno, $sum);
+        }
+
+    
+
+
+
+        for($i=0; $i < count($anos); $i++) {
+            $pilotYearTable->addRow([
                     $anos[$i], $temposAno[$i]
             ]);     
         }
 
         
-        /*for ($a = 1; $a < 30; $a++) {
-            $stocksTable->addRow([
-              '2015-10-' . $a, rand(800,1000), rand(800,1000)
-            ]);
-        }*/
+        \Lava::AreaChart('Piloto/Ano', $pilotYearTable);
+        echo \Lava::render('AreaChart', 'Piloto/Ano', 'pilot-year-chart');
 
-        \Lava::LineChart('Aeronave/Ano', $aeronaveYearTable);
-        echo \Lava::render('LineChart', 'Aeronave/Ano', 'year-chart');
-    
-       return view("movimentos.statistics");
+        //---------------------------------------------------------
+    */
+        $aeronaves = Aeronave::paginate(15);
+        $pilotos = User::getPilotos()->paginate(15);
+        return view("movimentos.statistics", compact("title","aeronaves","pilotos"));
 
         
     }
