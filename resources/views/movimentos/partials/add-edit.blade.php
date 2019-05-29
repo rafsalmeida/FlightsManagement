@@ -30,14 +30,14 @@
     @endif
 </div>
 <div class="form-group">
-    <label for="inputAeronave">Matricula Aeronave</label>
-    <input
-        type="text" class="form-control"
-        name="aeronave" id="inputAeronave"
-        placeholder="Aeronave" value="@if(isset($movimento)){{ old('aeronave', $movimento->aeronave) }}@endif" />
-    @if ($errors->has('aeronave'))
-        <em>{{ $errors->first('aeronave') }}</em>
-    @endif
+    <form id="getMatricula">
+        <label >Matrícula Aeronave</label>
+        @if(isset($movimento->aeronave))
+            {!! Form::select('aeronave', $aeronaves, $movimento->aeronave, ['class' => 'form-control', 'id' => 'matricula', 'onchange' => 'val()']) !!}
+        @else
+            {!! Form::select('aeronave', $aeronaves, null, ['class' => 'form-control', 'id' => 'matricula', 'onchange' => 'val()'])!!}
+        @endif
+
 </div>
 <div class="form-group">
     <label for="inputNDiario">Nº de Diario</label>
@@ -74,33 +74,29 @@
     <label for="inputType">Natureza do Voo</label>
     <div>
         @if(isset($movimento))
-            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] + array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), $movimento->natureza, ['id' => 'natureza']) }}
+            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] + array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), $movimento->natureza, ['id' => 'natureza', 'class' => 'form-control']) }}
         @else
-            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'natureza'])}}
+            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'natureza', 'class' => 'form-control'])}}
         @endif
     </div>
 </div>
 
 <div class="form-group">
-    <label for="inputAerPartida">Aerodromo de Partida</label>
-    <input
-        type="text" class="form-control"
-        name="aerodromo_partida" id="inputAerPartida"
-        placeholder="AerPartida" value="@if(isset($movimento)){{ old('aerodromo_partida', $movimento->aerodromo_partida) }}@endif" />
-    @if ($errors->has('aerodromo_partida'))
-        <em>{{ $errors->first('aerodromo_partida') }}</em>
-    @endif
+    <label >Aerodromo de Partida</label>
+        @if(isset($movimento->aerodromo_partida))
+            {!! Form::select('aerodromo_partida', $aerodromos, $movimento->aerodromo_partida, ['class' => 'form-control']) !!}
+        @else
+            {!! Form::select('aerodromo_partida', $aerodromos, null, ['class' => 'form-control'])!!}
+        @endif
 </div>
 
 <div class="form-group">
-    <label for="inputAerChegada">Aerodromo de Chegada</label>
-    <input
-        type="text" class="form-control"
-        name="aerodromo_chegada" id="inputAerChegada"
-        placeholder="AerChegada" value="@if(isset($movimento)){{ old('aerodromo_chegada', $movimento->aerodromo_chegada) }}@endif" />
-    @if ($errors->has('aerodromo_chegada'))
-        <em>{{ $errors->first('aerodromo_chegada') }}</em>
-    @endif
+    <label >Aerodromo de Chegada</label>
+        @if(isset($movimento->aerodromo_chegada))
+            {!! Form::select('aerodromo_chegada', $aerodromos, $movimento->aerodromo_chegada, ['class' => 'form-control']) !!}
+        @else
+            {!! Form::select('aerodromo_chegada', $aerodromos, null, ['class' => 'form-control'])!!}
+        @endif
 </div>
 
 <div class="form-group">
@@ -136,8 +132,8 @@
 <div class="form-group">
     <label for="inputCHInicial">Conta-horas Inicial</label>
     <input
-        type="number" class="form-control"
-        name="conta_horas_inicio" id="inputCHInicial"
+        type="number" class="form-control conta-horas"
+        name="conta_horas_inicio" id="conta_horas_inicio"
         placeholder="CHInicial" value="@if(isset($movimento)){{ old('conta_horas_inicio', $movimento->conta_horas_inicio) }}@endif" />
     @if ($errors->has('conta_horas_inicio'))
         <em>{{ $errors->first('conta_horas_inicio') }}</em>
@@ -146,12 +142,22 @@
 <div class="form-group">
     <label for="inputCHFinal">Conta-horas Final</label>
     <input
-        type="number" class="form-control"
-        name="conta_horas_fim" id="inputCHFinal"
+        type="number" class="form-control conta-horas"
+        name="conta_horas_fim" id="conta_horas_fim"
         placeholder="CHFinal" value="@if(isset($movimento)){{ old('conta_horas_fim', $movimento->conta_horas_fim) }}@endif" />
     @if ($errors->has('conta_horas_fim'))
         <em>{{ $errors->first('conta_horas_fim') }}</em>
     @endif
+</div>
+<div class="form-group">
+    <label>Tempo de voo:</label>
+    <p id="show_tempo"></p>
+    <input type="hidden" name="tempo_voo" id="tempo_voo" />
+</div>
+<div class="form-group">
+    <label>Preço de voo:</label>
+    <p id="show_preco"></p>
+    <input type="hidden" name="preco_voo" id="preco_voo" />
 </div>
 <div class="form-group">
     <label for="inputTPagamento">Modo de Pagamento</label>
@@ -205,10 +211,9 @@
 </div>
 <div class="form-group">
     <label for="inputObs">Observações</label>
-    <input
-        type="text" class="form-control"
-        name="observacoes" id="inputObs"
-        placeholder="Obs" value="@if(isset($movimento)){{ old('observacoes', $movimento->observacoes) }}@endif" />
+    <textarea class="form-control"
+        name="observacoes">
+         @if(isset($movimento)){{ old('observacoes', $movimento->observacoes) }}@endif </textarea>
     @if ($errors->has('observacoes'))
         <em>{{ $errors->first('observacoes') }}</em>
     @endif
@@ -249,7 +254,7 @@
     @endif
 </div>
 </div>
-
+<p id="demo"></p>
 <script type="text/javascript">
     
     $(function() {
@@ -262,6 +267,51 @@
         }
       }).trigger('change');
     });
+
+
+
+    $(function() {
+      $("#matricula").change(function() {
+        $.ajax({
+          type    :"GET",
+          url     :"http://ainet.prj31.test/aeronaves/"+document.getElementById("matricula").value+"/precos_tempos",
+          dataType:"json",
+          success :function(response) {
+            $(".conta-horas").on("change", function(){
+
+                var conta_horas_inicio = document.getElementById("conta_horas_inicio").value;
+                var conta_horas_fim = document.getElementById("conta_horas_fim").value;    
+                var diferenca = conta_horas_fim - conta_horas_inicio;
+                var resto = diferenca % 10;
+                var decima = Math.floor(diferenca/10);
+                var tempo_voo = response[resto-1].minutos;
+                var conta_horas_10 = response[9].minutos;
+                tempo_voo +=(conta_horas_10*decima);
+                document.getElementById("show_tempo").innerHTML = tempo_voo;
+                document.getElementById("tempo_voo").value = tempo_voo;
+
+                var preco_voo = response[resto-1].preco;
+                var conta_horas_10 = response[9].preco;
+                preco_voo +=(conta_horas_10*decima);
+                alert(preco_voo);
+                document.getElementById("show_preco").innerHTML = preco_voo;
+                document.getElementById("preco_voo").value = preco_voo;
+     
+            });
+            
+          },
+          error: function(e) {
+            console.log(e.responseText);
+          }
+        });
+    }).trigger('change');
+});
+
+
+
+
+//var obj = [{"unidade_conta_horas":1,"minutos":5,"preco":"10.00"},{"unidade_conta_horas":2,"minutos":10,"preco":"20.00"},{"unidade_conta_horas":3,"minutos":20,"preco":"30.00"},{"unidade_conta_horas":4,"minutos":25,"preco":"40.00"},{"unidade_conta_horas":5,"minutos":30,"preco":"50.00"},{"unidade_conta_horas":6,"minutos":35,"preco":"60.00"},{"unidade_conta_horas":7,"minutos":40,"preco":"70.00"},{"unidade_conta_horas":8,"minutos":50,"preco":"80.00"},{"unidade_conta_horas":9,"minutos":55,"preco":"90.00"},{"unidade_conta_horas":10,"minutos":60,"preco":"100.00"}];
+//document.getElementById("demo").innerHTML = obj[0].minutos;
 </script>
 
 @endsection
