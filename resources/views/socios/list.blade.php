@@ -148,29 +148,42 @@
                 @endif
             </td>
 
-            <td>                
-                <div style="text-align: center; margin: auto ">
-                <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
-                <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline" style="margin:0">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="socio_id" value="{{ $socio->id }}">
-                    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
-                </form>
-                <form method="POST" action="{{route('socios.mudarEstado', $socio->id)}}"  role="form" class="inline" style="margin:0">
-                    @csrf
-                    @method('PATCH')
-                    <input type="hidden" name="_method" value="patch">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Estado', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
-                </form>
-                <form method="POST" action="{{route('socios.mudarEstadoQuota', $socio->id)}}"  role="form" class="inline">
-                    @csrf
-                    @method('PATCH')
-                    <input type="hidden" name="_method" value="patch">
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-warning rounded-pill', 'style' => 'width: 100%; white-space: nowrap;', 'name' => 'quota_paga','onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
-                </form>
+            <td>
+
+                <div class="dropdown navbar-nav ml-auto" style="text-align: center; margin: auto">
+                  <button type="button" class="btn btn-outline-primary btn-block dropdown-toggle" data-toggle="dropdown">
+                    Ações
+                  <span class="caret"></span></button>
+                  <div class="dropdown-menu ml-auto">
+                    <li>
+                        <a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
+                    </li>
+                    <li>
+                        <form method="POST" action="{{action('SocioController@destroy', $socio->id)}}"  role="form" class="inline" style="margin:0">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="socio_id" value="{{ $socio->id }}">
+                            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
+                        </form>
+                    </li>
+                    <li>
+                        <form method="POST" action="{{route('socios.mudarEstado', $socio->id)}}"  role="form" class="inline" style="margin:0">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="_method" value="patch">
+                            {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Estado', ['type' => 'submit', 'name' => 'ativo', 'class' => 'btn btn-sm btn-xs btn-success ', 'style' => 'width: 100%; white-space: nowrap;', 'onclick' => "return confirm('Tem a certeza que quer alterar o estado?')"]) !!}
+                        </form>
+                    </li>
+                    <li>
+                        <form method="POST" action="{{route('socios.mudarEstadoQuota', $socio->id)}}"  role="form" class="inline">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="_method" value="patch">
+                            {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-warning', 'style' => 'width: 100%; white-space: nowrap;', 'name' => 'quota_paga','onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
+                        </form>
+                    </li>
+                  </div>
                 
-            </div>
             </td>
             @endcan
         </tr>

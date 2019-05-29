@@ -32,7 +32,8 @@ class AeronaveController extends Controller
 
         $query = Aeronave::limit(10);
             if ($request->filled('matricula') && $request['matricula'] != null) {
-                $query->where('matricula', $request->get('matricula'));
+                $matricula = $request->get('matricula');
+                $query->where('matricula', 'like', '%$matricula%');
             }
 
             if ($request->filled('marca') && $request['marca'] != null) {
@@ -45,8 +46,7 @@ class AeronaveController extends Controller
                 $query->where('modelo', 'like', "%$modelo%");
             }
             if ($request->filled('num_lugares') && $request['num_lugares'] != null) {
-                $num_lugares = $request->get('num_lugares');
-                $query->where('num_lugares', 'like', "%$num_lugares%");
+                $query->where('num_lugares', $request->num_lugares);
             }
 
             $aeronaves = $query->paginate(15);
