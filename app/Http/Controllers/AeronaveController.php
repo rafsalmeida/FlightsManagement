@@ -31,9 +31,10 @@ class AeronaveController extends Controller
         $title = "Lista de Aeronaves";
 
         $query = Aeronave::limit(10);
+            
             if ($request->filled('matricula') && $request['matricula'] != null) {
                 $matricula = $request->get('matricula');
-                $query->where('matricula', 'like', '%$matricula%');
+                $query->where('matricula', 'like', "%$matricula%");
             }
 
             if ($request->filled('marca') && $request['marca'] != null) {
@@ -50,6 +51,7 @@ class AeronaveController extends Controller
             }
 
             $aeronaves = $query->paginate(15);
+
         return view('aeronaves.list', compact('aeronaves', 'title'));
     }
 
