@@ -84,7 +84,7 @@
 </div>
 <div style="padding-top: 10px">
 @if (count($socios))
-    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded" style="white-space: nowrap;">
+    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded table-responsive" style="white-space: nowrap;">
     <thead class="thead-light">
         <tr>
             <th>Foto</th>
@@ -161,7 +161,7 @@
                   <button type="button" class="btn btn-outline-primary btn-block dropdown-toggle" data-toggle="dropdown">
                     Ações
                   <span class="caret"></span></button>
-                  <div class="dropdown-menu ml-auto">
+                  <ul class="dropdown-menu ml-auto">
                     <li>
                         <a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{ action('SocioController@edit', $socio->id) }}"><i class="fas fa-user-edit"></i> Editar</a>
                     </li>
@@ -189,7 +189,7 @@
                             {!! Form::button('<i class="fas fa-pencil-alt"></i> Alterar Quotas', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-warning', 'style' => 'width: 100%; white-space: nowrap;', 'name' => 'quota_paga','onclick' => "return confirm('Tem a certeza que quer alterar o estado das quotas?')"]) !!}
                         </form>
                     </li>
-                  </div>
+                  </ul>
                 
             </td>
             @endcan
@@ -208,9 +208,8 @@
 {{ $socios->appends(request()->except('page'))->links() }}
 
 @endsection
-<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
 <script  type="text/javascript">
-    $(document).ready(function () {
+    window.onload = function(){
   
   // Remove empty fields from GET forms
   // Author: Bill Erickson
@@ -225,5 +224,5 @@
     // Un-disable form fields when page loads, in case they click back after submission
     $( "pesquisarSocio" ).find( ":input" ).prop( "disabled", false );
     
-});
+};
 </script>
