@@ -27,8 +27,18 @@ class MovimentoController extends Controller
         $this->middleware('verified');
     }
 
-    public function confirmar(){
-        
+    public function confirm(Request $request){
+        $checkboxes = $request->input('checkbox');
+
+        var_dump($checkboxes);
+
+        //foreach ($checkboxes as $id) {
+        //    $movimento = Movimento::findOrFail($id);
+        //    $movimento->confirmado = 1;
+        //    $movimento->save();
+        //}
+
+        //return redirect('movimentos');
     }
 
     
