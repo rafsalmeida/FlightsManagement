@@ -500,6 +500,16 @@ class MovimentoController extends Controller
         
     }
 
+    public function pendentes(){
+        $title = "Assuntos pendentes";
+        $movimentosConflitos = Movimento::whereNotNull('tipo_conflito')->paginate(15);
+        $movimentosConfirmar = Movimento::where('confirmado',0)->paginate(15);
+        $licencasConfirmar = User::where('licenca_confirmada',0)->paginate(15);
+        $certificadosConfirmar = User::where('certificado_confirmado',0)->paginate(15);
+
+        return view("movimentos.pendentes-list", compact("title","movimentosConflitos", "movimentosConfirmar","licencasConfirmar", "certificadosConfirmar"));
+    }
+
     
         
 }
