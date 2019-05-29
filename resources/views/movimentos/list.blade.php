@@ -46,6 +46,9 @@
                         Meus Voos
                     </label>
                 </div>
+                <div class="form-group">
+                    {{ Form::select('ordenar', [null => 'Ordenar Por'] +  array('IDA' => 'ID Asc', 'IDD' => 'ID Desc', 'AA' => 'Aeronave Asc', 'AD' => 'Aeronave Desc', 'DA' => 'Data Asc', 'DD' => 'Data Desc', 'TA' => 'Tipo Asc', 'TD' => 'Tipo Desc'), null, ['id' => 'idOrdenar', 'class' => 'form-control', 'name' => 'ordenar'])}}
+                </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-sm btn-success mb-3" >
                         <i class="fas fa-search"></i> Pesquisar
