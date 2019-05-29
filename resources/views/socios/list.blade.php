@@ -90,7 +90,9 @@
             <th>Foto</th>
             <th>Nome Informal</th>
             <th>Email</th>
+            <th>Telefone</th>
             <th>Tipo de Sócio</th>
+            <th>Nº da Licença de Piloto</th>
             <th>Direção</th>
             <th>NºSócio</th>
             @can('is-direcao', Auth::user())
@@ -112,16 +114,21 @@
             </td>
             <td>{{ $socio->nome_informal }}</td>
             <td>{{ $socio->email }}</td>
+            <td>{{ $socio->telefone }}</td>
             <td>
                 @if($socio->tipo_socio == "P")
                     Piloto <br>
-                    Nº Licença: {{$socio->num_licenca}}
                 @elseif ($socio->tipo_socio == "NP")
                     Não-Piloto
                 @else
                     Aeromodelista
                 @endif
             </td>
+            <td>@if($socio->tipo_socio == "P")
+                    {{$socio->num_licenca}}
+                @else
+                    Não tem licença de Piloto
+                @endif</td>
             <td>@if ($socio->direcao == 1)
                     Pertence
                 @else
