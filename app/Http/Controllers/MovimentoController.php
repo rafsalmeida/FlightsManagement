@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\AeronaveValor;
 use App\User;
 use App\Aeronave;
+use App\Aerodromo;
 use App\Http\Requests\StoreMovimento;
 use Khill\Lavacharts\Lavacharts;
+use Illuminate\Support\Facades\Auth;
 
 class MovimentoController extends Controller
 {
@@ -91,7 +93,11 @@ class MovimentoController extends Controller
     public function create()
     {
         $title = "Adicionar Movimento";
-        return view("movimentos.add", compact("title"));
+        $aerodromos = Aerodromo::pluck('nome','code');
+        $aerodromos[''] = "Escolha um aerodromo";
+        $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+        $aeronaves[''] = "Escolha uma aeronave";
+        return view("movimentos.add", compact("title", "aerodromos", "aeronaves"));
     }
 
     /**
@@ -100,7 +106,7 @@ class MovimentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMovimento $request)
     {
         if ($request->has("cancel")) {
             return redirect()->action("MovimentoController@index");
@@ -109,32 +115,32 @@ class MovimentoController extends Controller
         $movimento = new Movimento();
        
         $request->validated();
+        $movimento->fill($request->all());
+        $request->request->add([
+            'num_licenca_piloto' => $movimento->piloto->num_licenca,
+            'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
+            'tipo_licenca_piloto' => $movimento->piloto->tipo_licenca,
+            'num_certificado_piloto' => $movimento->piloto->num_certificado,
+            'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
+            'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+        ]);
+
+        //dd($request);
+
+        if($request->natureza == 'I'){
+            $request->request->add([
+            'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
+            'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
+            'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
+            'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
+            'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
+            'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
+
+            ]);
+        }
 
         $movimento->fill($request->all());
 
-        $movimento->observacoes = $request->observacoes;
-        $movimento->hora_aterragem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_aterragem;
-        $movimento->hora_descolagem = date('Y-m-d', strtotime($request->data)).' '.$request->hora_descolagem;
-        $movimento->num_licenca_piloto = $movimento->piloto->num_licenca;
-        $movimento->validade_licenca_piloto = $movimento->piloto->validade_licenca;
-        $movimento->tipo_licenca_piloto = $movimento->piloto->tipo_licenca;
-        $movimento->num_certificado_piloto = $movimento->piloto->num_certificado;
-        $movimento->validade_certificado_piloto = $movimento->piloto->validade_certificado;
-        $movimento->classe_certificado_piloto = $movimento->piloto->classe_certificado;
-        $movimento->tempo_voo = ($request->conta_horas_fim-$request->conta_horas_inicio)*6;
-        $movimento->preco_voo = $movimento->thisAeronave->valores->where('unidade_conta_horas', '$request->conta_horas_fim-$request->conta_horas_inicio')->first->preco->preco;
-        $movimento->confirmado = 0;
-        if($request->has("confirmar")){
-            $movimento->confirmado = 1;
-        }
-        if ($request->natureza == 'I'){
-            $movimento->num_licenca_instrutor = $movimento->instrutor->num_licenca;
-            $movimento->validade_licenca_instrutor = $movimento->instrutor->validade_licenca;
-            $movimento->tipo_licenca_instrutor = $movimento->instrutor->tipo_licenca;
-            $movimento->num_certificado_instrutor = $movimento->instrutor->num_certificado;
-            $movimento->validade_certificado_instrutor = $movimento->instrutor->validade_certificado;
-            $movimento->classe_certificado_instrutor = $movimento->instrutor->classe_certificado;
-        }
 
         $movimento->save();
 
@@ -167,7 +173,11 @@ class MovimentoController extends Controller
     {
         $title = "Editar Movimento";
         $movimento = Movimento::findOrFail($id);
-        return view("movimentos.edit", compact("title", "movimento"));
+        $aerodromos = Aerodromo::pluck('nome','code');
+        $aerodromos[''] = "Escolha um aerodromo";
+        $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+        $aeronaves[''] = "Escolha uma aeronave";
+        return view("movimentos.edit", compact("movimento","title", "aerodromos", "aeronaves"));
     }
 
     /**
@@ -185,9 +195,32 @@ class MovimentoController extends Controller
             return redirect()->action('MovimentoController@index');
         }
 
-        $request->validated();
-            
         $movimento = Movimento::findOrFail($id);
+
+        $request->validated();
+
+        $request->request->add([
+            'num_licenca_piloto' => $movimento->piloto->num_licenca,
+            'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
+            'tipo_licenca_piloto' => $movimento->piloto->tipo_licenca,
+            'num_certificado_piloto' => $movimento->piloto->num_certificado,
+            'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
+            'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+        ]);
+
+
+        if($request->natureza == 'I'){
+            $request->request->add([
+            'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
+            'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
+            'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
+            'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
+            'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
+            'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
+
+            ]);
+        }
+
         $movimento->fill($request->all());
 
         $movimento->save();
@@ -338,7 +371,6 @@ class MovimentoController extends Controller
                 }
             }
 
-
             $temposMes = [];
             $sum = 0;
             $movimentos = $piloto->movimentosPiloto;
@@ -352,7 +384,6 @@ class MovimentoController extends Controller
                 }
                 array_push($temposMes, $sum);
             }
-
 
 
             for($i=0; $i < count($meses); $i++) {
