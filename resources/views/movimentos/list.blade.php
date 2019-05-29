@@ -64,7 +64,7 @@
                     <th></th>
                     <th>ID</th>
                     <th>Aeronave</th>
-                    <th>&emsp;Data&emsp;&emsp;&emsp;</th>
+                    <th>Data</th>
                     <th>Hora Descolagem</th>
                     <th>Hora Aterragem</th>
                     <th>Tempo Voo</th>
