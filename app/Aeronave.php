@@ -27,4 +27,8 @@ class Aeronave extends Model
         return $this->belongsToMany('App\User', 'aeronaves_pilotos', 'matricula', 'piloto_id');
     }
 
+    public function getMinutos(int $class){
+        return $this->hasMany('App\AeronaveValor', 'matricula')->where('unidade_conta_horas','=',$class)->first();
+    }
+
 }
