@@ -13,7 +13,7 @@ class AeronaveValor extends Model
     protected $fillable = ['matricula', 'unidade_conta_horas', 'minutos', 'preco'];
 
     public function aeronaves(){
-    	return $this->belongsTo('App\Aeronave');
+    	return $this->belongsTo('App\Aeronave' , 'id' , 'matricula');
     }
   
 }
