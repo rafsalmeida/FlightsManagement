@@ -52,7 +52,7 @@
                             <a class="btn" href="{{action('SocioController@index')}}"><i class="fas fa-plane"></i> Gerir Sócios</a>
                           </li>
                           <li class="nav-item">
-                            <a class="btn" href="{{action('MovimentoController@index')}}" ><i class="fas fa-plane"></i> Movimentos</a>
+                            <a class="btn" href="{{action('MovimentoController@index')}}" ><i class="fas fa-plane"></i> Gerir Movimentos</a>
                           </li> 
                         </ul>
                 </div>
