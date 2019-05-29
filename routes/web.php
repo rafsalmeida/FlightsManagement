@@ -47,6 +47,8 @@ Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')
 
 Route::get('aeronaves/{aeronave}/pilotos', 'AeronavePilotosController@index')->middleware('direcao');
 
+Route::get('aeronaves/{aeronave}/precos_tempos' ,'AeronaveController@getJson')->name('aeronaves.json');
+
 Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->middleware('direcao');
 
 Route::delete('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@destroy')->name('pilotos.delete')->middleware('direcao');
