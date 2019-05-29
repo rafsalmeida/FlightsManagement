@@ -46,5 +46,18 @@ class StoreMovimento extends FormRequest
         'tipo_instrucao' => 'required_if:natureza,I',
         'modo_pagamento' => 'required|in:N,T,M,P',
         ];
+
+        // fazer a verificação ainda 
+
+        /*public function calcTempoVoo($partida, $chegada){
+        
+        $diferenca = (integer) $movimento->conta_horas_fim - (integer) $movimento->conta_horas_inicio;
+        $resto = $diferenca % 10;
+        $decima = intdiv($diferenca, 10);
+        $tempo_voo = $movimento->getAeronave->getMinutos($resto)->minutos;
+        $min_dez = $movimento->getAeronave->getMinutos(10)->minutos;
+
+        $tempo_voo += ($min_dez * $decima);
+    }*/
     }
 }
