@@ -61,4 +61,6 @@ Route::get('movimentos/estatisticas', 'MovimentoController@statistics')->name('m
 
 Route::resource('movimentos', 'MovimentoController');
 
+Route::get('/confirm',"MovimentoController@confirm");
+
 
