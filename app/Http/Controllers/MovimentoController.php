@@ -91,6 +91,32 @@ class MovimentoController extends Controller
             $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
         }
 
+        if($request->filled('ordenar') && $request['ordenar'] != null){
+            if ($request->get('ordenar') == 'IDA') {
+                $query->orderBy('id','ASC');
+            }
+            elseif ($request->get('ordenar') == 'IDD') {
+                $query->orderBy('id','DESC');            }
+            elseif ($request->get('ordenar') == 'AA') {
+                $query->orderBy('aeronave','ASC');
+            }
+            elseif ($request->get('ordenar') == 'AD') {
+                $query->orderBy('aeronave','DESC');
+            }
+            elseif ($request->get('ordenar') == 'DA') {
+                $query->orderBy('data','ASC');
+            }
+            elseif ($request->get('ordenar') == 'DD') {
+                $query->orderBy('aeronave','DESC');
+            }
+            elseif ($request->get('ordenar') == 'TA') {
+                $query->orderBy('natureza','ASC');
+            }
+            elseif ($request->get('ordenar') == 'TD') {
+                $query->orderBy('natureza','DESC');
+            }           
+        }
+
         /*if ($request->filled('natureza') && $request['natureza'] != null && $request->filled('piloto') && $request['piloto'] != null && $request->filled('instrutor') && $request['instrutor'] != null ){
 
             $nome_piloto = $request->get('piloto');
@@ -104,7 +130,6 @@ class MovimentoController extends Controller
 
              //dd($piloto_id, $natureza, $nome_instrutor);
         }*/
-        
 
         $movimentos = $query->paginate(15);
 
