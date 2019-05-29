@@ -45,14 +45,17 @@
             <div class="row">
 	               <div class="col-md-2 collapse navbar-collapse show" id="collapsibleNavbar" style="padding: 0; margin: 0; min-height: 91vh;background-color: #ececec; "> 
                         <ul class="vertical-menu navbar-nav nav-navtabs">
-                          <li class="nav-item">
+                          <li class="nav-item" style="padding-right: 0">
                             <a class="btn" href="{{action('AeronaveController@index')}}"><i class="fas fa-plane"></i> Gerir Aeronaves</a>
                           </li>
-                          <li class="nav-item">
+                          <li class="nav-item" style="padding-right: 0">
                             <a class="btn" href="{{action('SocioController@index')}}"><i class="fas fa-plane"></i> Gerir Sócios</a>
                           </li>
-                          <li class="nav-item">
+                          <li class="nav-item" style="padding-right: 0">
                             <a class="btn" href="{{action('MovimentoController@index')}}" ><i class="fas fa-plane"></i> Gerir Movimentos</a>
+                          </li>
+                          <li class="nav-item" style="padding-right: 0">
+                            <a class="btn" href="{{action('MovimentoController@pendentes')}}" ><i class="fas fa-plane"></i> Assuntos Pendentes</a>
                           </li> 
                         </ul>
                 </div>
