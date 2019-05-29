@@ -205,4 +205,14 @@ class AeronaveController extends Controller
     }
 
 
+    public function getJson($id){
+        $aeronave = Aeronave::findOrFail($id);
+
+        //dd(response()->json($aeronave->valores->makeHidden(['id', 'matricula'])));
+        return response()
+                ->json($aeronave->valores->makeHidden(['id', 'matricula']));
+
+    }
+
+
 }
