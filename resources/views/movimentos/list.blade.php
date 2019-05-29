@@ -18,21 +18,21 @@
                     <input type="text" class="form-control" placeholder="Aeronave" name="aeronave">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Piloto" name="nome_informal_piloto">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Instrutor" name="nome_informal_instrutor">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
                     {{ Form::select('natureza', [null => 'Tipo (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'idNatureza', 'class' => 'form-control', 'name' => 'natureza'])}}
                 </div>
                 <div class="form-group">
-                    <input type="date" class="form-control" placeholder="De" name="data_de">
+                    <input type="text" class="form-control" placeholder="Piloto" name="piloto">
+                </div>
+            </div>
+            <div class="form-row">
+                 <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Instrutor" name="instrutor">
                 </div>
                 <div class="form-group">
-                    <input type="date" class="form-control" placeholder="Ate" name="data_ate">
+                    <input type="date" class="form-control" placeholder="inf" name="data_inf">
+                </div>
+                 <div class="form-group">
+                    <input type="date" class="form-control" placeholder="sup" name="data_sup">
                 </div>
                 <div class="form-group form-check-inline" style="padding-left: 30px">
                     {{ Form::checkbox('confirmado', '1', false, ['class' => 'form-check-input']) }}
