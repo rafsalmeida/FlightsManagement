@@ -17,7 +17,23 @@ class Movimento extends Model
     	return $this->belongsTo('App\User', 'instrutor_id', 'id');
     }
 
-    public function thisAeronave(){
+    public function getAeronave(){
     	return $this->belongsTo('App\Aeronave', 'aeronave', 'matricula');
+    }
+
+    public function aerodromoPartida(){
+        return $this->belongsTo('App\Aerodromo', 'code', 'aerodromo_partida');
+    }
+
+    public function aerodromoChegada(){
+        return $this->belongsTo('App\Aerodromo', 'code', 'aerodromo_chegada');
+    }
+
+    public function calcTempoVoo($partida, $chegada){
+        
+
+
+        
+        return ($partida-$chegada)*6;
     }
 }
