@@ -99,3 +99,23 @@
 @endif
 
 @endsection
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+  
+  // Remove empty fields from GET forms
+  // Author: Bill Erickson
+  // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/
+  
+    // Change 'form' to class or ID of your specific form
+    $("#pesquisarAeronave").submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+    
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "pesquisarAeronave" ).find( ":input" ).prop( "disabled", false );
+    
+});
+</script>
