@@ -7,11 +7,14 @@
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
     	<script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+        
 
     </head>
     <body>
@@ -22,9 +25,9 @@
 			  </button>
 		      <a href="{{action('HomeController@index')}}"class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
               <div class="dropdown navbar-nav ml-auto" >
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target="#perfil"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                     <span class="caret"></span></button>
-                    <ul class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center;">
+                    <ul id="perfil" class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center;">
                         <li><a class="text-primary" href="{{action('SocioController@edit', Auth::user()->id)}}"><i class="fas fa-user-circle"></i> Perfil</a></li>
                         <div class="dropdown-divider"></div>
                         <li><a class="text-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}"><i class="fas fa-key"></i> Alterar Password</a></li>
