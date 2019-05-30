@@ -6,7 +6,7 @@
     <input
         type="text" class="form-control"
         name="num_socio" id="inputNumSocio"
-        placeholder="Numero de Sócio" value="@if(isset($socio)){{old('num_socio', $socio->num_socio)}}@else {{old('name')}} @endif" @cannot('is-direcao', Auth::user()){{ "readonly" }}@endcannot/>
+        placeholder="Numero de Sócio" value="@if(isset($socio)){{old('num_socio', $socio->num_socio)}}@else {{old('num_socio')}} @endif" @cannot('is-direcao', Auth::user()){{ "readonly" }}@endcannot/>
     @if ($errors->has('num_socio'))
         <em>{{ $errors->first('num_socio') }}</em>
     @endif
