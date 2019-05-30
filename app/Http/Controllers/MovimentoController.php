@@ -163,27 +163,6 @@ class MovimentoController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     public function store(StoreMovimento $request)
     {
         if ($request->has("cancel")) {
@@ -219,10 +198,30 @@ class MovimentoController extends Controller
 
         $movimento->fill($request->all());
 
-        $movimentoRecente = $movimento->getAeronave->getRecent;
-        dd($movimentoRecente);
+        $dataRecente = $movimento->getAeronave->movimentos->max('data');
+        $movimentoRecente = Movimento::where('data',$dataRecente)->where('aeronave', $movimento->getAeronave->matricula)->first();
+        $contaHoras = $movimentoRecente->conta_horas_fim;
 
+
+        if($request->conta_horas_inicio != $contaHoras && $request->hasConflito == 0){
+            $request->request->add(['hasConflito' => "1"]);
+            return redirect()->back()->withInput($request->all());
+
+        }
+
+        if($request->hasConflito == 1){
+            if($request->conta_horas_inicio > $contaHoras){
+                $request['tipo_conflito'] = 'B';
+            } else {
+                $request['tipo_conflito'] = 'S';
+            }
+        }
+
+        $movimento->fill($request->all());
+
+        dd($movimento);
         $movimento->save();
+
 
         return redirect()
                  ->action("MovimentoController@index")            
@@ -312,6 +311,18 @@ class MovimentoController extends Controller
             return redirect()->back()->withInput($request->all());
 
         }
+
+        if($request->hasConflito == 1){
+            if($request->conta_horas_inicio > $contaHoras){
+                $request['tipo_conflito'] = 'B';
+            } else {
+                $request['tipo_conflito'] = 'S';
+            }
+        }
+        dd($movimentoRecente, $contaHoras);
+
+        $movimento->fill($request->all());
+
 
         $movimento->save();
         return redirect()
