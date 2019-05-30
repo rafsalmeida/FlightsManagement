@@ -39,7 +39,7 @@
                     </label>
                 </div>
                 <div class="form-group form-check-inline" style="padding-left: 30px">
-                    {{ Form::checkbox('meus_voos', '1', false, ['class' => 'form-check-input']) }}
+                    {{ Form::checkbox('meus_movimentos', '1', false, ['class' => 'form-check-input']) }}
                     <label class="form-check-label">
                         Meus Voos
                     </label>
