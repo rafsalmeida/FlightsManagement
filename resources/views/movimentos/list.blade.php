@@ -3,9 +3,12 @@
 @section('content')
 
 <div class="row">
+@can('is-direcao-piloto', Auth::user())
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+@endcan
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
         left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>
+
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
         <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
             <div class="form-row ">
@@ -38,13 +41,14 @@
                         Confirmado
                     </label>
                 </div>
-                //policie só para pilotos
+                @can('is-direcao-piloto', Auth::user())
                 <div class="form-group form-check-inline" style="padding-left: 30px">
                     {{ Form::checkbox('meus_movimentos', '1', false, ['class' => 'form-check-input']) }}
                     <label class="form-check-label">
                         Meus Voos
                     </label>
                 </div>
+                @endcan
                 <div class="form-group">
                     {{ Form::select('ordenar', [null => 'Ordenar Por'] +  array('IDA' => 'ID Asc', 'IDD' => 'ID Desc', 'AA' => 'Aeronave Asc', 'AD' => 'Aeronave Desc', 'DA' => 'Data Asc', 'DD' => 'Data Desc', 'TA' => 'Tipo Asc', 'TD' => 'Tipo Desc'), null, ['id' => 'idOrdenar', 'class' => 'form-control', 'name' => 'ordenar'])}}
                 </div>
@@ -59,14 +63,17 @@
 </div>
 <div class="row">
 @if (count($movimentos))
- <form method="POST" action="{{action('MovimentoController@confirm')}}" id="confirmarMovimento">
+
+ <form method="POST" action="{{action('MovimentoController@confirm')}}" id="confirmarMovimento" class="table-responsive">
     @csrf
     @method('PATCH')
-    <div style="">
-        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded table-responsive">
+    <div class="">
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded ">
                 <thead class="thead-light">
                 <tr>
+                    @can('is-direcao', Auth::user())
                     <th><input type="submit" name="confirmar_btn" class="btn btn-primary" id="btn-confirm" value="Confirmar Voos"></th>
+                    @endcan
                     <th>ID</th>
                     <th>Aeronave</th>
                     <th>Data</th>
@@ -93,9 +100,11 @@
             <tbody>
                 @foreach ($movimentos as $movimento)
                     <tr>
+                        @can('is-direcao', Auth::user())
                         <td>
                             <input type="checkbox" name="confirmar[{{ $movimento->id }}]" value="{{ $movimento->id }}">
                         </td>
+                        @endcan
                         <td>{{ $movimento->id }}</td>
                         <td>{{ $movimento->aeronave }}</td>
                         <td>{{ $movimento->data }}</td>
@@ -142,6 +151,7 @@
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
                             </div>
+                            
                        </td>
                     </tr>
                 @endforeach
