@@ -194,6 +194,18 @@ class MovimentoController extends Controller
 
         $movimento->fill($request->all());
 
+        /*if ($movimento->getAeronave->conta_horas != $movimento->conta_horas_inicio) {
+            if ($movimento->getAeronave->conta_horas > $movimento->conta_horas_inicio) {
+                //Sobreposição
+                $movimento->tipo_conflito = 'S';
+            }
+            else{
+                //Buraco
+                $movimento->tipo_conflito = 'B';
+            }
+            return redirect();
+        }*/
+
 
         $movimento->save();
 
