@@ -25,6 +25,8 @@ class MovimentoController extends Controller
         $this->middleware('auth');
         $this->middleware('ativo');
         $this->middleware('verified');
+        $this->middleware('passwd_changed');
+
     }
 
     public function confirm(Request $request){
