@@ -62,6 +62,6 @@ Route::get('/pendentes','MovimentoController@pendentes')->name('movimentos.pende
 
 Route::resource('movimentos', 'MovimentoController');
 
-Route::get('/confirm',"MovimentoController@confirm");
+Route::patch('/confirm',"MovimentoController@confirm");
 
 
