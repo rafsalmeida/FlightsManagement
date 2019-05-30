@@ -317,17 +317,6 @@ class MovimentoController extends Controller
      */
     public function update(StoreMovimento $request, $id)
     {
-
-
-
-
-
-
-
-
-
-
-
         //validar e dar store na bd        
         if ($request->has('cancel')) {
             return redirect()->action('MovimentoController@index');
