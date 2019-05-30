@@ -160,10 +160,8 @@
 {{ $movimentos->appends(request()->except('page'))->links() }}
 
 @endsection
-
-<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
 <script  type="text/javascript">
-    $(document).ready(function () {
+    window.onload = function(){
   
   // Remove empty fields from GET forms
   // Author: Bill Erickson
@@ -178,5 +176,5 @@
     // Un-disable form fields when page loads, in case they click back after submission
     $( "pesquisarMovimento" ).find( ":input" ).prop( "disabled", false );
     
-});
+};
 </script>

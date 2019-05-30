@@ -58,6 +58,7 @@ Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@
 
 Route::get('movimentos/estatisticas', 'MovimentoController@statistics')->name('movimentos.estatisticas');
 
+Route::get('/pendentes','MovimentoController@pendentes')->name('movimentos.pendentes');
 
 Route::resource('movimentos', 'MovimentoController');
 
