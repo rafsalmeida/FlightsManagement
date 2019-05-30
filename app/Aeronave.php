@@ -31,4 +31,7 @@ class Aeronave extends Model
         return $this->hasMany('App\AeronaveValor', 'matricula')->where('unidade_conta_horas','=',$class)->first();
     }
 
+
+
+
 }
