@@ -85,7 +85,6 @@
                     <th>Tipo de Instrução</th>
                     <th>Instrutor</th>
                     <th>Confirmado</th>
-                    <th>Observações</th>
                     <th></th>
                 </tr>
             </thead>
@@ -135,7 +134,6 @@
                             @else
                                 Não
                             @endif</td>
-                        <td>{{ $movimento->observacoes }}</td>
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
