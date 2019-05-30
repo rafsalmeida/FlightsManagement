@@ -89,7 +89,7 @@ class MovimentoController extends Controller
             $query->where('data', '<=', $request->get('data_sup'));
         }
 
-        if ($request->filled('meus_voos') && $request['meus_voos'] != null) {
+        if ($request->filled('meus_movimentos') && $request['meus_movimentos'] != null) {
             $id = Auth::user()->id;
             $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
         }
