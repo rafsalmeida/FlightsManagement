@@ -180,6 +180,14 @@ class MovimentoController extends Controller
         $movimento = new Movimento();
        
         $request->validated();
+
+        //dd($request->hora_descolagem);
+
+        $hora_descolagem = $request->data.' '.$request->hora_descolagem;
+        $request->hora_descolagem = date('Y-m-d h:s',strtotime($hora_descolagem));
+        dd($request->hora_descolagem);
+
+
         $movimento->fill($request->all());
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
@@ -225,10 +233,6 @@ class MovimentoController extends Controller
             }
         }
 
-        $hora_descolagem = $movimento->data.' '.$movimento->hora_descolagem;
-        dd($movimento->hora_descolagem);
-        $movimento->hora_descolagem = date('Y-m-d H:s',strtotime($hora_descolagem));
-        dd($movimento->hora_descolagem);
 
         $movimento->fill($request->all());
 
