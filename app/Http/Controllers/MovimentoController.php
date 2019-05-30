@@ -62,15 +62,15 @@ class MovimentoController extends Controller
         }
 
         if ($request->filled('piloto') && $request['piloto'] != null) {
-            $nome = $request->get('piloto');
-            $piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
-            $query->whereIn('piloto_id', $piloto_id);
+            $piloto_id = $request->get('piloto'); //passar o piloto_id para $nome
+            //$piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->where('piloto_id', $piloto_id); //se quiser usar o nome passar o where para whereIn
         }
 
         if ($request->filled('instrutor') && $request['instrutor'] != null) {
-            $nome = $request->get('instrutor');
-            $instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
-            $query->whereIn('instrutor_id', $instrutor_id);
+            $instrutor_id = $request->get('instrutor'); //passar o piloto_id para $nome
+            //$instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
+            $query->where('instrutor_id', $instrutor_id); //se quiser usar o nome passar o where para whereIn
         }
 
         if ($request->filled('natureza') && $request['natureza'] != null) {
@@ -90,7 +90,7 @@ class MovimentoController extends Controller
         }
 
         if ($request->filled('meus_voos') && $request['meus_voos'] != null) {
-            $id = auth()->user()->id;
+            $id = Auth::user()->id;
             $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
         }
 
