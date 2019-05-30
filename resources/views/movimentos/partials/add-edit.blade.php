@@ -152,12 +152,12 @@
 <div class="form-group">
     <label>Tempo de voo:</label>
     <p id="show_tempo"></p>
-    <input type="hidden" name="tempo_voo" id="tempo_voo" />
+    <input type="hidden" name="tempo_voo" id="tempo_voo" value="@if(isset($movimento)){{ old('tempo_voo', $movimento->tempo_voo)}}@endif"/>
 </div>
 <div class="form-group">
     <label>Preço de voo:</label>
     <p id="show_preco"></p>
-    <input type="hidden" name="preco_voo" id="preco_voo" />
+    <input type="hidden" name="preco_voo" id="preco_voo" value="@if(isset($movimento)){{ old('preco_voo', $movimento->preco_voo)}}@endif" />
 </div>
 <div class="form-group">
     <label for="inputTPagamento">Modo de Pagamento</label>
@@ -268,7 +268,6 @@
 <script type="text/javascript">
     
     $(function() {
-
       $("#natureza").change(function() {
         var val = $(this).val();
         if (val === "I") {
