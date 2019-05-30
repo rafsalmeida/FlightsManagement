@@ -23,6 +23,8 @@ class AeronaveController extends Controller
         $this->middleware('direcao', ['only' => ['create','store','edit','update','destroy']]);
         $this->middleware('ativo');
         $this->middleware('verified');
+        $this->middleware('passwd_changed');
+
 
     }
 
