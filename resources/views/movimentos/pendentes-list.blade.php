@@ -27,7 +27,7 @@
 			    		<td>{{$conflito->tipo_conflito}}</td>
 			    		<td>{{$conflito->justificacao_conflito}}</td>
 			    		<td>
-                            <a class="btn btn-sm btn-xs btn-primary"  href="{{action('MovimentoController@edit', $conflito->id)}}">Resolver</a>
+                            <a class="btn btn-sm btn-xs btn-outline-dark"  style="width: 100%" href="{{action('MovimentoController@edit', $conflito->id)}}"><i class="fas fa-tools"></i> Resolver</a>
 			    		</td>
 			    	</tr>
 				@endforeach
@@ -55,7 +55,7 @@
 			    		<td>{{$naoConfirmados->aeronave}}</td>
 			    		<td>{{$naoConfirmados->piloto_id}}</td>
 			    		<td>
-			    			<a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{action('MovimentoController@edit', $naoConfirmados->id)}}">Resolver</a>
+			    			<a class="btn btn-sm btn-xs btn-outline-dark" style="width: 100%" href="{{action('MovimentoController@edit', $naoConfirmados->id)}}"><i class="fas fa-tools"></i> Resolver</a>
 			    		</td>
 			    	</tr>
 				@endforeach
@@ -84,7 +84,7 @@
 			    		<td>{{$licenca->nome_informal}}</td>
 			    		<td>{{$licenca->num_licenca}}</td>
 			    		<td>
-			    			<a class="btn btn-sm btn-xs btn-primary" href="{{ action('SocioController@edit', $licenca->id) }}"><i class="fas fa-user-edit"></i> Resolver</a>
+			    			<a class="btn btn-sm btn-xs btn-outline-dark" style="width: 100%" href="{{ action('SocioController@edit', $licenca->id) }}"><i class="fas fa-tools"></i> Resolver</a>
 			    		</td>
 
 			    	</tr>
@@ -112,7 +112,7 @@
 			    		<td>{{$certificado->nome_informal}}</td>
 			    		<td>{{$certificado->num_certificado}}</td>
 			    		<td>
-			    			<a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{ action('SocioController@edit', $certificado->id) }}"><i class="fas fa-user-edit"></i> Resolver</a>
+			    			<a class="btn btn-sm btn-xs btn-outline-dark" style="width: 100%" href="{{ action('SocioController@edit', $certificado->id) }}"><i class="fas fa-tools"></i> Resolver</a>
 			    		</td>
 
 			    	</tr>
