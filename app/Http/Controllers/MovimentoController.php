@@ -141,6 +141,11 @@ class MovimentoController extends Controller
         return view('movimentos.list', compact('movimentos','title'));
     }
 
+
+
+
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -220,9 +225,13 @@ class MovimentoController extends Controller
             }
         }
 
+        $hora_descolagem = $movimento->data.' '.$movimento->hora_descolagem;
+        dd($movimento->hora_descolagem);
+        $movimento->hora_descolagem = date('Y-m-d H:s',strtotime($hora_descolagem));
+        dd($movimento->hora_descolagem);
+
         $movimento->fill($request->all());
 
-        dd($movimento);
         $movimento->save();
 
 
@@ -322,7 +331,7 @@ class MovimentoController extends Controller
                 $request['tipo_conflito'] = 'S';
             }
         }
-        dd($movimentoRecente, $contaHoras);
+
 
         $movimento->fill($request->all());
 
