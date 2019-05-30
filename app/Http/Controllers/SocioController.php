@@ -205,7 +205,6 @@ class SocioController extends Controller
         $socio = User::findOrFail($id);
 
 
-
         if ($request->has("cancel")) {
             return redirect()->action("SocioController@index");
         }
