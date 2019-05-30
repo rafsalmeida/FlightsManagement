@@ -61,8 +61,8 @@
  <form method="POST" action="{{action('MovimentoController@confirm')}}" id="confirmarMovimento">
     @csrf
     @method('PATCH')
-    <div style="overflow-x: auto; overflow-y: hidden;">
-        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+    <div style="">
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded table-responsive">
                 <thead class="thead-light">
                 <tr>
                     <th><input type="submit" name="confirmar_btn" class="btn btn-primary" id="btn-confirm" value="Confirmar Voos"></th>
