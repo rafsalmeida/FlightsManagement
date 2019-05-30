@@ -60,7 +60,7 @@
                         </ul>
                 </div>
                 <div class="col-md-10">
-                    <div class="container-fluid" >
+                    <div class="container" >
                         @if (session('success'))
                             @include('partials.success')
                         @endif
