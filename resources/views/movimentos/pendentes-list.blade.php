@@ -21,10 +21,15 @@
 			        </tr>
 			    </thead>
 			    <tbody>
-			    @foreach($movimentosConflito as $conflito)
+			    @foreach($movimentosConflitos as $conflito)
 			    	<tr>
 			    		<td>{{$conflito->data}}</td>
-			    		<td>{{$conflito->tipo_conflito}}</td>
+			    		<td>@if($conflito->tipo_conflito == 'S')
+			    				Sobreposição
+			    			@else
+			    				Buraco
+							@endif
+			    		</td>
 			    		<td>{{$conflito->justificacao_conflito}}</td>
 			    		<td>
                             <a class="btn btn-sm btn-xs btn-outline-dark"  style="width: 100%" href="{{action('MovimentoController@edit', $conflito->id)}}"><i class="fas fa-tools"></i> Resolver</a>
