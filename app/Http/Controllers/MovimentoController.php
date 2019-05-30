@@ -30,19 +30,48 @@ class MovimentoController extends Controller
     public function confirm(Request $request){
         $checkboxes = $request->input('confirmar');
 
+        $confirmados=0;
+        $naoConfirmados = 0;
 
-        var_dump($checkboxes);
+        foreach ($checkboxes as $id) {
+            $movimento = Movimento::findOrFail($id);
+            if ($movimento->confirmado == 0) {
+                $movimento['confirmado'] = 1;
+                $movimento->save();
+                $confirmados++;
+            }
+            else{
+                $naoConfirmados++;
+            }
+        }
 
-        
-
-        //foreach ($checkboxes as $id) {
-        //    $movimento = Movimento::findOrFail($id);
-        //    $movimento->confirmado = 1;
-        //    $movimento->save();
-        //}
-
-        //return redirect('movimentos');
+        if ($naoConfirmados != 0 && $confirmados == 0) {
+            return redirect('movimentos')->with('success', 'O(s) movimento(s) que estava a tentar confirmar já se encontrava confirmado(s)');
+        }
+        elseif ($naoConfirmados != 0) {
+            return redirect('movimentos')->with('success', 'Algun(s) do(s) movimento(s) que tentou confirmar já estavam confirmado(s)');
+        }
+        else{
+            return redirect('movimentos')->with('success', 'Movimento(s) confirmado(s) com sucesso');
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     public function index(Request $request)
