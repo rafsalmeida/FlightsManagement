@@ -20,9 +20,9 @@
     </div>
 </form>
 <form method="POST" action="{{action('MovimentoController@destroy', $movimento->id)}}" role="form" class="inline">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
-                                {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
-                            </form>
+    @csrf
+    @method('delete')
+    <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
+    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
+</form>
 @endsection
