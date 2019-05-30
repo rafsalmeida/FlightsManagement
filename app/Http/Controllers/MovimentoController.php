@@ -313,10 +313,13 @@ class MovimentoController extends Controller
      */
     public function update(StoreMovimento $request, $id)
     {
-        //validar e dar store na bd
-
+        //validar e dar store na bd        
         if ($request->has('cancel')) {
             return redirect()->action('MovimentoController@index');
+        }
+
+        if ($request->has('confirmar')) {
+            $request->request->add(['confirmado' => 1]);
         }
 
         $movimento = Movimento::findOrFail($id);
@@ -328,8 +331,9 @@ class MovimentoController extends Controller
 
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
         $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
-        $request['confirmado'] = 0;
-        dd($movimento->piloto()->first());
+        //$request['confirmado'] = 0;
+        //dd($movimento->piloto()->first());
+        
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
             'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
@@ -352,7 +356,7 @@ class MovimentoController extends Controller
             ]);
         }
 
-        dd($movimento->tempo_voo, $request->tempo_voo);
+        //dd($movimento->tempo_voo, $request->tempo_voo);
 
         $movimento->fill($request->all());
 
