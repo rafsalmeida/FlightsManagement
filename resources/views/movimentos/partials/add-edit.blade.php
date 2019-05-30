@@ -14,7 +14,7 @@
     <input
         type="time" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
-        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', $movimento->hora_descolagem) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', date('H:i',strtotime($movimento->hora_descolagem))) }}@endif" />
     @if ($errors->has('hora_descolagem'))
         <em>{{ $errors->first('hora_descolagem') }}</em>
     @endif
@@ -24,7 +24,7 @@
     <input
         type="time" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
-        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', $movimento->hora_aterragem) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', date('H:i',strtotime($movimento->hora_aterragem))) }}@endif" />
     @if ($errors->has('hora_aterragem'))
         <em>{{ $errors->first('hora_aterragem') }}</em>
     @endif
@@ -33,9 +33,9 @@
     <form id="getMatricula">
         <label >Matrícula Aeronave</label>
         @if(isset($movimento->aeronave))
-            {!! Form::select('aeronave', $aeronaves, $movimento->aeronave, ['class' => 'form-control', 'id' => 'matricula', 'onchange' => 'val()']) !!}
+            {!! Form::select('aeronave', $aeronaves, $movimento->aeronave, ['class' => 'form-control', 'id' => 'matricula']) !!}
         @else
-            {!! Form::select('aeronave', $aeronaves, null, ['class' => 'form-control', 'id' => 'matricula', 'onchange' => 'val()'])!!}
+            {!! Form::select('aeronave', $aeronaves, null, ['class' => 'form-control', 'id' => 'matricula'])!!}
         @endif
 
 </div>
@@ -254,10 +254,21 @@
     @endif
 </div>
 </div>
+<div id="form-conflito" style="display: none;">
+    <div class="form-group">
+        <label for="justificacao_conflito">Justificação</label>
+        <textarea class="form-control"
+        name="justificacao_conflito">
+            @if(isset($movimento)){{ old('justficacao_conflito', $movimento->justificacao_conflito) }}@endif </textarea>
+    </div>
+</div>
+<input type="hidden" name="hasConflito" value="0{{ old('hasConflito')}}" id="conflito"/>
+<input type="hidden" name="conflitoConfirmed" value="0" id="conflitoConfirmed"/>
 <p id="demo"></p>
 <script type="text/javascript">
     
     $(function() {
+
       $("#natureza").change(function() {
         var val = $(this).val();
         if (val === "I") {
@@ -266,7 +277,23 @@
           $("#instrucao_form").hide();
         }
       }).trigger('change');
+    
+        var val = $("#conflito").val();
+        if (val == 1) {
+          let confirmation = confirm("Os valores dos conta-horas estão com conflitos. Deseja continuar?");
+          if(confirmation){
+            $("#form-conflito").show();
+        } else {
+            $("#form-conflito").hide();
+            $("#conta_horas_inicio").val("");
+            
+
+        }
+        }
+
     });
+
+
 
 
 
@@ -293,7 +320,6 @@
                 var preco_voo = response[resto-1].preco;
                 var conta_horas_10 = response[9].preco;
                 preco_voo +=(conta_horas_10*decima);
-                alert(preco_voo);
                 document.getElementById("show_preco").innerHTML = preco_voo;
                 document.getElementById("preco_voo").value = preco_voo;
      
@@ -308,10 +334,6 @@
 });
 
 
-
-
-//var obj = [{"unidade_conta_horas":1,"minutos":5,"preco":"10.00"},{"unidade_conta_horas":2,"minutos":10,"preco":"20.00"},{"unidade_conta_horas":3,"minutos":20,"preco":"30.00"},{"unidade_conta_horas":4,"minutos":25,"preco":"40.00"},{"unidade_conta_horas":5,"minutos":30,"preco":"50.00"},{"unidade_conta_horas":6,"minutos":35,"preco":"60.00"},{"unidade_conta_horas":7,"minutos":40,"preco":"70.00"},{"unidade_conta_horas":8,"minutos":50,"preco":"80.00"},{"unidade_conta_horas":9,"minutos":55,"preco":"90.00"},{"unidade_conta_horas":10,"minutos":60,"preco":"100.00"}];
-//document.getElementById("demo").innerHTML = obj[0].minutos;
 </script>
 
 @endsection
