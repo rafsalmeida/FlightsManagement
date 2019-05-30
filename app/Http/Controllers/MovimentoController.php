@@ -313,6 +313,17 @@ class MovimentoController extends Controller
      */
     public function update(StoreMovimento $request, $id)
     {
+
+
+
+
+
+
+
+
+
+
+        
         //validar e dar store na bd        
         if ($request->has('cancel')) {
             return redirect()->action('MovimentoController@index');
@@ -331,9 +342,12 @@ class MovimentoController extends Controller
 
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
         $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+
         //$request['confirmado'] = 0;
         //dd($movimento->piloto()->first());
         
+        $request['confirmado'] = 0;
+
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
             'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
@@ -367,27 +381,36 @@ class MovimentoController extends Controller
         //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO SEGUINTE ----
         $contaHInicialMovSeg = $movimento->getAeronave->movimentos->where('conta_horas_inicio','>=', $movimento->conta_horas_fim)->where('id','!=',$movimento->id)->min('conta_horas_inicio');
         
-        if(($request->conta_horas_inicio != $contaHFinalMovAnt && $request->hasConflito == 0) || ($request->conta_horas_fim != $contaHInicialMovSeg && $request->hasConflito == 0) ){
+
+
+
+        if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $request->conta_horas_fim != $contaHInicialMovSeg ) ){
             $request->request->add(['hasConflito' => "1"]);
             return redirect()->back()->withInput($request->all());
 
         }
 
+
+        $movimento->fill($request->all());
         if($request->hasConflito == 1){
+                     
+
             if($request->conta_horas_inicio > $contaHFinalMovAnt){
+                dd('nao me digas que entra aqui ');
                 $request['tipo_conflito'] = 'B';
             } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
                 $request['tipo_conflito'] = 'S';
             } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
+                dd("achas que devias entrar aqui?");
                 $request['tipo_conflito'] = 'B';
-            } else {
+            } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
                 $request['tipo_conflito'] = 'S';
             }
 
         }
 
 
-        //dd($request);
+        
         $movimento->fill($request->all());
 
 
