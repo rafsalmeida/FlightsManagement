@@ -297,6 +297,10 @@ class MovimentoController extends Controller
     {
         $title = "Editar Movimento";
         $movimento = Movimento::findOrFail($id);
+        if($movimento->confirmado == 1){
+            return redirect()->action("MovimentoController@index")            
+                 ->with("success", "Movimento confirmado e não pode ser alterado");
+        }
         $aerodromos = Aerodromo::pluck('nome','code');
         $aerodromos[''] = "Escolha um aerodromo";
         $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
@@ -323,7 +327,7 @@ class MovimentoController extends Controller
 
 
 
-        
+
         //validar e dar store na bd        
         if ($request->has('cancel')) {
             return redirect()->action('MovimentoController@index');
@@ -331,6 +335,9 @@ class MovimentoController extends Controller
 
         if ($request->has('confirmar')) {
             $request->request->add(['confirmado' => 1]);
+        }
+        else{
+            $request['confirmado'] = 0;
         }
 
         $movimento = Movimento::findOrFail($id);
@@ -342,11 +349,6 @@ class MovimentoController extends Controller
 
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
         $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
-
-        //$request['confirmado'] = 0;
-        //dd($movimento->piloto()->first());
-        
-        $request['confirmado'] = 0;
 
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
@@ -369,8 +371,6 @@ class MovimentoController extends Controller
 
             ]);
         }
-
-        //dd($movimento->tempo_voo, $request->tempo_voo);
 
         $movimento->fill($request->all());
 
@@ -396,12 +396,12 @@ class MovimentoController extends Controller
                      
 
             if($request->conta_horas_inicio > $contaHFinalMovAnt){
-                dd('nao me digas que entra aqui ');
+                //dd('nao me digas que entra aqui ');
                 $request['tipo_conflito'] = 'B';
             } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
                 $request['tipo_conflito'] = 'S';
             } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
-                dd("achas que devias entrar aqui?");
+                //dd("achas que devias entrar aqui?");
                 $request['tipo_conflito'] = 'B';
             } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
                 $request['tipo_conflito'] = 'S';
