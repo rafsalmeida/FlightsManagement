@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class AeronavePilotosController extends Controller
 {
+    public function __construct(){
+        
+        $this->middleware('auth');
+        $this->middleware('ativo');
+        $this->middleware('verified');
+        $this->middleware('passwd_changed');
+
+    }
+
+
     public function index($id){
         $aeronave = Aeronave::findOrFail($id);
         $title = "Pilotos da Aeronave ".$aeronave->matricula;

@@ -32,6 +32,9 @@ class SocioController extends Controller
 
         $this->middleware('ativo');
 
+        $this->middleware('passwd_changed');
+
+
     }
     
     public function index(Request $request)
