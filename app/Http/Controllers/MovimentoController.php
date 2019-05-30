@@ -181,11 +181,14 @@ class MovimentoController extends Controller
        
         $request->validated();
 
-        //dd($request->hora_descolagem);
 
         $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-        $request->hora_descolagem = date('Y-m-d h:s',strtotime($hora_descolagem));
-        dd($request->hora_descolagem);
+        $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+
+        $hora_aterragem = $request->data.' '.$request->hora_aterragem;
+        $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+        $request['confirmado'] = 0;
+
 
 
         $movimento->fill($request->all());
@@ -214,10 +217,7 @@ class MovimentoController extends Controller
 
         $movimento->fill($request->all());
 
-        $dataRecente = $movimento->getAeronave->movimentos->max('data');
-        $movimentoRecente = Movimento::where('data',$dataRecente)->where('aeronave', $movimento->getAeronave->matricula)->first();
-        $contaHoras = $movimentoRecente->conta_horas_fim;
-
+        $contaHoras = $movimento->getAeronave->movimentos->max('conta_horas_fim');
 
         if($request->conta_horas_inicio != $contaHoras && $request->hasConflito == 0){
             $request->request->add(['hasConflito' => "1"]);
@@ -294,6 +294,13 @@ class MovimentoController extends Controller
 
         $request->validated();
 
+        $hora_descolagem = $request->data.' '.$request->hora_descolagem;
+        $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+
+        $hora_aterragem = $request->data.' '.$request->hora_aterragem;
+        $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+        $request['confirmado'] = 0;
+        dd($movimento->piloto()->first());
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
             'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
@@ -316,27 +323,38 @@ class MovimentoController extends Controller
             ]);
         }
 
+        dd($movimento->tempo_voo, $request->tempo_voo);
+
         $movimento->fill($request->all());
 
-        $dataRecente = $movimento->getAeronave->movimentos->max('data');
-        $movimentoRecente = Movimento::where('data',$dataRecente)->first();
-        $contaHoras = $movimentoRecente->conta_horas_fim;
 
-        if($request->conta_horas_inicio != $contaHoras && $request->hasConflito == 0){
+        //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO ANTERIOR ----
+        $contaHFinalMovAnt = $movimento->getAeronave->movimentos->where('conta_horas_fim','<=', $movimento->conta_horas_inicio)->where('id','!=',$movimento->id)->max('conta_horas_fim');
+
+        //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO SEGUINTE ----
+        $contaHInicialMovSeg = $movimento->getAeronave->movimentos->where('conta_horas_inicio','>=', $movimento->conta_horas_fim)->where('id','!=',$movimento->id)->min('conta_horas_inicio');
+        
+        if(($request->conta_horas_inicio != $contaHFinalMovAnt && $request->hasConflito == 0) || ($request->conta_horas_fim != $contaHInicialMovSeg && $request->hasConflito == 0) ){
             $request->request->add(['hasConflito' => "1"]);
             return redirect()->back()->withInput($request->all());
 
         }
 
         if($request->hasConflito == 1){
-            if($request->conta_horas_inicio > $contaHoras){
+            if($request->conta_horas_inicio > $contaHFinalMovAnt){
+                $request['tipo_conflito'] = 'B';
+            } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
+                $request['tipo_conflito'] = 'S';
+            } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
                 $request['tipo_conflito'] = 'B';
             } else {
                 $request['tipo_conflito'] = 'S';
             }
+
         }
 
 
+        //dd($request);
         $movimento->fill($request->all());
 
 
@@ -566,6 +584,8 @@ class MovimentoController extends Controller
 
     public function pendentes(){
         $title = "Assuntos pendentes";
+
+       
         $movimentosConflitos = Movimento::whereNotNull('tipo_conflito')->paginate(15);
         $movimentosConfirmar = Movimento::where('confirmado',0)->paginate(15);
         $licencasConfirmar = User::where('licenca_confirmada',0)->paginate(15);
