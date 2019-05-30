@@ -6,8 +6,6 @@
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
     <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
         left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>
-    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
-        left"><a type="submit" href="confirm" id="btn-confirm" class="btn btn-secondary" >Confirmar Voos</a></div>
     <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
         <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
             <div class="form-row ">
@@ -60,11 +58,14 @@
 </div>
 <div class="row">
 @if (count($movimentos))
+ <form method="POST" action="{{action('MovimentoController@confirm')}}" id="confirmarMovimento">
+    @csrf
+    @method('PATCH')
     <div style="overflow-x: auto; overflow-y: hidden;">
         <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-light">
                 <tr>
-                    <th>Select</th>
+                    <th><input type="submit" name="confirmar_btn" class="btn btn-primary" id="btn-confirm" value="Confirmar Voos"></th>
                     <th>ID</th>
                     <th>Aeronave</th>
                     <th>Data</th>
@@ -91,7 +92,9 @@
             <tbody>
                 @foreach ($movimentos as $movimento)
                     <tr>
-                        <td><input type="checkbox" name="checkbox[]" value="{{$movimento->id}}"></td>
+                        <td>
+                            <input type="checkbox" name="confirmar[{{ $movimento->id }}]" value="{{ $movimento->id }}">
+                        </td>
                         <td>{{ $movimento->id }}</td>
                         <td>{{ $movimento->aeronave }}</td>
                         <td>{{ $movimento->data }}</td>
@@ -137,19 +140,14 @@
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
-                            <form method="POST" action="{{action('MovimentoController@destroy', $movimento->id)}}" role="form" class="inline">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
-                                {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger rounded-pill', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
-                            </form>
                             </div>
-                        </td>
+                       </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
         </div>
+        </form>
     @else
     <div class="col-md-12">    
         <h2>Nenhum movimento encontrado </h2>
@@ -177,4 +175,9 @@
     $( "pesquisarMovimento" ).find( ":input" ).prop( "disabled", false );
     
 };
+</script>
+<script type="text/javascript">
+  $("#btn-confirm").change(function () {
+    $("input:confirmar").prop('checked', $(this).prop("checked"));
+});
 </script>
