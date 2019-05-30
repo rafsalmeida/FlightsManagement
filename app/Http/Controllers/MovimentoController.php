@@ -107,7 +107,7 @@ class MovimentoController extends Controller
                 $query->orderBy('data','ASC');
             }
             elseif ($request->get('ordenar') == 'DD') {
-                $query->orderBy('aeronave','DESC');
+                $query->orderBy('data','DESC');
             }
             elseif ($request->get('ordenar') == 'TA') {
                 $query->orderBy('natureza','ASC');
@@ -194,6 +194,8 @@ class MovimentoController extends Controller
 
         $movimento->fill($request->all());
 
+        $movimentoRecente = $movimento->getAeronave->getRecent;
+        dd($movimentoRecente);
 
         $movimento->save();
 
@@ -240,7 +242,7 @@ class MovimentoController extends Controller
      * @param  \App\Movimento  $movimento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreMovimento $request, $id)
     {
         //validar e dar store na bd
 
@@ -275,6 +277,16 @@ class MovimentoController extends Controller
         }
 
         $movimento->fill($request->all());
+
+        $dataRecente = $movimento->getAeronave->movimentos->max('data');
+        $movimentoRecente = Movimento::where('data',$dataRecente)->first();
+        $contaHoras = $movimentoRecente->conta_horas_fim;
+
+        if($request->conta_horas_inicio != $contaHoras && $request->hasConflito == 0){
+            $request->request->add(['hasConflito' => "1"]);
+            return redirect()->back()->withInput($request->all());
+
+        }
 
         $movimento->save();
         return redirect()
