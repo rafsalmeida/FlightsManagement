@@ -8,9 +8,12 @@ use App\AeronaveValor;
 use App\User;
 use App\Aeronave;
 use App\Aerodromo;
+use App\Policies\UserPolicy;
 use App\Http\Requests\StoreMovimento;
 use Khill\Lavacharts\Lavacharts;
 use Illuminate\Support\Facades\Auth;
+use \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 
 class MovimentoController extends Controller
 {
@@ -59,23 +62,6 @@ class MovimentoController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     public function index(Request $request)
     {
 
@@ -120,10 +106,14 @@ class MovimentoController extends Controller
             $query->where('data', '<=', $request->get('data_sup'));
         }
 
-        if ($request->filled('meus_movimentos') && $request['meus_movimentos'] != null) {
-            $id = Auth::user()->id;
-            $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
+        if(Auth::user()->can('createMovimento', Auth::user())){
+            if ($request->filled('meus_movimentos') && $request['meus_movimentos'] != null) {
+                $id = Auth::user()->id;
+                $query->where('piloto_id', $id)->orWhere('instrutor_id', $id);
+            }
         }
+
+
 
         if($request->filled('ordenar') && $request['ordenar'] != null){
             if ($request->get('ordenar') == 'IDA') {
@@ -171,10 +161,6 @@ class MovimentoController extends Controller
 
         return view('movimentos.list', compact('movimentos','title'));
     }
-
-
-
-
     
 
     /**
@@ -184,6 +170,7 @@ class MovimentoController extends Controller
      */
     public function create()
     {
+        $this->authorize('createMovimento', Auth::user());
         $title = "Adicionar Movimento";
         $aerodromos = Aerodromo::pluck('nome','code');
         $aerodromos[''] = "Escolha um aerodromo";
@@ -204,6 +191,8 @@ class MovimentoController extends Controller
 
     public function store(StoreMovimento $request)
     {
+
+        $this->authorize('createMovimento', Auth::user());
         if ($request->has("cancel")) {
             return redirect()->action("MovimentoController@index");
         }
@@ -297,17 +286,25 @@ class MovimentoController extends Controller
      */
     public function edit($id)
     {
-        $title = "Editar Movimento";
         $movimento = Movimento::findOrFail($id);
-        if($movimento->confirmado == 1){
-            return redirect()->action("MovimentoController@index")            
-                 ->with("success", "Movimento confirmado e não pode ser alterado");
+
+        if(Auth::user()->can('updateMovimento', $movimento->piloto) || Auth::user()->can('updateMovimento', $movimento->instrutor)){
+            $title = "Editar Movimento";
+
+            if($movimento->confirmado == 1){
+                return redirect()->action("MovimentoController@index")            
+                     ->with("success", "Movimento confirmado e não pode ser alterado");
+            }
+            $aerodromos = Aerodromo::pluck('nome','code');
+            $aerodromos[''] = "Escolha um aerodromo";
+            $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+            $aeronaves[''] = "Escolha uma aeronave";
+            return view("movimentos.edit", compact("movimento","title", "aerodromos", "aeronaves"));
+        } else {
+            throw new AccessDeniedHttpException('Unauthorized.');
         }
-        $aerodromos = Aerodromo::pluck('nome','code');
-        $aerodromos[''] = "Escolha um aerodromo";
-        $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
-        $aeronaves[''] = "Escolha uma aeronave";
-        return view("movimentos.edit", compact("movimento","title", "aerodromos", "aeronaves"));
+
+
     }
 
     /**
@@ -319,96 +316,99 @@ class MovimentoController extends Controller
      */
     public function update(StoreMovimento $request, $id)
     {
-        //validar e dar store na bd        
-        if ($request->has('cancel')) {
-            return redirect()->action('MovimentoController@index');
-        }
-
-        if ($request->has('confirmar')) {
-            $request->request->add(['confirmado' => 1]);
-        }
-        else{
-            $request['confirmado'] = 0;
-        }
-
         $movimento = Movimento::findOrFail($id);
 
-        $request->validated();
-
-        $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-        $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
-
-        $hora_aterragem = $request->data.' '.$request->hora_aterragem;
-        $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
-
-        $request->request->add([
-            'num_licenca_piloto' => $movimento->piloto->num_licenca,
-            'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
-            'tipo_licenca_piloto' => $movimento->piloto->tipo_licenca,
-            'num_certificado_piloto' => $movimento->piloto->num_certificado,
-            'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
-            'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
-        ]);
+        if(Auth::user()->can('updateMovimento', $movimento->piloto) || Auth::user()->can('updateMovimento', $movimento->instrutor)){
 
 
-        if($request->natureza == 'I'){
-            $request->request->add([
-            'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
-            'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
-            'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
-            'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
-            'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
-            'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
-
-            ]);
-        }
-
-        $movimento->fill($request->all());
-
-
-        //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO ANTERIOR ----
-        $contaHFinalMovAnt = $movimento->getAeronave->movimentos->where('conta_horas_fim','<=', $movimento->conta_horas_inicio)->where('id','!=',$movimento->id)->max('conta_horas_fim');
-
-        //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO SEGUINTE ----
-        $contaHInicialMovSeg = $movimento->getAeronave->movimentos->where('conta_horas_inicio','>=', $movimento->conta_horas_fim)->where('id','!=',$movimento->id)->min('conta_horas_inicio');
-        
-
-
-
-        if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $request->conta_horas_fim != $contaHInicialMovSeg ) ){
-            $request->request->add(['hasConflito' => "1"]);
-            return redirect()->back()->withInput($request->all());
-
-        }
-
-
-        $movimento->fill($request->all());
-        if($request->hasConflito == 1){
-                     
-
-            if($request->conta_horas_inicio > $contaHFinalMovAnt){
-                //dd('nao me digas que entra aqui ');
-                $request['tipo_conflito'] = 'B';
-            } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
-                $request['tipo_conflito'] = 'S';
-            } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
-                //dd("achas que devias entrar aqui?");
-                $request['tipo_conflito'] = 'B';
-            } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
-                $request['tipo_conflito'] = 'S';
+            //validar e dar store na bd        
+            if ($request->has('cancel')) {
+                return redirect()->action('MovimentoController@index');
             }
 
+            if ($request->has('confirmar')) {
+                $request->request->add(['confirmado' => 1]);
+            }
+            else{
+                $request['confirmado'] = 0;
+            }
+
+            $request->validated();
+
+            $hora_descolagem = $request->data.' '.$request->hora_descolagem;
+            $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+
+            $hora_aterragem = $request->data.' '.$request->hora_aterragem;
+            $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+
+            $request->request->add([
+                'num_licenca_piloto' => $movimento->piloto->num_licenca,
+                'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
+                'tipo_licenca_piloto' => $movimento->piloto->tipo_licenca,
+                'num_certificado_piloto' => $movimento->piloto->num_certificado,
+                'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
+                'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+            ]);
+
+
+            if($request->natureza == 'I'){
+                $request->request->add([
+                'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
+                'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
+                'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
+                'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
+                'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
+                'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
+
+                ]);
+            }
+
+            $movimento->fill($request->all());
+
+            //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO ANTERIOR ----
+            $contaHFinalMovAnt = $movimento->getAeronave->movimentos->where('conta_horas_fim','<=', $movimento->conta_horas_inicio)->where('id','!=',$movimento->id)->max('conta_horas_fim');
+
+            //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO SEGUINTE ----
+            $contaHInicialMovSeg = $movimento->getAeronave->movimentos->where('conta_horas_inicio','>=', $movimento->conta_horas_fim)->where('id','!=',$movimento->id)->min('conta_horas_inicio');
+            
+
+            if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $request->conta_horas_fim != $contaHInicialMovSeg ) ){
+                $request->request->add(['hasConflito' => "1"]);
+                return redirect()->back()->withInput($request->all());
+
+            }
+
+            $movimento->fill($request->all());
+            if($request->hasConflito == 1){
+                         
+
+                if($request->conta_horas_inicio > $contaHFinalMovAnt){
+                    //dd('nao me digas que entra aqui ');
+                    $request['tipo_conflito'] = 'B';
+                } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
+                    $request['tipo_conflito'] = 'S';
+                } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
+                    //dd("achas que devias entrar aqui?");
+                    $request['tipo_conflito'] = 'B';
+                } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
+                    $request['tipo_conflito'] = 'S';
+                }
+
+            }
+
+
+            
+            $movimento->fill($request->all());
+
+
+            $movimento->save();
+            return redirect()
+                    ->action('MovimentoController@index')
+                    ->with('success', 'Movimento editada corretamente');
+        } else {
+            throw new AccessDeniedHttpException('Unauthorized.');
+
         }
-
-
-        
-        $movimento->fill($request->all());
-
-
-        $movimento->save();
-        return redirect()
-                ->action('MovimentoController@index')
-                ->with('success', 'Movimento editada corretamente');
 
         
 
@@ -429,14 +429,16 @@ class MovimentoController extends Controller
     public function destroy($id)
     {
         $movimento = Movimento::findOrFail($id);
-        //$movimentos = $socio->movimentos;
-        if($movimento->confirmado == 0){
-            $movimento->delete();
-        } else {
-            return redirect()->action("MovimentoController@index")->with('sucess', 'Movimento Confirmado. Impossivel Apagar');
-        }
+        if(Auth::user()->can('updateMovimento', $movimento->piloto) || Auth::user()->can('updateMovimento', $movimento->instrutor)){
+            if($movimento->confirmado == 0){
+                $movimento->delete();
+            } else {
+                return redirect()->action("MovimentoController@index")->with('sucess', 'Movimento Confirmado. Impossivel Apagar');
+            }
 
-        return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
+            return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
+            }
+
     }
 
 

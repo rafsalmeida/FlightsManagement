@@ -53,5 +53,34 @@ class UserPolicy
         return false;
     }
 
+    public function createMovimento(User $socioLogged){
+        if($socioLogged->direcao){
+            return true;
+        }
+
+        if($socioLogged->tipo_socio == 'P'){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updateMovimento(User $socioLogged,User $socio){
+        if($socioLogged->direcao){
+            return true;
+        }
+
+        if($socioLogged->tipo_socio == 'P' && $socioLogged->id == $socio->id){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
+
+
 
 }
