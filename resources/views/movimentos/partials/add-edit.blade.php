@@ -261,7 +261,7 @@
             @if(isset($movimento)){{ old('justficacao_conflito', $movimento->justificacao_conflito) }}@else{{ old('justficacao_conflito') }}@endif </textarea>
     </div>
 </div>
-
+<input type="hidden" name="piloto_instrutor" value="">
 <input type="hidden" name="hasConflito" value="@if(isset($movimento) && $movimento->tipo_conflito !== null){{ old('hasConflito', $movimento->tipo_conflito) }}@elseif(old('hasConflito')!== null){{ old('hasConflito') }}@else {{'0'}}@endif" id="conflito"/>
 <input type="hidden" name="conflitoConfirmed" value="0" id="conflitoConfirmed"/>
 <p id="demo"></p>
