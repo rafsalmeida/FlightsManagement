@@ -30,6 +30,8 @@ Route::patch('password', 'Auth\ChangePasswordController@updatePassword')->name('
 
 //Route::get('aeronaves', 'AeronaveController@index');
 
+Route::get('aeronaves/linha_temporal', 'AeronaveController@linhaTemporal')->name('aeronaves.linhaTemporal');
+
 Route::resource('aeronaves', 'AeronaveController')->parameters(['aeronaves' => 'aeronave']);
 //Route::get('aeronaves{aeronave}/edit', 'AeronaveController@edit($aeronave)');
 Route::patch('socios/reset_quotas', 'SocioController@resetQuotas')->name('socios.resetQuotas')->middleware('direcao');

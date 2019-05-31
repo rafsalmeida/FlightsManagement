@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Aeronave;
+use App\Movimento;
 use App\AeronaveValor;
 use App\AeronavePilotos;
 use App\Http\Requests\StoreAeronave;
 use App\User;
+use Carbon\Carbon;
+
 
 class AeronaveController extends Controller
 {
@@ -215,6 +218,64 @@ class AeronaveController extends Controller
         //dd(response()->json($aeronave->valores->makeHidden(['id', 'matricula'])));
         return response()
                 ->json($aeronave->valores->makeHidden(['id', 'matricula']));
+
+    }
+
+    public function linhaTemporal(Request $request){
+        $title = "Linhas Temporais";
+        $aeronaves = Aeronave::pluck('matricula','matricula');
+        $aeronaves[''] = "Escolha uma aeronave";
+        $movimentosAeronave = [];
+        $datas = [];
+
+        $query = Movimento::limit(15);
+
+        if(!$request->filled('matricula') && !$request->filled('data_inf') && !$request->filled('data_sup')){
+            return view('aeronaves.linha-temporal', compact('title', 'aeronaves','movimentosAeronave','datas'));
+        }
+
+        if ($request->filled('matricula') && $request['matricula'] != null) {
+            $matricula = $request->get('matricula');
+            $query->where('aeronave', 'like', "%$matricula%");
+        } else {
+            \Session::flash('unsuccess','Por favor, escolha uma aeronave.');
+            return view('aeronaves.linha-temporal', compact('title', 'aeronaves','movimentosAeronave','datas'));
+        }
+
+
+        if ($request->filled('data_inf') && $request['data_inf'] != null && $request->filled('data_sup') && $request['data_sup'] != null ) {
+
+            $start_time = \Carbon\Carbon::parse($request->data_inf);
+            $finish_time = \Carbon\Carbon::parse($request->data_sup);
+            $diferenca = $start_time->diffInDays($finish_time, false);
+
+            if($start_time->diffInDays($finish_time, false) > 10){
+                \Session::flash('unsuccess','A diferença entre datas deverá ser no máximo 10 dias');
+                return view('aeronaves.linha-temporal', compact('title', 'aeronaves','movimentosAeronave','datas'));
+            }
+
+            $query->where('data', '>=', $request->get('data_inf'));
+            $query->where('data', '<=', $request->get('data_sup'));
+
+        } else if ($request->filled('data_inf') > $request->filled('data_sup')){
+            \Session::flash('unsuccess','A data inicial tem de ser inferior à data final.');
+            return view('aeronaves.linha-temporal', compact('title', 'aeronaves','datas'));
+
+        } else {
+            \Session::flash('unsuccess','Por favor, escolha uma data inicial e uma data final (máximo 10 dias de diferença).');
+            return view('aeronaves.linha-temporal', compact('title', 'aeronaves','movimentosAeronave','datas'));
+        }
+
+        $dataMaisRecente = $request->data_sup;
+        $dataMaisAntiga = $request->data_inf;
+
+        $movimentosAeronave = $query->orderBy('data','DESC')->paginate(15);
+        $aux = $movimentosAeronave->groupBy('data')->toArray();
+        $movimentosAeronave  =$movimentosAeronave->pluck('data','id')->toArray();
+        
+        $datas = array_keys($aux);
+        //dd($movimentosAeronave, $datas);
+        return view('aeronaves.linha-temporal', compact('title', 'aeronaves', 'movimentosAeronave','dataMaisRecente','dataMaisAntiga','datas','diferenca'));
 
     }
 
