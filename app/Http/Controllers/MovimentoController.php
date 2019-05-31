@@ -339,6 +339,11 @@ class MovimentoController extends Controller
 
             if ($request->has('confirmar')) {
                 $request['confirmado'] = 1;
+                $aeronave = $movimento->getAeronave;
+                if($aeronave->conta_horas < $request->conta_horas_fim){
+                    $aeronave->conta_horas = $request->conta_horas_fim;
+                    $aeronave->save();
+                }
             }
             else{
                 $request['confirmado'] = 0;
