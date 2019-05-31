@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'direcao' => \App\Http\Middleware\IsDirecao::class,
         'ativo' =>  \App\Http\Middleware\IsAtivo::class,
         'passwd_changed' => \App\Http\Middleware\IsPasswdChanged::class,
+        'deleted' => \App\Http\Middleware\IsNotDeleted::class,
     ];
 
     /**
