@@ -69,4 +69,13 @@ class StoreMovimento extends FormRequest
         $tempo_voo += ($min_dez * $decima);
     }*/
     }
+
+    public function messages(){
+        return [
+            'piloto_id.exists' => 'O piloto selecionado nao pode voar a aeronave',
+            'instrutor_id.exists' => 'O user selecionado não é instrutor',
+            'instrutor_id.Rule::exists' => 'O instrutor selecionado nao pode voar a aeronave',
+            'piloto_instrutor.required' => 'Tem de ser um dos intervenientes no movimento para adicionar'
+        ];
+    }
 }
