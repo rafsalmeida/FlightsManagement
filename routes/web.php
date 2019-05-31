@@ -20,7 +20,7 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 Auth::routes(['verify' => true]);
 
-Route::group(['middleware' => ['verified' , 'passwd_changed']], function(){
+Route::group(['middleware' => ['verified' , 'passwd_changed', 'deleted']], function(){
 	Route::get('/home', 'HomeController@index');
 });
 
