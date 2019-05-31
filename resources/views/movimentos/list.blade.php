@@ -12,7 +12,7 @@
     </div>
 <div class="col-md-4" >
     <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fas fa-filter"></i>
             Filtros
         </button>
         <div class="dropdown-menu">
