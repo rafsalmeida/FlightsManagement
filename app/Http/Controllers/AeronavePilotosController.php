@@ -24,7 +24,7 @@ class AeronavePilotosController extends Controller
         $aeronave = Aeronave::findOrFail($id);
         $title = "Pilotos da Aeronave ".$aeronave->matricula;
         $pilotos = $aeronave->user()->paginate(15);
-
+        dd($pilotos)
        /** Pilotos Não Autorizados (e apenas pilotos) **/
         $pilotosNaoAutorizados= User::whereDoesntHave('aeronave', function ($query) use($id) {
                 $query->where('aeronaves_pilotos.matricula','=',$id);
