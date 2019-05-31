@@ -4,17 +4,16 @@
     <input
         type="date" class="form-control"
         name="data" id="inputData"
-        placeholder="Data" value="@if(isset($movimento )){{old('data', $movimento->data)}}@endif" />
+        placeholder="Data" value="@if(isset($movimento )){{old('data', $movimento->data)}}@else{{ old('data') }}@endif" />
     @if ($errors->has('data'))
         <em>{{ $errors->first('data') }}</em>
     @endif
-</div>
 <div class="form-group">
     <label for="inputHoraDescolagem">Hora Descolagem</label>
     <input
         type="time" class="form-control"
         name="hora_descolagem" id="inputHoraDescolagem"
-        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', date('H:i',strtotime($movimento->hora_descolagem))) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_descolagem', date('H:i',strtotime($movimento->hora_descolagem))) }}@else{{ old('hora_descolagem') }}@endif" />
     @if ($errors->has('hora_descolagem'))
         <em>{{ $errors->first('hora_descolagem') }}</em>
     @endif
@@ -24,7 +23,7 @@
     <input
         type="time" class="form-control"
         name="hora_aterragem" id="inputHoraAterragem"
-        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', date('H:i',strtotime($movimento->hora_aterragem))) }}@endif" />
+        placeholder="aaaa-mm-dd hh:mm:ss" value="@if(isset($movimento)){{ old('hora_aterragem', date('H:i',strtotime($movimento->hora_aterragem))) }}@else{{  old('hora_aterragem')  }}@endif" />
     @if ($errors->has('hora_aterragem'))
         <em>{{ $errors->first('hora_aterragem') }}</em>
     @endif
@@ -33,9 +32,9 @@
     <form id="getMatricula">
         <label >Matrícula Aeronave</label>
         @if(isset($movimento->aeronave))
-            {!! Form::select('aeronave', $aeronaves, $movimento->aeronave, ['class' => 'form-control', 'id' => 'matricula']) !!}
+            {!! Form::select('aeronave', $aeronaves, $movimento->aeronave, ['class' => 'form-control conta-horas', 'id' => 'matricula']) !!}
         @else
-            {!! Form::select('aeronave', $aeronaves, null, ['class' => 'form-control', 'id' => 'matricula'])!!}
+            {!! Form::select('aeronave', $aeronaves, old('aeronave'), ['class' => 'form-control conta-horas', 'id' => 'matricula'])!!}
         @endif
 
 </div>
@@ -44,7 +43,7 @@
     <input
         type="number" class="form-control"
         name="num_diario" id="inputNDiario"
-        placeholder="NDiario" value="@if(isset($movimento)){{ old('num_diario', $movimento->num_diario) }}@endif" />
+        placeholder="NDiario" value="@if(isset($movimento)){{ old('num_diario', $movimento->num_diario) }}@else{{ old('num_diario') }}@endif" />
     @if ($errors->has('num_diario'))
         <em>{{ $errors->first('num_diario') }}</em>
     @endif
@@ -54,7 +53,7 @@
     <input
         type="number" class="form-control"
         name="num_servico" id="inputNServico"
-        placeholder="NServico" value="@if(isset($movimento)){{ old('num_servico', $movimento->num_servico) }}@endif" />
+        placeholder="NServico" value="@if(isset($movimento)){{ old('num_servico', $movimento->num_servico) }}@else{{ old('num_servico') }}@endif" />
     @if ($errors->has('num_servico'))
         <em>{{ $errors->first('num_servico') }}</em>
     @endif
@@ -76,7 +75,7 @@
         @if(isset($movimento))
             {{ Form::select('natureza', [null => 'Natureza (Selecione)'] + array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), $movimento->natureza, ['id' => 'natureza', 'class' => 'form-control']) }}
         @else
-            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), null, ['id' => 'natureza', 'class' => 'form-control'])}}
+            {{ Form::select('natureza', [null => 'Natureza (Selecione)'] +  array('T' => 'Treino', 'I' => 'Instrução', 'E' => 'Especial'), old('natureza'), ['id' => 'natureza', 'class' => 'form-control'])}}
         @endif
     </div>
 </div>
@@ -86,7 +85,7 @@
         @if(isset($movimento->aerodromo_partida))
             {!! Form::select('aerodromo_partida', $aerodromos, $movimento->aerodromo_partida, ['class' => 'form-control']) !!}
         @else
-            {!! Form::select('aerodromo_partida', $aerodromos, null, ['class' => 'form-control'])!!}
+            {!! Form::select('aerodromo_partida', $aerodromos, old('aerodromo_partida'), ['class' => 'form-control'])!!}
         @endif
 </div>
 
@@ -95,7 +94,7 @@
         @if(isset($movimento->aerodromo_chegada))
             {!! Form::select('aerodromo_chegada', $aerodromos, $movimento->aerodromo_chegada, ['class' => 'form-control']) !!}
         @else
-            {!! Form::select('aerodromo_chegada', $aerodromos, null, ['class' => 'form-control'])!!}
+            {!! Form::select('aerodromo_chegada', $aerodromos, old('aerodromo_chegada'), ['class' => 'form-control'])!!}
         @endif
 </div>
 
@@ -104,7 +103,7 @@
     <input
         type="number" class="form-control"
         name="num_aterragens" id="inputNAterragens"
-        placeholder="NAterragens" value="@if(isset($movimento)){{ old('num_aterragens', $movimento->num_aterragens) }}@endif" />
+        placeholder="NAterragens" value="@if(isset($movimento)){{ old('num_aterragens', $movimento->num_aterragens) }}@else{{ old('num_aterragens') }}@endif" />
     @if ($errors->has('num_aterragens'))
         <em>{{ $errors->first('num_aterragens') }}</em>
     @endif
@@ -114,7 +113,7 @@
     <input
         type="number" class="form-control"
         name="num_descolagens" id="inputNDescolagens"
-        placeholder="NDescolagens" value="@if(isset($movimento)){{ old('num_descolagens', $movimento->num_descolagens) }}@endif" />
+        placeholder="NDescolagens" value="@if(isset($movimento)){{ old('num_descolagens', $movimento->num_descolagens) }}@else{{ old('num_descolagens') }}@endif" />
     @if ($errors->has('num_descolagens'))
         <em>{{ $errors->first('num_descolagens') }}</em>
     @endif
@@ -124,7 +123,7 @@
     <input
         type="number" class="form-control"
         name="num_pessoas" id="inputNPessoas"
-        placeholder="NPessoas" value="@if(isset($movimento)){{ old('num_pessoas', $movimento->num_pessoas) }}@endif" />
+        placeholder="NPessoas" value="@if(isset($movimento)){{ old('num_pessoas', $movimento->num_pessoas) }}@else{{ old('num_pessoas') }}@endif" />
     @if ($errors->has('num_pessoas'))
         <em>{{ $errors->first('num_pessoas') }}</em>
     @endif
@@ -134,7 +133,7 @@
     <input
         type="number" class="form-control conta-horas"
         name="conta_horas_inicio" id="conta_horas_inicio"
-        placeholder="CHInicial" value="@if(isset($movimento)){{ old('conta_horas_inicio', $movimento->conta_horas_inicio) }}@endif" />
+        placeholder="CHInicial" value="@if(isset($movimento)){{ old('conta_horas_inicio', $movimento->conta_horas_inicio) }}@else{{ old('conta_horas_inicio') }}@endif" />
     @if ($errors->has('conta_horas_inicio'))
         <em>{{ $errors->first('conta_horas_inicio') }}</em>
     @endif
@@ -144,7 +143,7 @@
     <input
         type="number" class="form-control conta-horas"
         name="conta_horas_fim" id="conta_horas_fim"
-        placeholder="CHFinal" value="@if(isset($movimento)){{ old('conta_horas_fim', $movimento->conta_horas_fim) }}@endif" />
+        placeholder="CHFinal" value="@if(isset($movimento)){{ old('conta_horas_fim', $movimento->conta_horas_fim) }}@else{{ old('conta_horas_fim') }}@endif" />
     @if ($errors->has('conta_horas_fim'))
         <em>{{ $errors->first('conta_horas_fim') }}</em>
     @endif
@@ -152,12 +151,12 @@
 <div class="form-group">
     <label>Tempo de voo:</label>
     <p id="show_tempo"></p>
-    <input type="hidden" name="tempo_voo" id="tempo_voo" value="@if(isset($movimento)){{ old('tempo_voo', $movimento->tempo_voo)}}@endif"/>
+    <input type="hidden" name="tempo_voo" id="tempo_voo" value="@if(isset($movimento)){{ old('tempo_voo', $movimento->tempo_voo)}}@else{{ old('tempo_voo') }}@endif"/>
 </div>
 <div class="form-group">
     <label>Preço de voo:</label>
     <p id="show_preco"></p>
-    <input type="hidden" name="preco_voo" id="preco_voo" value="@if(isset($movimento)){{ old('preco_voo', $movimento->preco_voo)}}@endif" />
+    <input type="hidden" name="preco_voo" id="preco_voo" value="@if(isset($movimento)){{ old('preco_voo', $movimento->preco_voo)}}@else{{ old('preco_voo') }}@endif" />
 </div>
 <div class="form-group">
     <label for="inputTPagamento">Modo de Pagamento</label>
@@ -204,7 +203,7 @@
     <input
         type="number" class="form-control"
         name="num_recibo" id="inputNRecibo"
-        placeholder="NRecibo" value="@if(isset($movimento)){{ old('num_recibo', $movimento->num_recibo) }}@endif" />
+        placeholder="NRecibo" value="@if(isset($movimento)){{ old('num_recibo', $movimento->num_recibo) }}@else{{ old('num_recibo') }}@endif" />
     @if ($errors->has('num_recibo'))
         <em>{{ $errors->first('num_recibo') }}</em>
     @endif
@@ -213,7 +212,7 @@
     <label for="inputObs">Observações</label>
     <textarea class="form-control"
         name="observacoes">
-         @if(isset($movimento)){{ old('observacoes', $movimento->observacoes) }}@endif </textarea>
+         @if(isset($movimento)){{ old('observacoes', $movimento->observacoes) }}@else{{ old('observacoes') }}@endif </textarea>
     @if ($errors->has('observacoes'))
         <em>{{ $errors->first('observacoes') }}</em>
     @endif
@@ -248,7 +247,7 @@
     <input
         type="number" class="form-control"
         name="instrutor_id" id="inputInstrutor"
-        placeholder="Instrutor" value="@if(isset($movimento)){{ old('instrutor_id', $movimento->instrutor_id) }}@endif" />
+        placeholder="Instrutor" value="@if(isset($movimento)){{ old('instrutor_id', $movimento->instrutor_id) }}@else{{ old('instrutor_id') }}@endif" />
     @if ($errors->has('instrutor_id'))
         <em>{{ $errors->first('instrutor_id') }}</em>
     @endif
@@ -259,14 +258,48 @@
         <label for="justificacao_conflito">Justificação</label>
         <textarea class="form-control"
         name="justificacao_conflito">
-            @if(isset($movimento)){{ old('justficacao_conflito', $movimento->justificacao_conflito) }}@endif </textarea>
+            @if(isset($movimento)){{ old('justficacao_conflito', $movimento->justificacao_conflito) }}@else{{ old('justficacao_conflito') }}@endif </textarea>
     </div>
 </div>
-<input type="hidden" name="hasConflito" value="0{{ old('hasConflito')}}" id="conflito"/>
+
+<input type="hidden" name="hasConflito" value="@if(isset($movimento) && $movimento->tipo_conflito !== null){{ old('hasConflito', $movimento->tipo_conflito) }}@elseif(old('hasConflito')!== null){{ old('hasConflito') }}@else {{'0'}}@endif" id="conflito"/>
 <input type="hidden" name="conflitoConfirmed" value="0" id="conflitoConfirmed"/>
 <p id="demo"></p>
 <script type="text/javascript">
-    
+    function getPrecoTempo() {
+        if (typeof($("#matricula").val()) != "undefined" && typeof($("#conta_horas_inicio").val()) != "undefined" && typeof($("#conta_horas_fim").val()) != "undefined") {
+            $.ajax({
+                type: "GET",
+                url: window.location.origin + "/aeronaves/" + document.getElementById("matricula").value + "/precos_tempos",
+                dataType: "json",
+                success: function (response) {
+                    var conta_horas_inicio = document.getElementById("conta_horas_inicio").value;
+                    var conta_horas_fim = document.getElementById("conta_horas_fim").value;
+
+                    var diferenca = conta_horas_fim - conta_horas_inicio;
+                    var resto = diferenca % 10;
+                    var decima = Math.floor(diferenca / 10);
+
+                    var conta_horas_10_minutos = response[9].minutos;
+                    var tempo_voo = (conta_horas_10_minutos * decima);
+
+                    var conta_horas_10_preco = response[9].preco;
+                    var preco_voo = (conta_horas_10_preco * decima);
+                    if (resto > 0) {
+                        tempo_voo += parseInt(response[resto - 1].minutos);
+                        preco_voo += parseInt(response[resto - 1].preco);
+                    }
+                    $("#show_tempo").text(tempo_voo);
+                    $("#tempo_voo").val(tempo_voo);
+                    $("#show_preco").text(preco_voo);
+                    $("#preco_voo").val(preco_voo);
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+    }
     $(function() {
       $("#natureza").change(function() {
         var val = $(this).val();
@@ -290,47 +323,16 @@
         }
         }
 
+
+        getPrecoTempo();
+
+
     });
 
-
-
-
-
-    $(function() {
-      $("#matricula").change(function() {
-        $.ajax({
-          type    :"GET",
-          url     :"http://ainet.prj31.test/aeronaves/"+document.getElementById("matricula").value+"/precos_tempos",
-          dataType:"json",
-          success :function(response) {
-            $(".conta-horas").on("change", function(){
-
-                var conta_horas_inicio = document.getElementById("conta_horas_inicio").value;
-                var conta_horas_fim = document.getElementById("conta_horas_fim").value;    
-                var diferenca = conta_horas_fim - conta_horas_inicio;
-                var resto = diferenca % 10;
-                var decima = Math.floor(diferenca/10);
-                var tempo_voo = response[resto-1].minutos;
-                var conta_horas_10 = response[9].minutos;
-                tempo_voo +=(conta_horas_10*decima);
-                document.getElementById("show_tempo").innerHTML = tempo_voo;
-                document.getElementById("tempo_voo").value = tempo_voo;
-
-                var preco_voo = response[resto-1].preco;
-                var conta_horas_10 = response[9].preco;
-                preco_voo +=(conta_horas_10*decima);
-                document.getElementById("show_preco").innerHTML = preco_voo;
-                document.getElementById("preco_voo").value = preco_voo;
-     
-            });
-            
-          },
-          error: function(e) {
-            console.log(e.responseText);
-          }
-        });
+    $(".conta-horas").change(function(){
+        getPrecoTempo();
     }).trigger('change');
-});
+
 
 
 </script>
