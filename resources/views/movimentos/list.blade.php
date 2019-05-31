@@ -1,18 +1,23 @@
 @extends('master')
 @section('title', "Lista de Movimentos")
 @section('content')
-
-<div class="row">
+<div class="row top-buttons">
 @can('is-direcao-piloto', Auth::user())
-    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a></div>
+    <div class="col-md-4">
+        <a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a>
+    </div>
 @endcan
-    <div class="col" style="padding-top: 55px; padding-left: 0px; position: relative; float: 
-        left"><a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a></div>
-
-    <div class="form-group" style="padding-top: 30px; padding-right: 10px; float: right;">            
+    <div class="col-md-4">
+        <a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a>
+    </div>
+<div class="col-md-4" >
+    <div class="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            Filtros
+        </button>
+        <div class="dropdown-menu">
         <form  method="GET" action="{{action('MovimentoController@index')}}" id="pesquisarMovimento">
-            <div class="form-row ">
-                <div class="form-group">
+            <div class="form-group ">
                     <input type="text" class="form-control" placeholder="ID do Movimento" name="id">
                 </div>
                 <div class="form-group">
@@ -24,8 +29,6 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Piloto" name="piloto">
                 </div>
-            </div>
-            <div class="form-row">
                  <div class="form-group">
                     <input type="text" class="form-control" placeholder="Instrutor" name="instrutor">
                 </div>
@@ -57,9 +60,12 @@
                         <i class="fas fa-search"></i> Pesquisar
                     </button>
                 </div>
-            </div>
         </form>
+        </div>
     </div>
+</div>
+
+    
 </div>
 <div class="row">
 @if (count($movimentos))
