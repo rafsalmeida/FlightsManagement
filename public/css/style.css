@@ -1,3 +1,23 @@
+
+.top-buttons{
+	padding: 3vh 0;
+}
+
+.top-buttons .col-md-4{
+	padding: 0!important;
+}
+
+.top-buttons .btn{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+}
+
+.top-buttons form{
+	padding: 10px;
+}
+
 .vertical-menu > li {
 	border-left: 3px solid transparent;
 	width: 100%;
