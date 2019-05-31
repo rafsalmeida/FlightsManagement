@@ -196,7 +196,6 @@ class MovimentoController extends Controller
         if ($request->has("cancel")) {
             return redirect()->action("MovimentoController@index");
         }
-
         
         $movimento = new Movimento();
        
