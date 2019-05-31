@@ -3,6 +3,7 @@
 @section('content')
 @can('is-direcao', Auth::user())
 <div style="padding-top: 10px; padding-bottom: 10px; position: relative; float: left"><a class="btn btn-primary" href="{{ route('aeronaves.create') }}"><i class="fas fa-plus"></i> Adicionar Aeronave</a></div>
+<div style="padding-top: 10px; padding-bottom: 10px; padding-left: 10px; position: relative; float: left"><a class="btn btn-success" href="{{ route('aeronaves.linhaTemporal') }}"><i class="fas fa-stream"></i> Linhas Temporais</a></div>
 @endcan
 <div class="form-group" style="padding-top: 10px; padding-right: 10px; float: right;">            
         <form  method="GET" action="{{action('AeronaveController@index')}}" id="pesquisarAeronave">
@@ -67,21 +68,22 @@
                   <button type="button" class="btn btn-outline-primary btn-block dropdown-toggle" data-toggle="dropdown">
                     Ações
                   <span class="caret"></span></button>
-                  <div class="dropdown-menu ml-auto">
+                  <ul class="dropdown-menu ml-auto">
                     <li>
-                        <a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{action('AeronaveController@edit', $aeronave->matricula)}}"><i class="fas fa-fighter-jet"></i> Editar</a></li>
+                        <a class="btn btn-sm btn-xs btn-primary" style="width: 100%" href="{{action('AeronaveController@edit', $aeronave->matricula)}}"><i class="fas fa-fighter-jet"></i> Editar</a>
+                    </li>
                     <li>
                         <form action="{{action('AeronaveController@destroy', $aeronave->matricula)}}" method="POST" role="form" class="inline">
                         @csrf
                         @method('delete')
                         <input type="hidden" name="aeronave_matricula" value="{{ $aeronave->matricula }}">
                         {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger', 'style' => 'width: 100%', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
-                    </form>
+                        </form>
                     </li>
                     <li>
                         <a href="{{route('aeronaves.json', $aeronave->matricula)}}" class="btn btn-sm btn-xs btn-secondary" style="width: 100%"><i class="fas fa-file-invoice"></i> Valores</a>
                     </li>
-                  </div>
+                  </ul>
                 </div>
 
             </td>
