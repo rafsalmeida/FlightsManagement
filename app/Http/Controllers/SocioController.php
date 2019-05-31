@@ -33,6 +33,8 @@ class SocioController extends Controller
         $this->middleware('ativo');
 
         $this->middleware('passwd_changed');
+        
+        $this->middleware('deleted');
 
 
     }
@@ -177,6 +179,8 @@ class SocioController extends Controller
         $socio = User::findOrFail($id);
 
         if(Auth::user()->can('view',$socio)){
+
+
             $title = "Editar Sócio";
             $tipos_licenca = TipoLicenca::pluck('nome','code');
             $tipos_licenca[''] = 'Escolha uma licença';
