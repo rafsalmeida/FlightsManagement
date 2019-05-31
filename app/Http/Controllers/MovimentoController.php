@@ -200,6 +200,9 @@ class MovimentoController extends Controller
             return redirect()->action("MovimentoController@index");
         }
 
+        if ($request->piloto_id != Auth::user()->id && $request->piloto_id != Auth::user()->id) {
+            return redirect()->action("MovimentoController@create")->with('success','Nao pode adicionar movimentos onde nao é interveniente');
+        }
         
         $movimento = new Movimento();
        
@@ -353,6 +356,8 @@ class MovimentoController extends Controller
                 'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
                 'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
             ]);
+
+            //dd($request);
 
 
             if($request->natureza == 'I'){
