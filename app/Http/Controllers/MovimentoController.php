@@ -235,8 +235,8 @@ class MovimentoController extends Controller
             'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
             'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
             'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
-            'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
-            'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
+            'num_certificado_instrutor' => $movimento->instrutor->num_certificado,
+            'validade_certificado_instrutor' => $movimento->instrutor->validade_certificado,
             'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
 
             ]);
@@ -365,8 +365,8 @@ class MovimentoController extends Controller
                 'num_licenca_instrutor' => $movimento->instrutor->num_licenca,
                 'validade_licenca_instrutor' => $movimento->instrutor->validade_licenca,
                 'tipo_licenca_instrutor' => $movimento->instrutor->tipo_licenca,
-                'num_licenca_instrutor' => $movimento->instrutor->num_certificado,
-                'validade_licenca_instrutor' => $movimento->instrutor->validade_certificado,
+                'num_certificado_instrutor' => $movimento->instrutor->num_certificado,
+                'validade_certificado_instrutor' => $movimento->instrutor->validade_certificado,
                 'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
 
                 ]);
