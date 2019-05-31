@@ -127,6 +127,65 @@
 		@endif
 		</div>
 	</div>
+	<div class="row">
+		@if(count($licencasValidade))
+		<div class="col">
+			<h5 class="text-center">Licenças a expirar/expiradas</h5>
+			<table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+			    <thead class="thead-light">
+			        <tr>
+			            <th>NºSócio</th>
+			            <th>Nome</th>
+			            <th>NºLicença</th>
+			            <th>Validade</th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			    @foreach($licencasValidade as $licencaVal)
+			    	<tr>
+			    		<td>{{$licencaVal->num_socio}}</td>
+			    		<td>{{$licencaVal->nome_informal}}</td>
+			    		<td>{{$licencaVal->num_licenca}}</td>
+			    		<td>{{$licencaVal->validade_licenca}}</td>
+			    		<td>
+			    			<a class="btn btn-sm btn-xs btn-outline-dark" style="width: 100%" href="{{ action('SocioController@edit', $licencaVal->id) }}"><i class="fas fa-tools"></i> Resolver</a>
+			    		</td>
+			    	</tr>
+				@endforeach
+			    </tbody>
+			</table>
+		</div>
+		@endif
+		@if(count($certificadosValidade))
+		<div class="col">
+			<h5 class="text-center">Certificados a expirar/expirados</h5>
+			<table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+			    <thead class="thead-light">
+			        <tr>
+			            <th>NºSócio</th>
+			            <th>Nome</th>
+			            <th>NºLicença</th>
+			            <th>Validade</th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			    @foreach($certificadosValidade as $certificadoVal)
+			    	<tr>
+			    		<td>{{$certificadoVal->num_socio}}</td>
+			    		<td>{{$certificadoVal->nome_informal}}</td>
+			    		<td>{{$certificadoVal->num_certificado}}</td>
+			    		<td>{{$certificadoVal->validade_certificado}}</td>
+			    		<td>
+			    			<a class="btn btn-sm btn-xs btn-outline-dark" style="width: 100%" href="{{ action('SocioController@edit', $certificadoVal->id) }}"><i class="fas fa-tools"></i> Resolver</a>
+			    		</td>
+			    	</tr>
+				@endforeach
+			    </tbody>
+			</table>
+		@endif
+	</div>
 </div>
 
 
