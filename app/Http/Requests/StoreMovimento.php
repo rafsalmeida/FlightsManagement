@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class StoreMovimento extends FormRequest
 {
@@ -25,7 +26,7 @@ class StoreMovimento extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
         'data' => 'required|date_format:"Y-m-d"|before_or_equal:today',
         'hora_descolagem' => 'required|date_format:H:i',
         'hora_aterragem' => 'required|after:hora_descolagem|date_format:H:i',
@@ -48,6 +49,12 @@ class StoreMovimento extends FormRequest
         'tempo_voo' => 'required|integer|min:0',
         'preco_voo' => 'required|numeric|min:0'
         ];
+
+        if ($this->get('piloto_id')!=Auth::user()->id && $this->get('instrutor_id')!=Auth::user()->id && Auth::user()->direcao == '0') {
+            $rules['piloto_instrutor'] = 'required';  
+        }
+
+        return $rules;
 
         // fazer a verificação ainda 
 

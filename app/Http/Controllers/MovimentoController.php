@@ -200,9 +200,9 @@ class MovimentoController extends Controller
             return redirect()->action("MovimentoController@index");
         }
 
-        if ($request->piloto_id != Auth::user()->id && $request->piloto_id != Auth::user()->id) {
+        /*if ($request->piloto_id != Auth::user()->id && $request->piloto_id != Auth::user()->id) {
             return redirect()->action("MovimentoController@create")->with('success','Nao pode adicionar movimentos onde nao é interveniente');
-        }
+        }*/
         
         $movimento = new Movimento();
        
@@ -214,6 +214,10 @@ class MovimentoController extends Controller
 
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
         $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+        
+        //dd($hora_aterragem);
+
+
         $request['confirmado'] = 0;
 
 
@@ -334,7 +338,7 @@ class MovimentoController extends Controller
             }
 
             if ($request->has('confirmar')) {
-                $request->request->add(['confirmado' => 1]);
+                $request['confirmado'] = 1;
             }
             else{
                 $request['confirmado'] = 0;
@@ -377,11 +381,12 @@ class MovimentoController extends Controller
             //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO ANTERIOR ----
             $contaHFinalMovAnt = $movimento->getAeronave->movimentos->where('conta_horas_fim','<=', $movimento->conta_horas_inicio)->where('id','!=',$movimento->id)->max('conta_horas_fim');
 
+
             //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO SEGUINTE ----
             $contaHInicialMovSeg = $movimento->getAeronave->movimentos->where('conta_horas_inicio','>=', $movimento->conta_horas_fim)->where('id','!=',$movimento->id)->min('conta_horas_inicio');
             
 
-            if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $request->conta_horas_fim != $contaHInicialMovSeg ) ){
+            if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $contaHInicialMovSeg != null &&$request->conta_horas_fim != $contaHInicialMovSeg ) ){
                 $request->request->add(['hasConflito' => "1"]);
                 return redirect()->back()->withInput($request->all());
 
