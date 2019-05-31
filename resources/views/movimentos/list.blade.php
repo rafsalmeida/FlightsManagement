@@ -78,7 +78,9 @@
                 <thead class="thead-light">
                 <tr>
                     @can('is-direcao', Auth::user())
-                    <th><input type="submit" name="confirmar_btn" class="btn btn-primary" id="btn-confirm" value="Confirmar Voos"></th>
+                    <th>
+                        <input type="submit" name="confirmar_btn" class="btn btn-primary" id="btn-confirm" value="Confirmar Voos">
+                    </th>
                     @endcan
                     <th>ID</th>
                     <th>Aeronave</th>
@@ -100,7 +102,9 @@
                     <th>Tipo de Instrução</th>
                     <th>Instrutor</th>
                     <th>Confirmado</th>
+                    @can('is-direcao-piloto', Auth::user())
                     <th></th>
+                    @endcan
                 </tr>
             </thead>
             <tbody>
@@ -153,12 +157,13 @@
                             @else
                                 Não
                             @endif</td>
+                        @can('is-direcao-piloto', Auth::user())
                         <td>
                             <div style="text-align: center; margin: auto">
                             <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
                             </div>
-                            
                        </td>
+                       @endcan
                     </tr>
                 @endforeach
             </tbody>
