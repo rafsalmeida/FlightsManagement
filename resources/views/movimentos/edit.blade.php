@@ -14,7 +14,9 @@
     	@yield('form')
     </div>
     <div class="form-group" style="padding-left: 15px;">
+        @can('is-direcao', Auth::user())
         <button type="submit" class="btn btn-success" name="confirmar">Confirmar Voo</button>
+        @endcan
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
         <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
     </div>
