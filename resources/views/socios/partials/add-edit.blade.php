@@ -1,6 +1,5 @@
 @section('form')
 
-
 <div class="form-group">
     <label for="inputNumSocio">Nº de sócio</label>
     <input
