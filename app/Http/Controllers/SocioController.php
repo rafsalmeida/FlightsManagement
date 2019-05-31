@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Carbon\Carbon;
 use App\TipoLicenca;
 use App\ClasseCertificado;
 use App\Policies\UserPolicy;
@@ -180,12 +181,18 @@ class SocioController extends Controller
 
         if(Auth::user()->can('view',$socio)){
 
-
             $title = "Editar Sócio";
             $tipos_licenca = TipoLicenca::pluck('nome','code');
             $tipos_licenca[''] = 'Escolha uma licença';
             $classes_certificado = ClasseCertificado::pluck('nome','code');
             $classes_certificado[''] = 'Escolha um certificado';
+
+            if($socio->tipo_socio == 'P' &&  ($socio->validade_licenca <= Carbon::now()->addDays(60) || $socio->validade_certificado <= Carbon::now()->addDays(60))){
+
+                \Session::flash('unsuccess','A validade do/a seu/sua certificado e/ou licença está a expirar ou expirou!');
+            }
+
+
             return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
         } else {
 

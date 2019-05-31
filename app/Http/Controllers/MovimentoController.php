@@ -474,7 +474,7 @@ private function agrupar($movimentos,$tipo){
         $titlePiloto = null;
 
 
-        if(!$request->filled("matrcula") && !$request->filled("id")){
+        if(!$request->filled("matricula") && !$request->filled("id")){
             return view("movimentos.statistics", compact("title", "aeronaves", "pilotos", "titleAeronave", "titlePiloto"));
         }
         /************* HORAS POR ANO *************************/

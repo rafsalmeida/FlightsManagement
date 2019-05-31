@@ -1,4 +1,7 @@
 @section('form')
+@if(session('unsuccess'))
+    @include('partials.unsuccess')
+@endif
 <div class="form-group">
     <label for="inputData">Data</label>
     <input
