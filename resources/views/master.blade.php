@@ -54,9 +54,11 @@
                           <li class="nav-item" style="padding-right: 0">
                             <a class="btn" href="{{action('MovimentoController@index')}}" ><i class="fas fa-plane"></i> Gerir Movimentos</a>
                           </li>
+                          @can('is-direcao', Auth::user())
                           <li class="nav-item" style="padding-right: 0">
                             <a class="btn" href="{{action('MovimentoController@pendentes')}}" ><i class="fas fa-plane"></i> Assuntos Pendentes</a>
-                          </li> 
+                          </li>
+                          @endcan 
                         </ul>
                 </div>
                 <div class="col-md-10">
