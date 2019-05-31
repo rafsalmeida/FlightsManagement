@@ -50,7 +50,7 @@ class StoreMovimento extends FormRequest
         'preco_voo' => 'required|numeric|min:0'
         ];
 
-        if ($this->get('piloto_id')!=Auth::user()->id && $this->get('instrutor_id')!=Auth::user()->id) {
+        if ($this->get('piloto_id')!=Auth::user()->id && $this->get('instrutor_id')!=Auth::user()->id && Auth::user()->direcao == '0') {
             $rules['piloto_instrutor'] = 'required';  
         }
 
