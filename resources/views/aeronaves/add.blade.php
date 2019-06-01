@@ -49,7 +49,7 @@
        @endfor
     </tbody>
     </table>
-    <div class="form-group" style="padding-left: 15px;">
+    <div class="form-group">
         <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
         <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
     </div>
