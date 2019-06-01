@@ -4,11 +4,11 @@
 <div class="row top-buttons">
 @can('is-direcao-piloto', Auth::user())
     <div class="col-md-4">
-        <a class="btn btn-primary" href="{{ route('movimentos.create') }}">Adicionar Movimento</a>
+        <a class="btn btn-primary" href="{{ route('movimentos.create') }}"><i class="fas fa-plus"></i> Adicionar Movimento</a>
     </div>
 @endcan
     <div class="col-md-4">
-        <a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}">Estatísticas</a>
+        <a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}"><i class="fas fa-chart-line"></i> Estatísticas</a>
     </div>
 <div class="col-md-4" >
     <div class="dropdown">
