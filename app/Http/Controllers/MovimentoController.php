@@ -201,9 +201,6 @@ class MovimentoController extends Controller
     {
 
         $this->authorize('createMovimento', Auth::user());
-        if ($request->has("cancel")) {
-            return redirect()->action("MovimentoController@index");
-        }
 
         /*if ($request->piloto_id != Auth::user()->id && $request->piloto_id != Auth::user()->id) {
             return redirect()->action("MovimentoController@create")->with('success','Nao pode adicionar movimentos onde nao é interveniente');
@@ -336,11 +333,6 @@ class MovimentoController extends Controller
 
         if(Auth::user()->can('updateMovimento', $movimento->piloto) || Auth::user()->can('updateMovimento', $movimento->instrutor)){
 
-
-            //validar e dar store na bd        
-            if ($request->has('cancel')) {
-                return redirect()->action('MovimentoController@index');
-            }
 
             if ($request->has('confirmar')) {
                 $request['confirmado'] = 1;
