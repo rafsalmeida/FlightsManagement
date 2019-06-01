@@ -51,7 +51,7 @@
     </table>
     <div class="form-group" style="padding-left: 15px;">
         <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
-        <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
+        <a class="btn btn-default" href="{{action('AeronaveController@index')}}" name="cancel">Cancelar</a>
     </div>
 </form>
 @endsection
