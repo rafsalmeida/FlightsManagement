@@ -115,9 +115,6 @@ class SocioController extends Controller
      */
     public function store(StoreSocio $request)
     {
-        if ($request->has("cancel")) {
-            return redirect()->action("SocioController@index");
-        }
 
         //$socio = $request->validated();
         
@@ -218,11 +215,6 @@ class SocioController extends Controller
     public function update(StoreSocio $request,  $id)
     {
         $socio = User::findOrFail($id);
-
-
-        if ($request->has("cancel")) {
-            return redirect()->action("SocioController@index");
-        }
 
 
         $request->validated();
