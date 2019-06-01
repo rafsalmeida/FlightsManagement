@@ -47,28 +47,28 @@ class SocioController extends Controller
 
         $title = "Lista de Sócios";
 
-            $query = User::limit(10);
-            if ($request->filled('num_socio') && $request['num_socio'] != null) {
-                $query->where('num_socio', $request->get('num_socio'));
-            }
+        $query = User::limit(10);
+        if ($request->filled('num_socio') && $request['num_socio'] != null) {
+            $query->where('num_socio', $request->get('num_socio'));
+        }
 
-            if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
-                $nome = $request->get('nome_informal');
-                $query->where('nome_informal', 'like', "%$nome%");
-            }
+        if ($request->filled('nome_informal') && $request['nome_informal'] != null) {
+            $nome = $request->get('nome_informal');
+            $query->where('nome_informal', 'like', "%$nome%");
+        }
 
-            if ($request->filled('email') && $request['email'] != null) {
-                $email = $request->get('email');
-                $query->where('email', 'like', "%$email%");
-            }
+        if ($request->filled('email') && $request['email'] != null) {
+            $email = $request->get('email');
+            $query->where('email', 'like', "%$email%");
+        }
 
-            if ($request->filled('tipo') && $request['tipo'] != null) {
-                $query->where('tipo_socio', $request->get('tipo'));
-            }
+        if ($request->filled('tipo') && $request['tipo'] != null) {
+            $query->where('tipo_socio', $request->get('tipo'));
+        }
 
-            if ($request->filled('direcao') && $request['direcao'] != null) {
-                $query->where('direcao', $request->get('direcao'));
-            }
+        if ($request->filled('direcao') && $request['direcao'] != null) {
+            $query->where('direcao', $request->get('direcao'));
+        }
 
         if(Auth::user()->can('viewSociosDesativados', Auth::user())){
 
@@ -88,6 +88,25 @@ class SocioController extends Controller
             $socios = $query->where('ativo',1)->paginate(15);
                         
         }
+
+        if($request->filled('ordenar') && $request['ordenar'] != null){
+            if ($request->get('ordenar') == 'IDA') {
+                $query->orderBy('num_socio','ASC');
+            }
+            elseif ($request->get('ordenar') == 'IDD') {
+                $query->orderBy('num_socio','DESC');            
+            }
+
+            elseif ($request->get('ordenar') == 'NA') {
+                $query->orderBy('nome_informal','ASC');
+            }
+            elseif ($request->get('ordenar') == 'ND') {
+                $query->orderBy('nome_informal','DESC');
+            }         
+        }
+
+        $socios = $query->paginate(15);
+
 
         return view("socios.list", compact("socios","title"));
     }
@@ -119,7 +138,7 @@ class SocioController extends Controller
             return redirect()->action("SocioController@index");
         }
 
-        //$socio = $request->validated();
+        
         
         $socio = new User();
 
@@ -149,7 +168,7 @@ class SocioController extends Controller
         $socio->password = Hash::make($request->data_nascimento);
         $socio->save();
         $socio->sendEmailVerificationNotification();
-        //Socio::create($socio);
+
         
 
         return redirect()
@@ -201,9 +220,7 @@ class SocioController extends Controller
         } else {
 
             throw new AccessDeniedHttpException('Unauthorized.');
-           /* return redirect()
-                    ->action("SocioController@index")
-                    ->with("success", "Não tem permissões para efetuar essa ação.");*/
+           
         }
 
     }
@@ -248,8 +265,7 @@ class SocioController extends Controller
                 $name = time().'.'.$image->getClientOriginalExtension();
                 $socio->foto_url = $name;
                 $path = $request->file('file_foto')->storeAs('public/fotos', $name);
-                // OR
-                // Storage::putFileAs('public/img', $image, $name);
+
             }
 
             if(! is_null($request['file_licenca'])) {
