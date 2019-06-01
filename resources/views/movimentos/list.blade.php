@@ -8,7 +8,7 @@
     </div>
     @endcan
     <div class="col-md-4">
-        <a class="btn btn-secondary" href="{{ route('movimentos.estatisticas') }}"><i class="fas fa-chart-line"></i> Estatísticas</a>
+        <a class="btn btn-success" href="{{ route('movimentos.estatisticas') }}"><i class="fas fa-chart-line"></i> Estatísticas</a>
     </div>
     <div class="col-md-4" >
         <div class="dropdown">
