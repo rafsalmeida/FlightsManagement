@@ -43,6 +43,11 @@ class ChangePasswordController extends Controller
         ]);
         $user=User::findOrFail(Auth::user()->id);
         $user->password = Hash::make($request->input('password'));
+        if ($user->hasVerifiedEmail()) {
+            if($user->ativo == 0){
+                $user->ativo = 1;
+            }
+        }
         $user->save();
         return redirect()
             ->action('HomeController@index')
