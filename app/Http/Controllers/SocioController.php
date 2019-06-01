@@ -188,9 +188,13 @@ class SocioController extends Controller
             $classes_certificado[''] = 'Escolha um certificado';
 
             if($socio->tipo_socio == 'P' &&  ($socio->validade_licenca <= Carbon::now()->addDays(60) || $socio->validade_certificado <= Carbon::now()->addDays(60))){
+                
+                 \Session::flash('unsuccess','A validade do/a seu/sua certificado e/ou licença está a expirar ou expirou!');
 
-                \Session::flash('unsuccess','A validade do/a seu/sua certificado e/ou licença está a expirar ou expirou!');
+
             }
+
+
 
 
             return view("socios.edit", compact("title", "socio","tipos_licenca","classes_certificado"));
