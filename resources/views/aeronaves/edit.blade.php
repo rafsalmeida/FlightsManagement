@@ -47,7 +47,7 @@
     </div>
     <div class="form-group" style="padding-left: 15px;">
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
-        <button type="submit" class="btn btn-danger" name="cancel">Cancelar</button>
+        <a class="btn btn-default" href="{{action('AeronaveController@index')}}" name="cancel">Cancelar</a>
     </div>
 </form>
 
