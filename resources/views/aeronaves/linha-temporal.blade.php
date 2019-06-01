@@ -69,6 +69,9 @@
 	</div>
 </div>
 @else
- <h5>Nenhum movimento encontrado nessas datas.</h5>
-@endif
+<div class="container" style="text-align: center">
+    <h5>Nenhum movimento encontrado nessas datas.</h5>
+
+</div>
+ @endif
 @endsection
