@@ -11,46 +11,48 @@
         @yield('form')
     </div>
     <div class="w-100 p-3  container" >
-        <table class="table table-bordered  table table-sm shadow p-3 mb-5 bg-white rounded">
-            <thead class="thead-light">
-            <tr>
-                <th>Unidade Conta Horas</th>
-                <th>Minutos</th>
-                <th>Preco</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for ($i = 1; $i < 11; $i++)
-            <tr>
-                <td>{{$i}}</td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="tempos[{{$i}}]" id="minuto"
-                               placeholder="Minutos"/>
-                        <!-- Verificar-->
-                        @if ($errors->has('tempos'))
-                        <em>{{ $errors->first('tempos') }}</em>
-                        @endif
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="precos[{{$i}}]" id="preco_minuto"
-                               placeholder="Precos"/>
-                        <!-- Verificar-->
-                        @if ($errors->has('precos'))
-                        <em>{{ $errors->first('precos') }}</em>
-                        @endif
-                    </div>
-                </td>
-            </tr>
-            @endfor
-            </tbody>
-        </table>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
-            <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
-        </div>
+       <table class="table table-bordered  table table-sm shadow p-3 mb-5 bg-white rounded">
+         <thead class="thead-light">
+        <tr>
+            <th>Unidade Conta Horas</th>
+            <th>Minutos</th>
+            <th>Preco</th>
+        </tr>
+        </thead>
+    <tbody>
+      @for ($i = 1; $i < 11; $i++)
+  
+        <tr>
+            <td>{{$i}} </td>
+            <td>
+          <input type="text" class="form-control" name="tempos[{{$i}}]" 
+                placeholder="Minutos"/>
+                     <!-- Verificar-->
+                     @if ($errors->has('tempos'))
+                <em>{{ $errors->first('tempos') }}</em>
+               @endif
+            </td>
+
+            <td>
+             
+          <input type="text" class="form-control" name="precos[{{$i}}]" 
+                placeholder="Precos"/>
+                     <!-- Verificar-->
+                     @if ($errors->has('precos'))
+                <em>{{ $errors->first('precos') }}</em>
+               @endif
+             
+            </td>
+           
+        </tr>
+
+       @endfor
+    </tbody>
+    </table>
+  </div>
+    <div class="form-group" style="padding-left: 15px;">
+        <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
+        <a class="btn btn-default" href="{{action('AeronaveController@index')}}" name="cancel">Cancelar</a>
     </div>
 </form>
 @endsection

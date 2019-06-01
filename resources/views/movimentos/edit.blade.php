@@ -25,7 +25,7 @@
         <button type="submit" class="btn btn-primary" name="confirmar"><i class="fas fa-check-double"></i> Confirmar Voo</button>
         @endcan
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
-        <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
+        <a class="btn btn-default" href="{{action('MovimentoController@index')}}" name="cancel">Cancelar</a>
     </div>
 </form>
 @can('is-direcao-piloto', Auth::user())

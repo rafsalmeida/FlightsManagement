@@ -14,8 +14,6 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
-
-
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
@@ -23,19 +21,28 @@
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <i class="fas fa-bars"></i>
         </button>
-        <a href="{{action('HomeController@index')}}"class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
+        <a href="{{action('HomeController@index')}}" class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
         <div class="dropdown navbar-nav ml-auto" >
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target="#perfil"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
-                <span class="caret"></span></button>
+                <span class="caret"></span>
+            </button>
             <ul id="perfil" class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center; padding: 5px">
-                <li><a class="btn btn-sm btn-xs btn-outline-primary" href="{{action('SocioController@edit', Auth::user()->id)}}" style="width: 100%"><i class="fas fa-user-circle"></i> Perfil</a></li>
-                <li><a class="btn btn-sm btn-xs btn-outline-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}" style="width: 100%"><i class="fas fa-key"></i> Alterar Password</a></li>
-                <li><form action="{{ action('Auth\LoginController@logout')}}" method="post" class= "form-group">
+                <li>
+                    <a class="btn btn-sm btn-xs btn-outline-primary" href="{{action('SocioController@edit', Auth::user()->id)}}" style="width: 100%"><i class="fas fa-user-circle"></i> Perfil
+                    </a>
+                </li>
+                <li>
+                    <a class="btn btn-sm btn-xs btn-outline-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}" style="width: 100%"><i class="fas fa-key"></i> Alterar Password
+                    </a>
+                </li>
+                <li>
+                    <form action="{{ action('Auth\LoginController@logout')}}" method="post" class= "form-group">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-xs btn-outline-primary" style="width: 100%"><i class="fas fa-sign-out-alt"></i> Terminar sessão</button></form></li>
+                        <button type="submit" class="btn btn-sm btn-xs btn-outline-primary" style="width: 100%"><i class="fas fa-sign-out-alt"></i> Terminar sessão</button>
+                    </form>
+                </li>
             </ul>
         </div>
-
     </div>
 </nav>
 
@@ -62,15 +69,13 @@
         <div class="col-md-10">
             <div class="container" >
                 @if (session('success'))
-                @include('partials.success')
+                    @include('partials.success')
                 @endif
                 @yield('content')
             </div>
         </div>
     </div>
 </div>
-</body>
-<script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         $(".vertical-menu .nav-item").on("click", function(){
@@ -79,4 +84,7 @@
         });
     });
 </script>
+</body>
+
+
 </html>

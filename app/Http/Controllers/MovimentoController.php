@@ -188,9 +188,6 @@ class MovimentoController extends Controller
     {
 
         $this->authorize('createMovimento', Auth::user());
-        if ($request->has("cancel")) {
-            return redirect()->action("MovimentoController@index");
-        }
 
 
         $movimento = new Movimento();
@@ -199,7 +196,11 @@ class MovimentoController extends Controller
 
 
         $hora_descolagem = $request->data.' '.$request->hora_descolagem;
+
+
+
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
+
 
 
         $movimento->fill($request->all());
@@ -225,6 +226,8 @@ class MovimentoController extends Controller
             'num_certificado_piloto' => $movimento->piloto->num_certificado,
             'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
             'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+            'hora_aterragem' => date('Y-m-d h:i:s',strtotime($hora_aterragem)),
+            'hora_descolagem' => date('Y-m-d h:i:s',strtotime($hora_descolagem)),
             'confirmado' => 0,
         ]);
 
@@ -238,8 +241,7 @@ class MovimentoController extends Controller
             'num_certificado_instrutor' => $movimento->instrutor->num_certificado,
             'validade_certificado_instrutor' => $movimento->instrutor->validade_certificado,
             'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
-            'hora_aterragem' => date('Y-m-d h:i:s',strtotime($hora_aterragem)),
-            'hora_descolagem' => date('Y-m-d h:i:s',strtotime($hora_descolagem)),
+
 
             ]);
         }
@@ -316,7 +318,12 @@ class MovimentoController extends Controller
             }
             $aerodromos = Aerodromo::pluck('nome','code');
             $aerodromos[''] = "Escolha um aerodromo";
-            $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+            if(Auth::user()->direcao == 1){
+                $aeronaves = Aeronave::all()->pluck('matricula','matricula');
+            }
+            else{
+                $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+            }
             $aeronaves[''] = "Escolha uma aeronave";
             return view("movimentos.edit", compact("movimento","title", "aerodromos", "aeronaves"));
         } else {
@@ -340,11 +347,6 @@ class MovimentoController extends Controller
         if(Auth::user()->can('updateMovimento', $movimento->piloto) || Auth::user()->can('updateMovimento', $movimento->instrutor)){
 
 
-            //validar e dar store na bd        
-            if ($request->has('cancel')) {
-                return redirect()->action('MovimentoController@index');
-            }
-
             if ($request->has('confirmar')) {
                 $request['confirmado'] = 1;
                 $aeronave = $movimento->getAeronave;
@@ -362,7 +364,9 @@ class MovimentoController extends Controller
             $hora_descolagem = $request->data.' '.$request->hora_descolagem;
 
 
+
             $hora_aterragem = $request->data.' '.$request->hora_aterragem;
+
 
 
             $request->request->add([
