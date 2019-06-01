@@ -14,6 +14,7 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
     	<script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+    	
         
 
     </head>
@@ -23,7 +24,7 @@
 		      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 				    <i class="fas fa-bars"></i>
 			  </button>
-		      <a href="{{action('HomeController@index')}}"class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
+		      <a href="{{action('HomeController@index')}}" class="navbar-brand"><i class="fas fa-plane"></i> FlightClub</a>
               <div class="dropdown navbar-nav ml-auto" >
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target="#perfil"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                     <span class="caret"></span></button>
@@ -69,9 +70,8 @@
                 </div>
             </div>
         </div>
-    </body>
-    <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
-    <script>
+
+    	<script>
         $(document).ready(function () {
             $(".vertical-menu .nav-item").on("click", function(){
                $(".vertical-menu").find(".active").removeClass("active");
@@ -79,4 +79,6 @@
             });
         });
     </script>
+    </body>
+    
 </html>
