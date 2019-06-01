@@ -6,16 +6,17 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
+
 <form method="POST" action="{{ action('MovimentoController@update', $movimento->id)}}" class="form-group">
 	@method('PUT')
 	@csrf
     <input type="hidden" name="id" value="{{ $movimento->id }}" />
-    <div class="container" style="padding-top: 15px">
+    <div class="container" >
     	@yield('form')
     </div>
-    <div class="form-group" style="padding-left: 15px;">
+    <div class="form-group">
         @can('is-direcao', Auth::user())
-        <button type="submit" class="btn btn-success" name="confirmar">Confirmar Voo</button>
+        <button type="submit" class="btn btn-primary" name="confirmar"><i class="fas fa-check-double"></i> Confirmar Voo</button>
         @endcan
         <button type="submit" class="btn btn-success" name="ok">Submeter</button>
         <button type="submit" class="btn btn-default" name="cancel">Cancelar</button>
@@ -26,7 +27,7 @@
     @csrf
     @method('delete')
     <input type="hidden" name="movimento_id" value="{{ $movimento->id }}">
-    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-sm btn-xs btn-danger', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
+    {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Apagar', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer apagar?')"]) !!}
 </form>
 @endcan
 @endsection
