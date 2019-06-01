@@ -6,6 +6,12 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
+@if(session('unsuccess'))
+    @include('partials.unsuccess')
+@endif
+@if(session('danger'))
+    @include('partials.errors')
+@endif
 
 <form method="POST" action="{{ action('MovimentoController@update', $movimento->id)}}" class="form-group">
 	@method('PUT')
