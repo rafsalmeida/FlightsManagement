@@ -27,14 +27,12 @@
               <div class="dropdown navbar-nav ml-auto" >
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target="#perfil"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                     <span class="caret"></span></button>
-                    <ul id="perfil" class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center;">
-                        <li><a class="text-primary" href="{{action('SocioController@edit', Auth::user()->id)}}"><i class="fas fa-user-circle"></i> Perfil</a></li>
-                        <div class="dropdown-divider"></div>
-                        <li><a class="text-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}"><i class="fas fa-key"></i> Alterar Password</a></li>
-                        <div class="dropdown-divider"></div>
+                    <ul id="perfil" class="dropdown-menu bg-light dropdown-menu-right rounded-bottom" style="min-width: 13.5rem; text-align: center; padding: 5px">
+                        <li><a class="btn btn-sm btn-xs btn-outline-primary" href="{{action('SocioController@edit', Auth::user()->id)}}" style="width: 100%"><i class="fas fa-user-circle"></i> Perfil</a></li>
+                        <li><a class="btn btn-sm btn-xs btn-outline-primary" href="{{ action('Auth\ChangePasswordController@showForm')}}" style="width: 100%"><i class="fas fa-key"></i> Alterar Password</a></li>
                         <li><form action="{{ action('Auth\LoginController@logout')}}" method="post" class= "form-group"> 
                         @csrf 
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link font-weight-bold"><i class="fas fa-sign-out-alt"></i> Terminar sessão</button></form></li>
+                        <button type="submit" class="btn btn-sm btn-xs btn-outline-primary" style="width: 100%"><i class="fas fa-sign-out-alt"></i> Terminar sessão</button></form></li>
                     </ul>
                </div>
 		      
@@ -43,19 +41,19 @@
 
         <div class="container-fluid">
             <div class="row">
-	               <div class="col-md-2 collapse navbar-collapse show" id="collapsibleNavbar" style="padding: 0; margin: 0; min-height: 91vh;background-color: #ececec; "> 
+	               <div class="col-md-2 collapse navbar-collapse show" id="collapsibleNavbar" style="padding: 0; margin: 0; min-height: 91vh;background-color: #ececec; white-space: nowrap;"> 
                         <ul class="vertical-menu navbar-nav nav-navtabs">
-                          <li class="nav-item" style="padding-right: 0">
+                          <li class="nav-item" style="padding-left: 1px">
                             <a class="btn" href="{{action('AeronaveController@index')}}"><i class="fas fa-plane"></i> Gerir Aeronaves</a>
                           </li>
-                          <li class="nav-item" style="padding-right: 0">
+                          <li class="nav-item" style="padding-left: 1px">
                             <a class="btn" href="{{action('SocioController@index')}}"><i class="fas fa-plane"></i> Gerir Sócios</a>
                           </li>
-                          <li class="nav-item" style="padding-right: 0">
+                          <li class="nav-item" style="padding-left: 1px">
                             <a class="btn" href="{{action('MovimentoController@index')}}" ><i class="fas fa-plane"></i> Gerir Movimentos</a>
                           </li>
                           @can('is-direcao', Auth::user())
-                          <li class="nav-item" style="padding-right: 0">
+                          <li class="nav-item" style="padding-left: 1px">
                             <a class="btn" href="{{action('MovimentoController@pendentes')}}" ><i class="fas fa-plane"></i> Assuntos Pendentes</a>
                           </li>
                           @endcan 
