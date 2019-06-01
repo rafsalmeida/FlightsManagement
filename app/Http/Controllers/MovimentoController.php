@@ -87,15 +87,13 @@ class MovimentoController extends Controller
         }
 
         if ($request->filled('piloto') && $request['piloto'] != null) {
-            $piloto_id = $request->get('piloto'); //passar o piloto_id para $nome
-            //$piloto_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
-            $query->where('piloto_id', $piloto_id); //se quiser usar o nome passar o where para whereIn
+            $piloto_id = $request->get('piloto'); 
+            $query->where('piloto_id', $piloto_id); 
         }
 
         if ($request->filled('instrutor') && $request['instrutor'] != null) {
-            $instrutor_id = $request->get('instrutor'); //passar o piloto_id para $nome
-            //$instrutor_id = User::where('nome_informal','like',"%$nome%")->get()->pluck('id');
-            $query->where('instrutor_id', $instrutor_id); //se quiser usar o nome passar o where para whereIn
+            $instrutor_id = $request->get('instrutor');
+            $query->where('instrutor_id', $instrutor_id); 
         }
 
         if ($request->filled('natureza') && $request['natureza'] != null) {
@@ -124,6 +122,7 @@ class MovimentoController extends Controller
 
 
         if($request->filled('ordenar') && $request['ordenar'] != null){
+            
             if ($request->get('ordenar') == 'IDA') {
                 $query->orderBy('id','ASC');
             }
@@ -149,19 +148,7 @@ class MovimentoController extends Controller
             }           
         }
 
-        /*if ($request->filled('natureza') && $request['natureza'] != null && $request->filled('piloto') && $request['piloto'] != null && $request->filled('instrutor') && $request['instrutor'] != null ){
-
-            $nome_piloto = $request->get('piloto');
-            $natureza = $request->get('natureza');
-            $nome_instrutor = $request->get('instrutor');
-            $piloto_id = User::where('nome_informal','=', $nome_piloto)->get()->pluck('id'); 
-            $instrutor_id = User::where('nome_informal','=', $nome_instrutor)->get()->pluck('id');
-            $query->where('natureza', $natureza)
-            ->where('instrutor_id' ,$instrutor_id)
-            ->where('piloto_id',$piloto_id);
-
-             //dd($piloto_id, $natureza, $nome_instrutor);
-        }*/
+    
 
         $movimentos = $query->paginate(15);
 
@@ -205,29 +192,32 @@ class MovimentoController extends Controller
             return redirect()->action("MovimentoController@index");
         }
 
-        /*if ($request->piloto_id != Auth::user()->id && $request->piloto_id != Auth::user()->id) {
-            return redirect()->action("MovimentoController@create")->with('success','Nao pode adicionar movimentos onde nao é interveniente');
-        }*/
-        
+
         $movimento = new Movimento();
        
         $request->validated();
 
 
         $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-        $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
-
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
-        $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
-        
-        //dd($hora_aterragem);
-
-
-        $request['confirmado'] = 0;
-
 
 
         $movimento->fill($request->all());
+
+        $diferenca = $movimento->conta_horas_fim - $movimento->conta_horas_inicio;
+        $resto = $diferenca % 10;
+        $decima = intdiv($diferenca,10);
+        $posicao_decima = $movimento->getAeronave->getMinutos(10);
+        $tempo_voo = ($posicao_decima->minutos*$decima);
+        $custo = ($posicao_decima->preco*$decima);
+        if($resto>0){
+            $posicao_resto = $movimento->getAeronave->getMinutos($resto);
+            $tempo_voo += $posicao_resto->minutos;
+            $custo += $posicao_resto->preco;
+        }
+        if($tempo_voo!=$request->tempo_voo || $custo != $request->perco_voo){
+            return redirect()->back()->withInput($request->all())->with('success', 'To do or not to do, don\'t try! Tempo/custo alterados indevidamente');
+        }
         $request->request->add([
             'num_licenca_piloto' => $movimento->piloto->num_licenca,
             'validade_licenca_piloto' => $movimento->piloto->validade_licenca,
@@ -235,6 +225,7 @@ class MovimentoController extends Controller
             'num_certificado_piloto' => $movimento->piloto->num_certificado,
             'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
             'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+            'confirmado' => 0,
         ]);
 
         //dd($request);
@@ -247,6 +238,8 @@ class MovimentoController extends Controller
             'num_certificado_instrutor' => $movimento->instrutor->num_certificado,
             'validade_certificado_instrutor' => $movimento->instrutor->validade_certificado,
             'classe_certificado_instrutor' => $movimento->instrutor->classe_certificado,
+            'hora_aterragem' => date('Y-m-d h:i:s',strtotime($hora_aterragem)),
+            'hora_descolagem' => date('Y-m-d h:i:s',strtotime($hora_descolagem)),
 
             ]);
         }
@@ -257,6 +250,16 @@ class MovimentoController extends Controller
 
         if($request->conta_horas_inicio != $contaHoras && $request->hasConflito == 0){
             $request->request->add(['hasConflito' => "1"]);
+            if($request->conta_horas_inicio > $contaHFinalMovAnt){
+                    \Session::flash('unsuccess','Aviso! Conflito de conta-horas do tipo buraco');
+            } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
+                    \Session::flash('danger','Aviso! Conflito de conta-horas do tipo sobreposição');
+            } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
+                    \Session::flash('unsuccess','Aviso! Conflito de conta-horas do tipo buraco');
+            } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
+                    \Session::flash('danger','Aviso! Conflito de conta-horas do tipo sobreposição');
+            }
+
             return redirect()->back()->withInput($request->all());
 
         }
@@ -309,7 +312,7 @@ class MovimentoController extends Controller
 
             if($movimento->confirmado == 1){
                 return redirect()->action("MovimentoController@index")            
-                     ->with("success", "Movimento confirmado e não pode ser alterado");
+                     ->with("unsuccess", "Movimento confirmado não pode ser alterado.");
             }
             $aerodromos = Aerodromo::pluck('nome','code');
             $aerodromos[''] = "Escolha um aerodromo";
@@ -357,10 +360,10 @@ class MovimentoController extends Controller
             $request->validated();
 
             $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-            $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+
 
             $hora_aterragem = $request->data.' '.$request->hora_aterragem;
-            $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+
 
             $request->request->add([
                 'num_licenca_piloto' => $movimento->piloto->num_licenca,
@@ -369,9 +372,11 @@ class MovimentoController extends Controller
                 'num_certificado_piloto' => $movimento->piloto->num_certificado,
                 'validade_certificado_piloto' => $movimento->piloto->validade_certificado,
                 'classe_certificado_piloto' => $movimento->piloto->classe_certificado,
+                'hora_descolagem' => date('Y-m-d h:i:s',strtotime($hora_descolagem)),
+                'hora_aterragem' => date('Y-m-d h:i:s',strtotime($hora_aterragem)),
             ]);
 
-            //dd($request);
+            
 
 
             if($request->natureza == 'I'){
@@ -388,6 +393,20 @@ class MovimentoController extends Controller
 
             $movimento->fill($request->all());
 
+            $diferenca = $movimento->conta_horas_fim - $movimento->conta_horas_inicio;
+            $resto = $diferenca % 10;
+            $decima = intdiv($diferenca,10);
+                $posicao_decima = $movimento->getAeronave->getMinutos(10);
+                $tempo_voo = ($posicao_decima->minutos*$decima);
+                $custo = ($posicao_decima->preco*$decima);
+            if($resto > 0){
+                $posicao_resto = $movimento->getAeronave->getMinutos($resto);
+                $tempo_voo += $posicao_resto->minutos;
+                $custo += $posicao_resto->preco;
+            }
+            if($tempo_voo!=$request->tempo_voo || $custo != $request->preco_voo){
+                return redirect()->back()->withInput($request->all())->with('success', 'To do or not do, don\'t try! Tempo/custo alterados indevidamente');
+            }
             //--- VER PROBLEMAS COM CONFLITOS TENDO EM CONTA O MOVIMENTO ANTERIOR ----
             $contaHFinalMovAnt = $movimento->getAeronave->movimentos->where('conta_horas_fim','<=', $movimento->conta_horas_inicio)->where('id','!=',$movimento->id)->max('conta_horas_fim');
 
@@ -397,6 +416,17 @@ class MovimentoController extends Controller
             
 
             if(( $request->hasConflito == 0 && $request->conta_horas_inicio != $contaHFinalMovAnt ) || ($request->hasConflito == 0 && $contaHInicialMovSeg != null &&$request->conta_horas_fim != $contaHInicialMovSeg ) ){
+                if($request->conta_horas_inicio > $contaHFinalMovAnt){
+                    \Session::flash('unsuccess','Aviso! Conflito de conta-horas do tipo buraco');
+                } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
+                    \Session::flash('danger','Aviso! Conflito de conta-horas do tipo sobreposição');
+                } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
+                    \Session::flash('unsuccess','Aviso! Conflito de conta-horas do tipo buraco');
+                } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
+                    \Session::flash('danger','Aviso! Conflito de conta-horas do tipo sobreposição');
+                }
+
+
                 $request->request->add(['hasConflito' => "1"]);
                 return redirect()->back()->withInput($request->all());
 
@@ -404,15 +434,13 @@ class MovimentoController extends Controller
 
             $movimento->fill($request->all());
             if($request->hasConflito == 1){
-                         
+
 
                 if($request->conta_horas_inicio > $contaHFinalMovAnt){
-                    //dd('nao me digas que entra aqui ');
                     $request['tipo_conflito'] = 'B';
                 } else if($request->conta_horas_inicio < $contaHFinalMovAnt){
                     $request['tipo_conflito'] = 'S';
                 } else if ($request->conta_horas_fim < $contaHInicialMovSeg){
-                    //dd("achas que devias entrar aqui?");
                     $request['tipo_conflito'] = 'B';
                 } else if ($request->conta_horas_fim > $contaHInicialMovSeg){
                     $request['tipo_conflito'] = 'S';
@@ -457,7 +485,7 @@ class MovimentoController extends Controller
             if($movimento->confirmado == 0){
                 $movimento->delete();
             } else {
-                return redirect()->action("MovimentoController@index")->with('sucess', 'Movimento Confirmado. Impossivel Apagar');
+                return redirect()->action("MovimentoController@index")->with('unsuccess', 'Movimento Confirmado. Impossível Apagar');
             }
 
             return redirect()->action("MovimentoController@index")->with('success', 'Movimento apagado corretamente');
@@ -469,9 +497,8 @@ class MovimentoController extends Controller
 
 
 private function agrupar($movimentos,$tipo){
-    return $movimentos->groupBy(DB::raw("DATE_FORMAT(data,'%".$tipo."')"))->select(DB::raw("SUM(tempo_voo) as horas,DATE_FORMAT(data,'%".$tipo."') as tipo"))->pluck('horas','tipo')->toArray();
+    return $movimentos->groupBy(DB::raw("DATE_FORMAT(data,'%".$tipo."')"))->select(DB::raw("SUM(tempo_voo) as horas,DATE_FORMAT(data,'%".$tipo."') as tipo"))->orderBy(DB::raw("DATE_FORMAT(data,'%".$tipo."')"))->pluck('horas','tipo')->toArray();
 }
-
     public function statistics(Request $request){
         /*
          SELECT SUM(tempo_voo)
@@ -480,38 +507,62 @@ private function agrupar($movimentos,$tipo){
         GROUP BY DATE_FORMAT(data,'%m');
         //$tempos = $aeronave->movimentos()->groupBy(DB::raw("DATE_FORMAT(data,'%Y')"))->select(DB::raw("SUM(tempo_voo) as horas,DATE_FORMAT(data,'%Y') as ano"))->pluck('horas','ano')->toArray();
          */
-
-        $title="Estatísticas dos Movimentos";
-
-        $aeronaves = Aeronave::paginate(15);
-        $pilotos = User::getPilotos()->paginate(15);
+        
         $titleAeronave = null;
         $titlePiloto = null;
+        $title="Estatísticas dos Movimentos";
 
+        $aeronavesAno = Aeronave::paginate(15, ['*'], 'aeronavesAno');
+        $aeronavesMes= Aeronave::paginate(15, ['*'], 'aeronavesMes');
+        $pilotosAno = User::getPilotos()->paginate(15, ['*'], 'pilotosAno');
+        $pilotosMes = User::getPilotos()->paginate(15, ['*'], 'pilotosMes');
 
+        $anos  = DB::table("movimentos")->select(DB::raw("DISTINCT(DATE_FORMAT(data,'%Y')) as data"))->pluck('data','data')->toArray();
+        $meses  = DB::table("movimentos")->select(DB::raw("DISTINCT(DATE_FORMAT(data,'%m')) as data"))->pluck('data','data')->toArray();
+        asort($meses);
+
+        $aeronavesAno->map(function ($value, $key) {
+            $value['estatistica'] = $this->agrupar($value->movimentos(),"Y");
+            return $value;
+        });
+        $aeronavesMes->map(function ($value, $key) {
+            $value['estatistica'] = $this->agrupar($value->movimentos(),"m");
+            return $value;
+        });
+        $pilotosAno->map(function ($value, $key) {
+            $value['estatistica'] = $this->agrupar($value->movimentosPiloto(),"Y");
+            return $value;
+        });
+        $pilotosMes->map(function ($value, $key) {
+            $value['estatistica'] = $this->agrupar($value->movimentosPiloto(),"m");
+            return $value;
+        });
+
+        $aeronaves = Aeronave::paginate(15, ['*'], 'aeronaves');
+        $pilotos = User::getPilotos()->paginate(15, ['*'], 'pilotos');
         if(!$request->filled("matricula") && !$request->filled("id")){
-            return view("movimentos.statistics", compact("title", "aeronaves", "pilotos", "titleAeronave", "titlePiloto"));
+            return view("movimentos.statistics", compact("title", "aeronaves", "pilotos", "titleAeronave", "titlePiloto","aeronavesAno","aeronavesMes","pilotosAno","pilotosMes","anos","meses"));
         }
         /************* HORAS POR ANO *************************/
 
-            $yearTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+            $yearTable = \Lava::DataTable();  
             $yearTable->addStringColumn('Ano')
                               ->addNumberColumn('Horas');
         if($request->filled('matricula')) {
             $titleAeronave = "Aeronave " . $request->get('matricula');
-            $aeronave = Aeronave::findOrFail($request->get('matricula')); //$id
+            $aeronave = Aeronave::findOrFail($request->get('matricula')); 
             $tempos = $this->agrupar($aeronave->movimentos(), "Y");
             $titleG = 'Aeronave/Ano';
 
         }elseif($request->filled('id')) {
-            $piloto = User::findOrFail($request->get('id')); //$id
+            $piloto = User::findOrFail($request->get('id')); 
             $titlePiloto="Piloto ".$request->get('id');
             $tempos = $this->agrupar($piloto->movimentosPiloto(), "Y");
             $titleG = 'Piloto/Ano';
         }
         foreach ($tempos as $ano => $tempo) {
             $yearTable->addRow([
-                $ano, $tempos[$ano]
+                $ano, number_format($tempos[$ano]/60, 2,'.','')
             ]);
         }
             \Lava::AreaChart($titleG, $yearTable);
@@ -520,42 +571,46 @@ private function agrupar($movimentos,$tipo){
 
         /************* HORAS POR MES ********************/
 
-        $monthTable = \Lava::DataTable();  // Lava::DataTable() if using Larave
+        $monthTable = \Lava::DataTable();  
         $monthTable->addStringColumn('Mês')
             ->addNumberColumn('Horas');
         if($request->filled('matricula')) {
             $titleAeronave = "Aeronave " . $request->get('matricula');
-            $aeronave = Aeronave::findOrFail($request->get('matricula')); //$id
+            $aeronave = Aeronave::findOrFail($request->get('matricula')); 
             $tempos = $this->agrupar($aeronave->movimentos(), "m");
             $titleG = 'Aeronave/Mes';
 
         }elseif($request->filled('id')) {
-            $piloto = User::findOrFail($request->get('id')); //$id
+            $piloto = User::findOrFail($request->get('id')); 
             $titlePiloto="Piloto ".$request->get('id');
             $tempos = $this->agrupar($piloto->movimentosPiloto(), "m");
             $titleG = 'Piloto/Mes';
         }
-        foreach ($tempos as $ano => $tempo) {
+        foreach ($tempos as $mes => $tempo) {
             $monthTable->addRow([
-                $ano, $tempos[$ano]
+                $mes, number_format($tempos[$mes]/60, 2,'.','')
             ]);
         }
         \Lava::AreaChart($titleG, $monthTable);
         echo \Lava::render('AreaChart', $titleG, 'month-chart');
 
 
-        return view("movimentos.statistics", compact("title", "aeronaves", "pilotos", "titleAeronave", "titlePiloto"));
+        
+
+
+
+        return view("movimentos.statistics", compact("title", "aeronaves", "pilotos", "titleAeronave", "titlePiloto","aeronavesAno","aeronavesMes","pilotosAno","pilotosMes","anos","meses"));
     }
 
-    public function pendentes(){
+     public function pendentes(){
         $title = "Assuntos pendentes";
 
-        $licencasValidade = User::where('validade_licenca','<=',Carbon::now()->addDays(60))->orderBy('validade_licenca','ASC')->paginate(15);
-        $certificadosValidade = User::where('validade_certificado','<=',Carbon::now()->addDays(60))->orderBy('validade_certificado','ASC')->paginate(15);
-        $movimentosConflitos = Movimento::whereNotNull('tipo_conflito')->paginate(15);
-        $movimentosConfirmar = Movimento::where('confirmado',0)->paginate(15);
-        $licencasConfirmar = User::where('licenca_confirmada',0)->paginate(15);
-        $certificadosConfirmar = User::where('certificado_confirmado',0)->paginate(15);
+        $licencasValidade = User::where('validade_licenca','<=',Carbon::now()->addDays(60))->orderBy('validade_licenca','ASC')->paginate(15, ['*'], 'licencasValidade');
+        $certificadosValidade = User::where('validade_certificado','<=',Carbon::now()->addDays(60))->orderBy('validade_certificado','ASC')->paginate(15, ['*'], 'certificadosValidade');
+        $movimentosConflitos = Movimento::whereNotNull('tipo_conflito')->paginate(15, ['*'], 'movimentosConflitos');
+        $movimentosConfirmar = Movimento::where('confirmado',0)->paginate(15, ['*'], 'movimentosConfirmar');
+        $licencasConfirmar = User::where('licenca_confirmada',0)->paginate(15, ['*'], 'licencasConfirmar');
+        $certificadosConfirmar = User::where('certificado_confirmado',0)->paginate(15, ['*'], 'certificadosConfirmar');
 
         return view("movimentos.pendentes-list", compact("title","movimentosConflitos", "movimentosConfirmar","licencasConfirmar", "certificadosConfirmar", "licencasValidade","certificadosValidade"));
     }
