@@ -43,13 +43,13 @@ Route::patch('socios/{socio}/ativo', 'SocioController@mudarEstado')->name('socio
 Route::patch('socios/{socio}/quota', 'SocioController@mudarEstadoQuota')->name('socios.mudarEstadoQuota')->middleware('direcao');
 Route::get('socios/{socio}/send_reactivate_email', 'SocioController@enviarEmailConfirmacao')->name('socios.enviarEmailConfirmacao')->middleware('direcao');
 
-Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado');
-Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca');
+Route::get('pilotos/{piloto}/certificado', 'SocioController@mostrarFicheiroCertificado')->name('pilotos.mostrarFicheiroCertificado')->middleware('ativo');
+Route::get('pilotos/{piloto}/licenca', 'SocioController@mostrarFicheiroLicenca')->name('pilotos.mostrarFicheiroLicenca')->middleware('ativo');
 
 
 Route::get('aeronaves/{aeronave}/pilotos', 'AeronavePilotosController@index')->middleware('direcao');
 
-Route::get('aeronaves/{aeronave}/precos_tempos' ,'AeronaveController@getJson')->name('aeronaves.json');
+Route::get('aeronaves/{aeronave}/precos_tempos' ,'AeronaveController@getJson')->name('aeronaves.json')->middleware('ativo');
 
 Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->middleware('direcao');
 
@@ -58,12 +58,12 @@ Route::delete('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosControlle
 
 Route::post('aeronaves/{aeronave}/pilotos/{piloto}', 'AeronavePilotosController@store')->name('pilotos.add')->middleware('direcao');
 
-Route::get('movimentos/estatisticas', 'MovimentoController@statistics')->name('movimentos.estatisticas');
+Route::get('movimentos/estatisticas', 'MovimentoController@statistics')->name('movimentos.estatisticas')->middleware('ativo');
 
 Route::get('/pendentes','MovimentoController@pendentes')->name('movimentos.pendentes')->middleware('direcao');
 
 Route::resource('movimentos', 'MovimentoController');
 
-Route::patch('/confirm',"MovimentoController@confirm");
+Route::patch('/confirm',"MovimentoController@confirm")->middleware('direcao');
 
 
