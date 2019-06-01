@@ -83,11 +83,6 @@ class AeronaveController extends Controller
     public function store(StoreAeronave $request)
     {
 
-
-        if ($request->has('cancel')) {
-            return redirect()->action('AeronaveController@index');
-        }
-
         //$aeronave = $request->validated();
 
         
@@ -156,9 +151,7 @@ class AeronaveController extends Controller
     public function update(StoreAeronave $request, $id)
     {
         //validar e dar store na bd
-        if ($request->has('cancel')) {
-            return redirect()->action('AeronaveController@index');
-        }
+       
         $dadosAGravar = $request->validated();
         $aeronave = Aeronave::findOrFail($id);
         $aeronave->fill($dadosAGravar);
