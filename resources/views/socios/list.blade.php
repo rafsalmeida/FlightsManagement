@@ -19,13 +19,13 @@
             @csrf
             @method('PATCH')
             <input type="hidden" name="_method" value="patch">
-            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas', ['type' => 'submit', 'name' => 'quota_paga', 'class' => 'btn btn-warning ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
+            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset todas a todas as quotas', ['type' => 'submit', 'name' => 'quota_paga','style' => 'width:100%' ,'class' => 'btn btn-danger ', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas?')"]) !!}
         </form>
         <form method="POST" action="{{route('socios.desativarSemQuotas')}}"  role="form" >
             @csrf
             @method('PATCH')
             <input type="hidden" name="_method" value="patch">
-            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset Quotas Sócios Desativados', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas dos sócios desativados?')"]) !!}
+            {!! Form::button('<i class="fas fa-exclamation-triangle"></i> Reset quotas dos sócios desativados', ['type' => 'submit','style' => 'width:100%', 'class' => 'btn btn-danger', 'onclick' => "return confirm('Tem a certeza que quer fazer reset às quotas dos sócios desativados?')"]) !!}
         </form>
         </div>
 <!-- Modal footer -->
