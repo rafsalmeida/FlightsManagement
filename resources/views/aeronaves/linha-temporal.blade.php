@@ -68,5 +68,7 @@
 		<h5>{{$dataMaisAntiga}}</h5>
 	</div>
 </div>
+@else
+ <h5>Nenhum movimento encontrado nessas datas.</h5>
 @endif
 @endsection
