@@ -6,6 +6,9 @@
 @if (count($errors) > 0)
     @include('partials.errors')
 @endif
+@if(session('unsuccess'))
+    @include('partials.unsuccess')
+@endif
 
 <form  method="POST" action="{{ action('SocioController@update', $socio->id)}}"  class="form-group" enctype="multipart/form-data">
 	@method('PUT')
