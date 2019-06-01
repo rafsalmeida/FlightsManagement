@@ -212,10 +212,10 @@ class MovimentoController extends Controller
 
 
         $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-        $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+        $request['hora_descolagem'] = date('Y-m-d H:i:s',strtotime($hora_descolagem));
 
         $hora_aterragem = $request->data.' '.$request->hora_aterragem;
-        $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+        $request['hora_aterragem'] = date('Y-m-d H:i:s',strtotime($hora_aterragem));
         
         //dd($hora_aterragem);
 
@@ -310,7 +310,12 @@ class MovimentoController extends Controller
             }
             $aerodromos = Aerodromo::pluck('nome','code');
             $aerodromos[''] = "Escolha um aerodromo";
-            $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+            if(Auth::user()->direcao == 1){
+                $aeronaves = Aeronave::all()->pluck('matricula','matricula');
+            }
+            else{
+                $aeronaves = Auth::user()->aeronave->pluck('matricula', 'matricula');
+            }
             $aeronaves[''] = "Escolha uma aeronave";
             return view("movimentos.edit", compact("movimento","title", "aerodromos", "aeronaves"));
         } else {
@@ -349,10 +354,10 @@ class MovimentoController extends Controller
             $request->validated();
 
             $hora_descolagem = $request->data.' '.$request->hora_descolagem;
-            $request['hora_descolagem'] = date('Y-m-d h:i:s',strtotime($hora_descolagem));
+            $request['hora_descolagem'] = date('Y-m-d H:i:s',strtotime($hora_descolagem));
 
             $hora_aterragem = $request->data.' '.$request->hora_aterragem;
-            $request['hora_aterragem'] = date('Y-m-d h:i:s',strtotime($hora_aterragem));
+            $request['hora_aterragem'] = date('Y-m-d H:i:s',strtotime($hora_aterragem));
 
             $request->request->add([
                 'num_licenca_piloto' => $movimento->piloto->num_licenca,
