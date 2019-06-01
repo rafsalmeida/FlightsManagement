@@ -99,8 +99,6 @@
         <h2>Nenhum aeronave encontrada </h2>
     </div>
 @endif
-
-@endsection
 <script>
     window.onload = function(){
   
@@ -119,3 +117,5 @@
     
 };
 </script>
+
+@endsection
