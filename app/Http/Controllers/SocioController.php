@@ -304,7 +304,7 @@ class SocioController extends Controller
     {
         $socio = User::findOrFail($id);
         $movimentos = $socio->movimentos;
-        if(($socio->instrutor || $socio->tipo_socio == 'P') && count($movimentos) > 0){
+        if(($socio->instrutor || $socio->tipo_socio == 'P') && (count($socio->movimentosPiloto) > 0 || count($socio->movimentosIntrutor) > 0)){
             $socio->delete();
         } else {
             $socio->forceDelete();
