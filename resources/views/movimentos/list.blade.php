@@ -160,7 +160,7 @@
                         @can('is-direcao-piloto', Auth::user())
                         <td>
                             <div style="text-align: center; margin: auto">
-                            <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}">Editar</a>
+                            <a class="btn btn-sm btn-xs btn-primary rounded-pill" style="width: 100%" href="{{action('MovimentoController@edit', $movimento->id)}}"><i class="fas fa-user-edit"></i> Editar</a>
                             </div>
                        </td>
                        @endcan
