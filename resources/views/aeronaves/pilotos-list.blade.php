@@ -2,20 +2,20 @@
 @section('title', "Lista de Pilotos")
 @section('content')
 <div style="padding-top: 10px">
-@if (count($pilotos))
+    @if (count($pilotos))
     <br>
     <h4>{{$title}}</h4>
     <br>
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
-    <thead class="thead-light">
+        <thead class="thead-light">
         <tr>
             <th>Id</th>
             <th>Nome Informal</th>
             <th style="max-width: 2vw"></th>
         </tr>
-    </thead>
-    <tbody>
-    @foreach ($pilotos as $piloto)
+        </thead>
+        <tbody>
+        @foreach ($pilotos as $piloto)
         <tr>
             <td>{{ $piloto->id }}</td>
             <td>{{ $piloto->nome_informal }}</td>
@@ -28,32 +28,32 @@
                 </form>
             </td>
         </tr>
-    @endforeach
+        @endforeach
     </table>
 </div>
 @else
-    <div class="col-md-12">    
-        <h2>Nenhum piloto encontrado </h2>
-    </div>
+<div class="col-md-12">
+    <h2>Nenhum piloto encontrado </h2>
+</div>
 @endif
 
-{{ $pilotos->links() }}
+{{ $pilotos->appends(request()->except('autorizados'))->links() }}
 
 <div style="padding-top: 10px">
-@if (count($pilotosNaoAutorizados))
+    @if (count($pilotosNaoAutorizados))
     <br>
     <h4>Pilotos não autorizados </h4>
     <br>
     <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
-    <thead class="thead-light">
+        <thead class="thead-light">
         <tr>
             <th>Id</th>
             <th>Nome Informal</th>
             <th style="max-width: 2vw"></th>
         </tr>
-    </thead>
-    <tbody>
-    @foreach ($pilotosNaoAutorizados as $pilotoNaoAutorizado)
+        </thead>
+        <tbody>
+        @foreach ($pilotosNaoAutorizados as $pilotoNaoAutorizado)
         <tr>
             <td>{{ $pilotoNaoAutorizado->id }}</td>
             <td>{{ $pilotoNaoAutorizado->nome_informal }}</td>
@@ -65,18 +65,18 @@
                 </form>
             </td>
         </tr>
-    @endforeach
+        @endforeach
     </table>
 </div>
 
 
 @else
-    <div class="col-md-12">    
-        <h2>Nenhum piloto encontrado </h2>
-    </div>
+<div class="col-md-12">
+    <h2>Nenhum piloto encontrado </h2>
+</div>
 @endif
 
 
-{{ $pilotosNaoAutorizados->links() }}
+{{ $pilotosNaoAutorizados->appends(request()->except('naoAutorizados'))->links() }}
 
 @endsection
