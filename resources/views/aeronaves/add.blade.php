@@ -19,35 +19,33 @@
             <th>Preco</th>
         </tr>
         </thead>
-    <tbody>
-      @for ($i = 1; $i < 11; $i++)
-  
-        <tr>
-            <td>{{$i}} </td>
-            <td>
-          <input type="text" class="form-control" name="tempos[{{$i}}]" id="minuto"
-                placeholder="Minutos"/>
-                     <!-- Verificar-->
-                     @if ($errors->has('tempos'))
-                <em>{{ $errors->first('tempos') }}</em>
-               @endif
-      </div> </td>
-
-            <td>
-              <div class="form-group">
-          <input type="text" class="form-control" name="precos[{{$i}}]" id="preco_minuto"
-                placeholder="Precos"/>
-                     <!-- Verificar-->
-                     @if ($errors->has('precos'))
-                <em>{{ $errors->first('precos') }}</em>
-               @endif
-      </div> 
-            </td>
-           
-        </tr>
-
-       @endfor
-    </tbody>
+        <tbody>
+          @for ($i = 1; $i < 11; $i++)
+            <tr>
+                <td>{{$i}}</td>
+                <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="tempos[{{$i}}]" id="minuto"
+                      placeholder="Minutos"/>
+                           <!-- Verificar-->
+                      @if ($errors->has('tempos'))
+                        <em>{{ $errors->first('tempos') }}</em>
+                      @endif
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="precos[{{$i}}]" id="preco_minuto"
+                          placeholder="Precos"/>
+                               <!-- Verificar-->
+                               @if ($errors->has('precos'))
+                          <em>{{ $errors->first('precos') }}</em>
+                         @endif
+                  </div> 
+                </td> 
+            </tr>
+           @endfor
+        </tbody>
     </table>
     <div class="form-group">
         <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
