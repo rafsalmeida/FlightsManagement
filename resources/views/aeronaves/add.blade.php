@@ -25,23 +25,23 @@
         <tr>
             <td>{{$i}} </td>
             <td>
-          <input type="text" class="form-control" name="tempos[{{$i}}]" id="minuto"
+          <input type="text" class="form-control" name="tempos[{{$i}}]" 
                 placeholder="Minutos"/>
                      <!-- Verificar-->
                      @if ($errors->has('tempos'))
                 <em>{{ $errors->first('tempos') }}</em>
                @endif
-      </div> </td>
+            </td>
 
             <td>
-              <div class="form-group">
-          <input type="text" class="form-control" name="precos[{{$i}}]" id="preco_minuto"
+             
+          <input type="text" class="form-control" name="precos[{{$i}}]" 
                 placeholder="Precos"/>
                      <!-- Verificar-->
                      @if ($errors->has('precos'))
                 <em>{{ $errors->first('precos') }}</em>
                @endif
-      </div> 
+             
             </td>
            
         </tr>
@@ -49,6 +49,7 @@
        @endfor
     </tbody>
     </table>
+  </div>
     <div class="form-group" style="padding-left: 15px;">
         <button type="submit" class="btn btn-success" name="ok">Adicionar</button>
         <a class="btn btn-default" href="{{action('AeronaveController@index')}}" name="cancel">Cancelar</a>
